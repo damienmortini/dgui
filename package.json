@@ -1,0 +1,25 @@
+{
+  "name": "dnit",
+  "version": "0.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node server.js",
+    "build": "rollup -c",
+    "release": "npm run build && minify build/index.js -o build/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Damien Mortini",
+  "license": "MIT",
+  "dependencies": {
+    "@webcomponents/webcomponentsjs": "^1.1.0",
+    "dlib": "0.0.78",
+    "ws": "^5.1.0"
+  },
+  "devDependencies": {
+    "babel-minify": "^0.3.0",
+    "browser-sync": "^2.23.6",
+    "http2": "^3.3.7",
+    "rollup": "^0.55.3"
+  }
+}
