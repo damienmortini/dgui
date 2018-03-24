@@ -7,6 +7,16 @@ export default class GUINumberInputElement extends GUIInputElement {
     this._numberInput.type = "number";
   }
 
+  set initialValue(value) {
+    this._initialValue = value;
+    const results = this._initialValue.toString().replace("-", "").split(".");
+    this.step = !isNaN(this.step) ? this.step : results[1] ? 1 / Math.pow(10, results[1].length + 2) : Math.pow(10, results[0].length - 3);
+  }
+
+  get initialValue() {
+    return this._initialValue;
+  }
+
   set step(value) {
     this._numberInput.step = value;
   }

@@ -21,15 +21,13 @@ export default class GUIRangeInputElement extends GUINumberInputElement {
   }
 
   set initialValue(value) {
-    this._initialValue = value;
-    let nextDecimal = Math.pow(10, Math.abs(parseInt(this._initialValue)).toString().length);
-    this.step = !isNaN(this.step) ? this.step : nextDecimal / 1000;
-    this.max = !isNaN(this.max) ? this.max : (this._initialValue < 0 ? 0 : (Math.abs(this._initialValue) < 1 ? 1 : nextDecimal));
-    this.min = !isNaN(this.min) ? this.min : (this._initialValue >= 0 ? 0 : (Math.abs(this._initialValue) < 1 ? -1 : -nextDecimal));
+    super.initialValue = value;
+    this.max = !isNaN(this.max) ? this.max : this.step * 1000;
+    this.min = !isNaN(this.min) ? this.min : (this._initialValue >= 0 ? 0 : -this.step * 1000);
   }
 
   get initialValue() {
-    return this._initialValue;
+    return super.initialValue;
   }
 
   set step(value) {
