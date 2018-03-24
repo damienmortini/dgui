@@ -40,18 +40,18 @@
       const script = document.createElement("script");
       document.currentScript.parentNode.insertBefore(script, document.currentScript.nextSibling);
       script.onload = () => {
-        DGUI.add({value: .5}, "value", {
+        DGUI.addInput({value: .5}, "value", {
           label: "Number"
         }).addEventListener("input", (e) => {
           console.log("Number", e.target.value);
         });
-        DGUI.add({value: 5}, "value", {
+        DGUI.addInput({value: 1}, "value", {
           label: "Range",
           type: "range"
         }).addEventListener("input", (e) => {
           console.log("Range", e.target.value);
         });
-        DGUI.add({value: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."}, "value", {
+        DGUI.addInput({value: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."}, "value", {
           label: "Text"
         }).addEventListener("input", (e) => {
           console.log("Text", e.target.value);

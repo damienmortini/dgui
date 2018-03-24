@@ -12,7 +12,7 @@ export default class GUINumberInputElement extends GUIInputElement {
   }
 
   get step() {
-    return this._numberInput.step;
+    return parseFloat(this._numberInput.step);
   }
 
   set min(value) {
@@ -20,7 +20,7 @@ export default class GUINumberInputElement extends GUIInputElement {
   }
 
   get min() {
-    return this._numberInput.min;
+    return parseFloat(this._numberInput.min);
   }
 
   set max(value) {
@@ -28,7 +28,7 @@ export default class GUINumberInputElement extends GUIInputElement {
   }
 
   get max() {
-    return this._numberInput.max;
+    return parseFloat(this._numberInput.max);
   }
 
   _updateInputFromValue(value) {

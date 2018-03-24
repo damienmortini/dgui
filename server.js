@@ -3,7 +3,7 @@ require("./src/server.js");
 
 browserSyncServer.init({
   server: true,
-  httpModule: "http2",
+  // httpModule: "http2",
   https: true,
   ghostMode: false,
   tunnel: false,

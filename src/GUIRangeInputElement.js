@@ -9,7 +9,7 @@ export default class GUIRangeInputElement extends GUINumberInputElement {
     this.shadowRoot.insertBefore(template.content.cloneNode(true), this.shadowRoot.querySelector("input"));
     this.shadowRoot.querySelector("style").textContent += `
       :host {
-        grid-template-columns: 50px 2.5fr 1fr 25px;
+        grid-template-columns: 50px 2.5fr 1fr auto;
       }
 
       input[type="number"] {
@@ -20,9 +20,25 @@ export default class GUIRangeInputElement extends GUINumberInputElement {
     this._rangeInput = this.shadowRoot.querySelector(`input[type="range"]`);
   }
 
+  set initialValue(value) {
+    this._initialValue = value;
+    let nextDecimal = Math.pow(10, Math.abs(parseInt(this._initialValue)).toString().length);
+    this.step = !isNaN(this.step) ? this.step : nextDecimal / 1000;
+    this.max = !isNaN(this.max) ? this.max : (this._initialValue < 0 ? 0 : (Math.abs(this._initialValue) < 1 ? 1 : nextDecimal));
+    this.min = !isNaN(this.min) ? this.min : (this._initialValue >= 0 ? 0 : (Math.abs(this._initialValue) < 1 ? -1 : -nextDecimal));
+  }
+
+  get initialValue() {
+    return this._initialValue;
+  }
+
   set step(value) {
     super.step = value;
     this._rangeInput.step = value;
+  }
+
+  get step() {
+    return super.step;
   }
 
   set min(value) {
@@ -30,9 +46,17 @@ export default class GUIRangeInputElement extends GUINumberInputElement {
     this._rangeInput.min = value;
   }
 
+  get min() {
+    return super.min;
+  }
+
   set max(value) {
     super.max = value;
     this._rangeInput.max = value;
+  }
+
+  get max() {
+    return super.max;
   }
 
   _updateInputFromValue(value) {

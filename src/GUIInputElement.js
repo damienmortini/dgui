@@ -4,7 +4,7 @@ TEMPLATE.innerHTML = `
     :host {
       display: grid;
       max-width: 100%;
-      grid-template-columns: 50px 1fr 25px;
+      grid-template-columns: 50px 1fr auto;
       grid-gap: 5px;
       align-items: center;
     }
@@ -12,6 +12,10 @@ TEMPLATE.innerHTML = `
     label {
       overflow: hidden;
       text-overflow: ellipsis;
+    }
+
+    #reset {
+      width: 30px;
     }
   </style>
   <label></label>

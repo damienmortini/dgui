@@ -198,42 +198,30 @@ export default class GUINodeElement extends HTMLElement {
     return this._container.open;
   }
 
-  add(object, key, {
-    label = key,
-    id = label,
-    group = "",
-    type = undefined,
-    options = undefined,
-    max = undefined,
-    min = undefined,
-    step = undefined,
-    reload = false,
-    remote = false,
-    client = remote,
-    onChange = (value) => { }
-  } = {}) {
+  addInput(object, key, options) {
+    options = Object.assign({}, options);
+
+    let type = options.type || (options.options ? "select" : undefined);
+    delete options.type;
+
+    options.label = options.label || key;
+    options.id = options.id || normalizeString(options.label);
 
     const INITIAL_VALUE = object[key];
 
     if (INITIAL_VALUE === null || INITIAL_VALUE === undefined) {
-      throw new Error(`GUI: ${id} must be defined.`);
+      throw new Error(`GUI: "${options.label}" must be defined.`);
     }
 
-    let idKey = normalizeString(id);
+    const group = "";
     let groupKey = normalizeString(group);
-    let uid = groupKey ? `${groupKey}/${idKey}` : idKey;
+    let uid = groupKey ? `${groupKey}/${options.id}` : options.id;
 
     if (this._uids.has(uid)) {
-      throw new Error(`GUI: An input with id ${id} already exist in the group ${group}`);
+      throw new Error(`GUI: An input with id ${uid} already exist in the group ${group}`);
     }
 
     this._uids.add(uid);
-
-    if (remote && !this.serverUrl) {
-      this._serverUrl = `wss://${location.hostname}:80`;
-    }
-
-    type = type || (options ? "select" : "");
 
     if (!type) {
       switch (typeof INITIAL_VALUE) {
@@ -267,107 +255,94 @@ export default class GUINodeElement extends HTMLElement {
     }
 
     let input = document.createElement(window.customElements.get(`dgui-${type}input`) ? `dgui-${type}input` : "dgui-input");
-    input.object = object;
-    input.key = key;
-    input.label = label;
-    input.value = INITIAL_VALUE;
-    input._client = client;
-    if (min) {
-      input.min = min;
-    }
-    if (max) {
-      input.max = max;
-    }
-    if (step) {
-      input.step = step;
-    }
-    if (options) {
-      input.options = options;
-    }
-    input.type = type;
+    Object.assign(input, Object.assign({
+      object,
+      key,
+      value: INITIAL_VALUE
+    }, options));
     container.appendChild(input);
 
-    const SAVED_VALUE = groupKey && DATA[groupKey] ? DATA[groupKey][idKey] : DATA[idKey];
-    if (SAVED_VALUE !== undefined) {
-      input.value = SAVED_VALUE;
-      if (type === "color") {
-        object[key] = colorFromHex(object[key], SAVED_VALUE);
-      }
-    }
+    // const SAVED_VALUE = groupKey && DATA[groupKey] ? DATA[groupKey][options.id] : DATA[options.id];
+    // if (SAVED_VALUE !== undefined) {
+    //   input.value = SAVED_VALUE;
+    //   if (type === "color") {
+    //     object[key] = colorFromHex(object[key], SAVED_VALUE);
+    //   }
+    // }
 
-    const onValueChange = (value) => {
-      let containerData = groupKey ? DATA[groupKey] : DATA;
-      if (!containerData) {
-        containerData = DATA[groupKey] = {};
-      }
-      if (input.value !== INITIAL_VALUE) {
-        containerData[idKey] = input.value;
-      } else {
-        delete containerData[idKey];
-        if (groupKey && !Object.keys(containerData).length) {
-          delete DATA[groupKey];
-        }
-      }
+    // const onValueChange = (value) => {
+    //   let containerData = groupKey ? DATA[groupKey] : DATA;
+    //   if (!containerData) {
+    //     containerData = DATA[groupKey] = {};
+    //   }
+    //   if (input.value !== INITIAL_VALUE) {
+    //     containerData[options.id] = input.value;
+    //   } else {
+    //     delete containerData[options.id];
+    //     if (groupKey && !Object.keys(containerData).length) {
+    //       delete DATA[groupKey];
+    //     }
+    //   }
 
-      if (GUI_REG_EXP.test(window.location.hash)) {
-        window.location.hash = window.location.hash.replace(
-          GUI_REG_EXP,
-          Object.keys(DATA).length ? `$1${encodeURI(JSON.stringify(DATA))}$5` : ""
-        );
-      } else {
-        let prefix = window.location.hash ? "&" : "#";
-        window.location.hash += `${prefix}gui=${encodeURI(JSON.stringify(DATA))}`;
-      }
+    //   if (GUI_REG_EXP.test(window.location.hash)) {
+    //     window.location.hash = window.location.hash.replace(
+    //       GUI_REG_EXP,
+    //       Object.keys(DATA).length ? `$1${encodeURI(JSON.stringify(DATA))}$5` : ""
+    //     );
+    //   } else {
+    //     let prefix = window.location.hash ? "&" : "#";
+    //     window.location.hash += `${prefix}gui=${encodeURI(JSON.stringify(DATA))}`;
+    //   }
 
-      if (remote && this._webSocket) {
-        const jsonString = JSON.stringify({ uid, value });
-        if (this._webSocket.readyState === WebSocket.CONNECTING) {
-          this._webSocketQueue.push(jsonString);
-        } else {
-          this._webSocket.send(jsonString);
-        }
-      }
+    //   if (remote && this._webSocket) {
+    //     const jsonString = JSON.stringify({ uid, value });
+    //     if (this._webSocket.readyState === WebSocket.CONNECTING) {
+    //       this._webSocketQueue.push(jsonString);
+    //     } else {
+    //       this._webSocket.send(jsonString);
+    //     }
+    //   }
 
-      if (reload) {
-        if (Keyboard.hasKeyDown(Keyboard.SHIFT)) {
-          Keyboard.addEventListener("keyup", function reloadLocation() {
-            Keyboard.removeEventListener("keyup", reloadLocation);
-            window.location.reload();
-          });
-        } else {
-          window.location.reload();
-        }
-      }
+    //   if (reload) {
+    //     if (Keyboard.hasKeyDown(Keyboard.SHIFT)) {
+    //       Keyboard.addEventListener("keyup", function reloadLocation() {
+    //         Keyboard.removeEventListener("keyup", reloadLocation);
+    //         window.location.reload();
+    //       });
+    //     } else {
+    //       window.location.reload();
+    //     }
+    //   }
 
-      onChange(value);
-    }
+    //   onChange(value);
+    // }
 
     // TODO: Clean here
 
-    if (type === "button") {
-      input.addEventListener("click", onValueChange);
-    } else {
-      let animationFrameId = -1;
-      const onValueChangeTmp = () => {
-        cancelAnimationFrame(animationFrameId);
-        animationFrameId = requestAnimationFrame(() => {
-          if (type === "color") {
-            onValueChange(colorFromHex(object[key], input.value));
-          } else {
-            onValueChange(input.value);
-          }
-        });
-      }
+    // if (type === "button") {
+    //   input.addEventListener("click", onValueChange);
+    // } else {
+    //   let animationFrameId = -1;
+    //   const onValueChangeTmp = () => {
+    //     cancelAnimationFrame(animationFrameId);
+    //     animationFrameId = requestAnimationFrame(() => {
+    //       if (type === "color") {
+    //         onValueChange(colorFromHex(object[key], input.value));
+    //       } else {
+    //         onValueChange(input.value);
+    //       }
+    //     });
+    //   }
 
-      if (type !== "text" && type !== "number") {
-        input.addEventListener("input", onValueChangeTmp);
-      }
-      input.addEventListener("change", onValueChangeTmp);
-    }
+    //   if (type !== "text" && type !== "number") {
+    //     input.addEventListener("input", onValueChangeTmp);
+    //   }
+    //   input.addEventListener("change", onValueChangeTmp);
+    // }
 
-    onChange(object[key]);
+    // onChange(object[key]);
 
-    this._inputs.set(uid, input);
+    // this._inputs.set(uid, input);
 
     return input;
   }
