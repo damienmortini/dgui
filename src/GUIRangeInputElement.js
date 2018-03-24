@@ -9,7 +9,7 @@ export default class GUIRangeInputElement extends GUINumberInputElement {
     this.shadowRoot.insertBefore(template.content.cloneNode(true), this.shadowRoot.querySelector("input"));
     this.shadowRoot.querySelector("style").textContent += `
       :host {
-        grid-template-columns: 50px 3fr 1fr 25px;
+        grid-template-columns: 50px 2.5fr 1fr 25px;
       }
 
       input[type="number"] {
@@ -17,13 +17,29 @@ export default class GUIRangeInputElement extends GUINumberInputElement {
         width: 100%;
       }
     `;
+    this._rangeInput = this.shadowRoot.querySelector(`input[type="range"]`);
   }
 
-  _onInput(e) {
-    for (const input of this.shadowRoot.querySelectorAll("input")) {
-      input.value = e.target.value;
+  set step(value) {
+    super.step = value;
+    this._rangeInput.step = value;
+  }
+
+  set min(value) {
+    super.min = value;
+    this._rangeInput.min = value;
+  }
+
+  set max(value) {
+    super.max = value;
+    this._rangeInput.max = value;
+  }
+
+  _updateInputFromValue(value) {
+    if(this.shadowRoot.activeElement !== this._rangeInput) {
+      this._rangeInput.valueAsNumber = value;
     }
-    super._onInput(...arguments);
+    super._updateInputFromValue(value);
   }
 }
 

@@ -16,12 +16,8 @@ export default class GUITextInputElement extends GUIInputElement {
     this.shadowRoot.replaceChild(template.content.cloneNode(true), this.shadowRoot.querySelector("input"));
   }
 
-  _updateValue() {
-    this.value = this.shadowRoot.querySelector("textarea").value;
-  }
-
-  _updateInput() {
-    this.shadowRoot.querySelector("textarea").value = this.value;
+  _updateInputFromValue(value) {
+    this.shadowRoot.querySelector("textarea").value = value;
   }
 }
 

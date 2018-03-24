@@ -41,26 +41,33 @@ export default class GUIInputElement extends HTMLElement {
   }
 
   _onInput(e) {
-    this._updateValue();
+    e.stopPropagation();
+    this._updateValueFromInput(e.target);
     this.dispatchEvent(new Event("input"));
   }
-
+  
   _onChange(e) {
-    this._updateValue();
+    e.stopPropagation();
+    this._updateValueFromInput(e.target);
+    this.dispatchEvent(new Event("change"));
+  }
+  
+  _onReset(e) {
+    if(this.value === this.initialValue) {
+      return;
+    }
+    this.value = this.initialValue;
+    this.dispatchEvent(new Event("reset"));
+    this.dispatchEvent(new Event("input"));
     this.dispatchEvent(new Event("change"));
   }
 
-  _onReset(e) {
-    this.value = this.initialValue;
-    this.dispatchEvent(new Event("reset"));
+  _updateValueFromInput(input) {
+    this.value = input.value;
   }
 
-  _updateValue() {
-    this.value = this.shadowRoot.querySelector("input").value;
-  }
-
-  _updateInput() {
-    this.shadowRoot.querySelector("input").value = this.value;
+  _updateInputFromValue(value) {
+    this.shadowRoot.querySelector("input").value = value;
   }
 
   set object(value) {
@@ -89,10 +96,8 @@ export default class GUIInputElement extends HTMLElement {
     if(this.initialValue === undefined) {
       this.initialValue = value;
     }
-    console.log(value);
-    
     this.object[this.key] = value;
-    this._updateInput();
+    this._updateInputFromValue(value);
   }
 
   get value() {

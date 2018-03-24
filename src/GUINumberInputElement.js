@@ -3,29 +3,42 @@ import GUIInputElement from "./GUIInputElement.js";
 export default class GUINumberInputElement extends GUIInputElement {
   constructor() {
     super();
-    this._input = this.shadowRoot.querySelector("input");
-    this._input.type = "number";
+    this._numberInput = this.shadowRoot.querySelector("input");
+    this._numberInput.type = "number";
   }
 
-  _updateValue() {
-    let value = this.shadowRoot.querySelector("input").valueAsNumber;
-    this.value = isNaN(value) ? 0 : value;
+  set step(value) {
+    this._numberInput.step = value;
+  }
+
+  get step() {
+    return this._numberInput.step;
   }
 
   set min(value) {
-    this._input.min = value;
+    this._numberInput.min = value;
   }
 
   get min() {
-    return this._input.min;
+    return this._numberInput.min;
   }
 
   set max(value) {
-    this._input.max = value;
+    this._numberInput.max = value;
   }
 
   get max() {
-    return this._input.max;
+    return this._numberInput.max;
+  }
+
+  _updateInputFromValue(value) {
+    if(this.shadowRoot.activeElement !== this._numberInput) {
+      this._numberInput.valueAsNumber = value;
+    }
+  }
+
+  _updateValueFromInput(input) {
+    this.value = isNaN(input.valueAsNumber) ? this.value : input.valueAsNumber;
   }
 }
 
