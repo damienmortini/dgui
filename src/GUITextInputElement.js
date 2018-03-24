@@ -1,12 +1,27 @@
 import GUIInputElement from "./GUIInputElement.js";
 
 const template = document.createElement("template");
-template.innerHTML = `<textarea slot="input"></textarea>`;
+template.innerHTML = `
+  <style>
+    textarea {
+      box-sizing: border-box;
+    }
+  </style>
+  <textarea rows="1"></textarea>
+`;
 
 export default class GUITextInputElement extends GUIInputElement {
   constructor() {
     super();
-    this.shadowRoot.replaceChild(document.importNode(template.content, true), this.shadowRoot.querySelector("input"));
+    this.shadowRoot.replaceChild(template.content.cloneNode(true), this.shadowRoot.querySelector("input"));
+  }
+
+  _updateValue() {
+    this.value = this.shadowRoot.querySelector("textarea").value;
+  }
+
+  _updateInput() {
+    this.shadowRoot.querySelector("textarea").value = this.value;
   }
 }
 

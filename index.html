@@ -42,13 +42,19 @@
       script.onload = () => {
         DGUI.add({value: .5}, "value", {
           label: "Number"
+        }).addEventListener("input", (e) => {
+          console.log("Number", e.target.value);
         });
         DGUI.add({value: 5}, "value", {
           label: "Range",
           type: "range"
+        }).addEventListener("input", (e) => {
+          console.log("Range", e.target.value);
         });
         DGUI.add({value: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."}, "value", {
           label: "Text"
+        }).addEventListener("input", (e) => {
+          console.log("Text", e.target.value);
         });
       }
       if (/\bdev\b/.test(window.location.search)) {
