@@ -3,6 +3,7 @@ import "./GUIInputElement.js";
 import "./GUINumberInputElement.js";
 import "./GUITextInputElement.js";
 import "./GUIRangeInputElement.js";
+import "./GUISelectInputElement.js";
 
 // STYLES
 
@@ -201,18 +202,35 @@ export default class GUINodeElement extends HTMLElement {
   addInput(object, key, options) {
     options = Object.assign({}, options);
 
-    let type = options.type || (options.options ? "select" : undefined);
-    delete options.type;
-
     options.label = options.label || key;
     options.id = options.id || normalizeString(options.label);
-
+    
     const INITIAL_VALUE = object[key];
-
+        
     if (INITIAL_VALUE === null || INITIAL_VALUE === undefined) {
       throw new Error(`GUI: "${options.label}" must be defined.`);
     }
 
+    const TYPE_RESOLVERS = new Map([
+      ["number", (value, options) => typeof value === "number"],
+      ["checkbox", (value, options) => typeof value === "boolean"],
+      ["text", (value, options) => typeof value === "string"],
+      ["button", (value, options) => typeof value === "function"],
+      ["range", (value, options) => typeof value === "number" && (options.min !== undefined || options.max !== undefined)],
+      ["select", (value, options) => options.options !== undefined],
+    ]);
+
+    let type = options.type;
+    delete options.type;
+    
+    if(!type) {
+      TYPE_RESOLVERS.forEach((value, key) => {
+        if(value(INITIAL_VALUE, options)) {
+          type = key;
+        }
+      });
+    }
+    
     const group = "";
     let groupKey = normalizeString(group);
     let uid = groupKey ? `${groupKey}/${options.id}` : options.id;
@@ -222,22 +240,6 @@ export default class GUINodeElement extends HTMLElement {
     }
 
     this._uids.add(uid);
-
-    if (!type) {
-      switch (typeof INITIAL_VALUE) {
-        case "boolean":
-          type = "checkbox";
-          break;
-        case "string":
-          type = "text";
-          break;
-        case "function":
-          type = "button";
-          break;
-        default:
-          type = typeof INITIAL_VALUE;
-      }
-    }
 
     if (!this._container.parentNode) {
       this.appendChild(this._container);

@@ -47,12 +47,23 @@
         });
         DGUI.addInput({value: 1}, "value", {
           label: "Range",
-          type: "range"
+          max: 2,
         }).addEventListener("input", (e) => {
           console.log("Range", e.target.value);
         });
         DGUI.addInput({value: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."}, "value", {
           label: "Text"
+        }).addEventListener("input", (e) => {
+          console.log("Text", e.target.value);
+        });
+        DGUI.addInput({value: 2}, "value", {
+          label: "Select",
+          options: [
+            "One",
+            2,
+            true,
+            [4, 8, 16, 32]
+          ]
         }).addEventListener("input", (e) => {
           console.log("Text", e.target.value);
         });
