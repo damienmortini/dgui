@@ -1,9 +1,12 @@
 import Keyboard from "../node_modules/dlib/input/Keyboard.js";
-import "./GUIInputElement.js";
-import "./GUINumberInputElement.js";
-import "./GUITextInputElement.js";
-import "./GUIRangeInputElement.js";
-import "./GUISelectInputElement.js";
+import GUIInputElement from "./input/GUIInputElement.js";
+import "./input/GUINumberInputElement.js";
+import "./input/GUITextInputElement.js";
+import "./input/GUIRangeInputElement.js";
+import "./input/GUISelectInputElement.js";
+import "./input/GUICheckboxInputElement.js";
+import "./input/GUIButtonInputElement.js";
+import "./input/GUIColorInputElement.js";
 
 // STYLES
 
@@ -199,33 +202,33 @@ export default class GUINodeElement extends HTMLElement {
     return this._container.open;
   }
 
-  addInput(object, key, options) {
-    options = Object.assign({}, options);
+  addInput(object, key, attributes) {
+    attributes = Object.assign({}, attributes);
 
-    options.label = options.label || key;
-    options.id = options.id || normalizeString(options.label);
+    attributes.label = attributes.label || key;
+    attributes.id = attributes.id || normalizeString(attributes.label);
     
     const INITIAL_VALUE = object[key];
         
     if (INITIAL_VALUE === null || INITIAL_VALUE === undefined) {
-      throw new Error(`GUI: "${options.label}" must be defined.`);
+      throw new Error(`GUI: "${attributes.label}" must be defined.`);
     }
 
     const TYPE_RESOLVERS = new Map([
-      ["number", (value, options) => typeof value === "number"],
-      ["checkbox", (value, options) => typeof value === "boolean"],
-      ["text", (value, options) => typeof value === "string"],
-      ["button", (value, options) => typeof value === "function"],
-      ["range", (value, options) => typeof value === "number" && (options.min !== undefined || options.max !== undefined)],
-      ["select", (value, options) => options.options !== undefined],
+      ["number", (value, attributes) => typeof value === "number"],
+      ["checkbox", (value, attributes) => typeof value === "boolean"],
+      ["text", (value, attributes) => typeof value === "string"],
+      ["button", (value, attributes) => typeof value === "function"],
+      ["range", (value, attributes) => typeof value === "number" && (attributes.min !== undefined || attributes.max !== undefined)],
+      ["select", (value, attributes) => attributes.options !== undefined],
     ]);
 
-    let type = options.type;
-    delete options.type;
-    
+    let type = attributes.type;
+    delete attributes.type;
+
     if(!type) {
-      TYPE_RESOLVERS.forEach((value, key) => {
-        if(value(INITIAL_VALUE, options)) {
+      GUIInputElement.typeResolvers.forEach((value, key) => {
+        if(value(INITIAL_VALUE, attributes)) {
           type = key;
         }
       });
@@ -233,7 +236,7 @@ export default class GUINodeElement extends HTMLElement {
     
     const group = "";
     let groupKey = normalizeString(group);
-    let uid = groupKey ? `${groupKey}/${options.id}` : options.id;
+    let uid = groupKey ? `${groupKey}/${attributes.id}` : attributes.id;
 
     if (this._uids.has(uid)) {
       throw new Error(`GUI: An input with id ${uid} already exist in the group ${group}`);
@@ -261,7 +264,7 @@ export default class GUINodeElement extends HTMLElement {
       object,
       key,
       value: INITIAL_VALUE
-    }, options));
+    }, attributes));
     container.appendChild(input);
 
     // const SAVED_VALUE = groupKey && DATA[groupKey] ? DATA[groupKey][options.id] : DATA[options.id];

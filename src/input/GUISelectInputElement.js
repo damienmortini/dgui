@@ -1,14 +1,17 @@
 import GUIInputElement from "./GUIInputElement.js";
 
-const template = document.createElement("template");
-template.innerHTML = `
-  <select></select>
-`;
-
 export default class GUISelectInputElement extends GUIInputElement {
   constructor() {
-    super();
-    this.shadowRoot.replaceChild(template.content.cloneNode(true), this.shadowRoot.querySelector("input"));
+    super({
+      type: "select",
+      content: `
+      <style>
+        select {
+          width: 100%;
+        }
+      </style>
+      <select></select>`
+    });
     this._selectInput = this.shadowRoot.querySelector("select");
   }
 
@@ -41,5 +44,7 @@ export default class GUISelectInputElement extends GUIInputElement {
     this.value = this.options[input.selectedIndex];
   }
 }
+
+GUIInputElement.typeResolvers.set("select", (value, attributes) => attributes.options !== undefined);
 
 window.customElements.define("dgui-selectinput", GUISelectInputElement);

@@ -56,6 +56,16 @@
         }).addEventListener("input", (e) => {
           console.log("Text", e.target.value);
         });
+        DGUI.addInput({value: true}, "value", {
+          label: "Checkbox"
+        }).addEventListener("input", (e) => {
+          console.log("Checkbox", e.target.value);
+        });
+        DGUI.addInput({value: () => {}}, "value", {
+          label: "Button"
+        }).addEventListener("input", (e) => {
+          console.log("Button", e.target.value);
+        });
         DGUI.addInput({value: 2}, "value", {
           label: "Select",
           options: [
@@ -65,7 +75,29 @@
             [4, 8, 16, 32]
           ]
         }).addEventListener("input", (e) => {
-          console.log("Text", e.target.value);
+          console.log("Select", e.target.value);
+        });
+        DGUI.addInput({value: {r: 1, g: .5, b: 0}}, "value", {
+          label: "Color RGB"
+        }).addEventListener("input", (e) => {
+          console.log("Color RGB", e.target.value);
+        });
+        DGUI.addInput({value: [0, 1, .5]}, "value", {
+          label: "Color Array",
+          type: "color"
+        }).addEventListener("input", (e) => {
+          console.log("Color Array", e.target.value);
+        });
+        DGUI.addInput({value: "#ff0000"}, "value", {
+          label: "Color Style 1"
+        }).addEventListener("input", (e) => {
+          console.log("Color Style 1", e.target.value);
+        });
+        DGUI.addInput({value: "rgba(128, 0, 255, 1)"}, "value", {
+          label: "Color Style 2",
+          type: "color",
+        }).addEventListener("input", (e) => {
+          console.log("Color Style 2", e.target.value);
         });
       }
       if (/\bdev\b/.test(window.location.search)) {

@@ -1,16 +1,27 @@
 import GUIInputElement from "./GUIInputElement.js";
 
 export default class GUINumberInputElement extends GUIInputElement {
-  constructor() {
-    super();
+  constructor({
+  } = {}) {
+    super({
+      type: "number",
+      content: `
+      <style>
+        input {
+          box-sizing: border-box;
+          width: 100%;
+        }
+      </style>
+      <input type="number">
+      `
+    });
     this._numberInput = this.shadowRoot.querySelector("input");
-    this._numberInput.type = "number";
   }
 
   set initialValue(value) {
     this._initialValue = value;
     const results = this._initialValue.toString().replace("-", "").split(".");
-    this.step = !isNaN(this.step) ? this.step : results[1] ? 1 / Math.pow(10, results[1].length + 2) : Math.pow(10, results[0].length - 3);
+    this.step = !isNaN(this.step) ? this.step : results[1] ? 1 / Math.pow(10, results[1].length) : 1;
   }
 
   get initialValue() {
@@ -52,4 +63,6 @@ export default class GUINumberInputElement extends GUIInputElement {
   }
 }
 
-window.customElements.define("dgui-numberinput", GUINumberInputElement);
+GUIInputElement.typeResolvers.set("number", (value, attributes) => typeof value === "number");
+
+window.customElements.define(`dgui-numberinput`, GUINumberInputElement);

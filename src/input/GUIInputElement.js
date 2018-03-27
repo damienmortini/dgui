@@ -1,35 +1,44 @@
-const TEMPLATE = document.createElement("template");
-TEMPLATE.innerHTML = `
-  <style>
-    :host {
-      display: grid;
-      max-width: 100%;
-      grid-template-columns: 50px 1fr auto;
-      grid-gap: 5px;
-      align-items: center;
-    }
-
-    label {
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    #reset {
-      width: 30px;
-    }
-  </style>
-  <label></label>
-  <input></input>
-  <button id=\"reset\">✕</button>
-`;
+const TYPE_RESOLVERS = new Map();
 
 export default class GUIInputElement extends HTMLElement {
-  constructor() {
+  static get typeResolvers() {
+    return TYPE_RESOLVERS;
+  }
+
+  constructor({
+    type = "",
+    content = `<input type="${type}"></input>`
+  } = {}) {
     super();
 
     this.name = "";
+    this.type = type;
 
-    this.attachShadow({ mode: "open" }).appendChild(document.importNode(TEMPLATE.content, true));
+    this.attachShadow({ mode: "open" }).innerHTML = `
+      <style>
+        :host {
+          display: grid;
+          max-width: 100%;
+          grid-template-columns: auto 1fr auto;
+          grid-gap: 5px;
+          align-items: center;
+        }
+
+        label {
+          // width: 50px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+
+        #reset {
+          width: 30px;
+        }
+      </style>
+      <label></label>
+      ${content}
+      <button id=\"reset\">✕</button>
+    `;
   }
 
   connectedCallback() {
@@ -41,7 +50,7 @@ export default class GUIInputElement extends HTMLElement {
   disconnectedCallback() {
     this.shadowRoot.removeEventListener("change", this._onChangeBinded);
     this.shadowRoot.removeEventListener("input", this._onInputBinded);
-    this.shadowRoot.querySelector("#reset").addEventListener("click", this._onResetBinded);
+    this.shadowRoot.querySelector("#reset").removeEventListener("click", this._onResetBinded);
   }
 
   _onInput(e) {
@@ -118,5 +127,7 @@ export default class GUIInputElement extends HTMLElement {
     return this.shadowRoot.querySelector("label").textContent;
   }
 }
+
+GUIInputElement.typeResolvers.set("any", (value, attributes) => true);
 
 window.customElements.define("dgui-input", GUIInputElement);
