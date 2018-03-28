@@ -11,7 +11,6 @@ export default class GUIInputElement extends HTMLElement {
   } = {}) {
     super();
 
-    this.name = "";
     this.type = type;
 
     this.attachShadow({ mode: "open" }).innerHTML = `
@@ -99,12 +98,15 @@ export default class GUIInputElement extends HTMLElement {
   }
 
   get key() {
-    return this._key;
+    return this._key || "value";
   }
 
   set value(value) {
     if(this.initialValue === undefined) {
       this.initialValue = value;
+    }
+    if(!this.object) {
+      this.object = {value};
     }
     this.object[this.key] = value;
     this._updateInputFromValue(value);
@@ -122,6 +124,26 @@ export default class GUIInputElement extends HTMLElement {
 
   get label() {
     return this.shadowRoot.querySelector("label").textContent;
+  }
+
+  set name(value) {
+    this._name = value;
+    if(!this.label) {
+      this.label = this.name;
+    }
+  }
+
+  get name() {
+    return this._name || this.label.toLowerCase() || this.key.toLowerCase();
+  }
+
+  toJSON() {
+    return {
+      name: this.name,
+      label: this.label,
+      type: this.type,
+      value: this.value
+    };
   }
 }
 

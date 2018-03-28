@@ -23,10 +23,10 @@ export default class GUIColorInputElement extends GUIInputElement {
   }
 
   set initialValue(value) {
-    if(typeof value === "string") {
+    if (typeof value === "string") {
       this._initialValue = value;
     } else {
-      this._initialValue = Object.assign(value[0] === undefined ? {} : [], value);
+      this._initialValue = value[0] === undefined ? { ...value } : [...value];
     }
   }
 
@@ -56,7 +56,7 @@ export default class GUIColorInputElement extends GUIInputElement {
 
   _updateInputFromValue(value) {
     const hexValue = this._valueToHexadecimal(value);
-    
+
     if (this.shadowRoot.activeElement !== this._textInput) {
       this._textInput.value = hexValue;
     }

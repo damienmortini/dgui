@@ -33,8 +33,6 @@
 <body>
   <script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
 
-  <dnit-main></dnit-main>
-
   <script type="text/javascript">
     {
       const script = document.createElement("script");
@@ -93,6 +91,8 @@
         }).addEventListener("input", (e) => {
           console.log("Color Style", e.target.value);
         });
+        console.log(JSON.stringify(DGUI));
+        // DGUI.data = JSON.parse(`{"nodes":[{"name":"main","label":"Main","inputs":[{"name":"number","label":"Number","type":"number","value":0.5},{"name":"range","label":"Range","type":"range","value":1},{"name":"text","label":"Text","type":"text","value":"Lorem ipsum dolor sit amet, consectetur adipiscing elit."},{"name":"checkbox","label":"Checkbox","type":"checkbox","value":false},{"name":"button","label":"Button","type":"button"},{"name":"select","label":"Select","type":"select","value":2},{"name":"color rgb","label":"Color RGB","type":"color","value":{"r":1,"g":0.4980392156862745,"b":0}},{"name":"color array","label":"Color Array","type":"color","value":[1,1,0.4980392156862745]},{"name":"color style","label":"Color Style","type":"color","value":"rgba(128, 0, 255, 1)"}]},{"name":"first","label":"First","inputs":[{"name":"test","label":"test","type":"number","value":3},{"name":"test2","label":"test2","type":"select","value":4}]},{"name":"second","label":"Second","inputs":[{"name":"test","label":"test","type":"range","value":8},{"name":"test2","label":"test2","type":"select","value":4}]}]}`);
       }
       if (/\bdev\b/.test(window.location.search)) {
         script.type = "module";

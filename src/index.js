@@ -1,8 +1,14 @@
-import GUINodeElement from "./GUINodeElement.js";
+import GUIElement from "./GUIElement.js";
 
-const GUI_NODE = new GUINodeElement();
-document.body.appendChild(GUI_NODE);
+const GUI = new GUIElement();
+GUI.addNode({
+  label: "Main"
+});
+document.body.appendChild(GUI);
 
-window.DGUI = GUI_NODE;
+GUI.addInput = (...parameters) => {
+  return GUI.nodes.get("main").addInput(...parameters);
+}
 
-export default GUI_NODE;
+window.DGUI = GUI;
+export default GUI;
