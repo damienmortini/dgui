@@ -34,14 +34,6 @@ export default class GUIElement extends HTMLElement {
     this.appendChild(node);
   }
 
-  set data(value) {
-    this.nodes = value.nodes;
-  }
-
-  get data() {
-    return this.toJSON();
-  }
-
   toJSON() {
     return {
       nodes: [...this.nodes.values()]
