@@ -46,8 +46,8 @@ export default class GUIColorInputElement extends GUIInputElement {
       } else {
         [super.value[0], super.value[1], super.value[2]] = [RGBA[0], RGBA[1], RGBA[2]];
       }
+      super.value = this.value;
     }
-    super.value = this.value;
   }
 
   get value() {

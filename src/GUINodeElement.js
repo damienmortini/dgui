@@ -87,14 +87,17 @@ export default class GUINodeElement extends HTMLElement {
       });
     }
     
-    let input = this.inputs.get(attributes.name) || document.createElement(window.customElements.get(`dgui-${attributes.type}input`) ? `dgui-${attributes.type}input` : "dgui-input");
+    let input = this.inputs.get(attributes.name);
+    if(!input) {
+      input = document.createElement(window.customElements.get(`dgui-${attributes.type}input`) ? `dgui-${attributes.type}input` : "dgui-input");
+      input.slot = "input";
+      this.appendChild(input);
+    }
     Object.assign(input, Object.assign({
       object,
       key
     }, attributes));
     this.inputs.set(input.name, input);
-    input.slot = "input";
-    this.appendChild(input);
 
     return input;
   }

@@ -55,20 +55,24 @@ export default class GUIInputElement extends HTMLElement {
   _onInput(e) {
     e.stopPropagation();
     this._updateValueFromInput(e.target);
-    this.dispatchEvent(new Event("input"));
+    this.dispatchEvent(new Event("input", {
+      bubbles: true
+    }));
   }
   
   _onChange(e) {
     e.stopPropagation();
     this._updateValueFromInput(e.target);
-    this.dispatchEvent(new Event("change"));
   }
   
   _onReset(e) {
     this.value = this.initialValue;
-    this.dispatchEvent(new Event("reset"));
-    this.dispatchEvent(new Event("input"));
-    this.dispatchEvent(new Event("change"));
+    this.dispatchEvent(new Event("input", {
+      bubbles: true
+    }));
+    this.dispatchEvent(new Event("reset", {
+      bubbles: true
+    }));
   }
 
   _updateValueFromInput(input) {
@@ -81,7 +85,7 @@ export default class GUIInputElement extends HTMLElement {
 
   set object(value) {
     this._object = value;
-    if(this.object && this.key) {
+    if(this.initialValue === undefined && this.object && this.key) {
       this.value = this.object[this.key];
     }
   }
@@ -92,7 +96,7 @@ export default class GUIInputElement extends HTMLElement {
 
   set key(value) {
     this._key = value;
-    if(this.object && this.key) {
+    if(this.initialValue === undefined && this.object && this.key) {
       this.value = this.object[this.key];
     }
   }
@@ -110,6 +114,10 @@ export default class GUIInputElement extends HTMLElement {
     }
     this.object[this.key] = value;
     this._updateInputFromValue(value);
+    
+    this.dispatchEvent(new Event("change", {
+      bubbles: true
+    }));
   }
 
   get value() {

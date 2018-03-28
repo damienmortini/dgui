@@ -27,11 +27,14 @@ export default class GUIElement extends HTMLElement {
   }
 
   addNode(attributes) {
-    const node = this.nodes.get(attributes.name) || document.createElement("dgui-node");
+    let node = this.nodes.get(attributes.name);
+    if(!node) {
+      node = document.createElement("dgui-node");
+      node.slot = "node";
+      this.appendChild(node);
+    }
     Object.assign(node, attributes);
     this.nodes.set(node.name, node);
-    node.slot = "node";
-    this.appendChild(node);
   }
 
   toJSON() {
