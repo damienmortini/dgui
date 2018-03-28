@@ -1,3 +1,4 @@
+import Color from "../../node_modules/dlib/math/Color.js";
 import GUIInputElement from "./GUIInputElement.js";
 
 export default class GUIColorInputElement extends GUIInputElement {
@@ -14,52 +15,73 @@ export default class GUIColorInputElement extends GUIInputElement {
           width: 100%;
         }
       </style>
-      <input type="text" maxlength="7" size="7">
+      <input type="text" size="7">
       <input type="color">`
     });
     this._textInput = this.shadowRoot.querySelector(`input[type="text"]`);
     this._colorInput = this.shadowRoot.querySelector(`input[type="color"]`);
   }
 
-  // _updateInputFromValue(value) {
-  //   console.log(value);
-    
-  //   if(typeof value === "string") {
-  //     this._colorInput.style.color = value;
-  //     const results = /rgba?\s*\(\s*(\d*),\s*(\d*)\s*,\s*(\d*)\s*(,\s*([\.\d]*))?\s*\)/.exec(getComputedStyle(this._colorInput).getPropertyValue("color"));
-  //     console.log(results);
-      
-  //   }
-  // }
-
-  _updateValueFromInput(input) {
-    if(typeof this.value === "string") {
-      this._colorInput.style.color = input.value;
-      const results = /rgba?\s*\(\s*(\d*),\s*(\d*)\s*,\s*(\d*)\s*(,\s*([\.\d]*))?\s*\)/.exec(getComputedStyle(this._colorInput).getPropertyValue("color"));
-      const value = `#${parseInt(results[1]).toString(16).padStart(2, "0")}${parseInt(results[2]).toString(16).padStart(2, "0")}${parseInt(results[3]).toString(16).padStart(2, "0")}`;
-      this.value = value;
+  set initialValue(value) {
+    if(typeof value === "string") {
+      this._initialValue = value;
+    } else {
+      this._initialValue = Object.assign(value[0] === undefined ? {} : [], value);
     }
-    
-    
+  }
+
+  get initialValue() {
+    return this._initialValue;
+  }
+
+  set value(value) {
+    if (typeof super.value === "string") {
+      super.value = value;
+    } else {
+      const RGBA = Color.styleToRGBA(this._valueToHexadecimal(value));
+      if (super.value.r) {
+        [super.value.r, super.value.g, super.value.b] = [RGBA[0], RGBA[1], RGBA[2]];
+      } else if (super.value.x) {
+        [super.value.x, super.value.y, super.value.z] = [RGBA[0], RGBA[1], RGBA[2]];
+      } else {
+        [super.value[0], super.value[1], super.value[2]] = [RGBA[0], RGBA[1], RGBA[2]];
+      }
+    }
+    super.value = this.value;
+  }
+
+  get value() {
+    return super.value;
   }
 
   _updateInputFromValue(value) {
-    if(typeof value !== "string") {
-      //temp
-      return;
+    const hexValue = this._valueToHexadecimal(value);
+    
+    if (this.shadowRoot.activeElement !== this._textInput) {
+      this._textInput.value = hexValue;
+    }
+    this._colorInput.value = hexValue;
+  }
+
+  _valueToHexadecimal(value) {
+    let RGBA;
+
+    if (typeof value === "string") {
+      RGBA = Color.styleToRGBA(value);
+    } else if (value.r) {
+      RGBA = [value.r, value.g, value.b, 1];
+    } else if (value.x) {
+      RGBA = [value.x, value.y, value.z, 1];
+    } else {
+      RGBA = [value[0], value[1], value[2], 1];
     }
 
-    value = value.length === 6 ? `#${value}` : value;
-    
-    if(this.shadowRoot.activeElement !== this._textInput) {
-      this._textInput.value = value;
-    }
-    this._colorInput.value = value;
+    return `#${Math.floor(RGBA[0] * 255).toString(16).padStart(2, "0")}${Math.floor(RGBA[1] * 255).toString(16).padStart(2, "0")}${Math.floor(RGBA[2] * 255).toString(16).padStart(2, "0")}`;
   }
 }
 
 GUIInputElement.typeResolvers.set("color", (value, attributes) => {
-  return typeof value === "string" && value.length === 7 && value.startsWith("#") || (value.r !== undefined && value.g !== undefined && value.b !== undefined);
+  return typeof value === "string" && ((value.length === 7 && value.startsWith("#")) || value.startsWith("rgb") || value.startsWith("hsl")) || (value.r !== undefined && value.g !== undefined && value.b !== undefined);
 });
 
 window.customElements.define("dgui-colorinput", GUIColorInputElement);

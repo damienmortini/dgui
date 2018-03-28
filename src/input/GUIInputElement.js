@@ -66,9 +66,6 @@ export default class GUIInputElement extends HTMLElement {
   }
   
   _onReset(e) {
-    if(this.value === this.initialValue) {
-      return;
-    }
     this.value = this.initialValue;
     this.dispatchEvent(new Event("reset"));
     this.dispatchEvent(new Event("input"));
