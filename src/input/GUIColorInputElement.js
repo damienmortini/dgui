@@ -35,18 +35,27 @@ export default class GUIColorInputElement extends GUIInputElement {
   }
 
   set value(value) {
-    if (typeof super.value === "string") {
-      super.value = value;
-    } else {
+    if (typeof this.value === "object" && typeof value === "string") {
       const RGBA = Color.styleToRGBA(this._valueToHexadecimal(value));
-      if (super.value.r) {
-        [super.value.r, super.value.g, super.value.b] = [RGBA[0], RGBA[1], RGBA[2]];
-      } else if (super.value.x) {
-        [super.value.x, super.value.y, super.value.z] = [RGBA[0], RGBA[1], RGBA[2]];
+      if (this.value.r) {
+        [this.value.r, this.value.g, this.value.b] = [RGBA[0], RGBA[1], RGBA[2]];
+      } else if (this.value.x) {
+        [this.value.x, this.value.y, this.value.z] = [RGBA[0], RGBA[1], RGBA[2]];
       } else {
-        [super.value[0], super.value[1], super.value[2]] = [RGBA[0], RGBA[1], RGBA[2]];
+        [this.value[0], this.value[1], this.value[2]] = [RGBA[0], RGBA[1], RGBA[2]];
       }
       super.value = this.value;
+    } else if (typeof this.value === "object" && typeof value === "object") {
+      if (this.value.r) {
+        [this.value.r, this.value.g, this.value.b] = [value.r, value.g, value.b];
+      } else if (this.value.x) {
+        [this.value.x, this.value.y, this.value.z] = [value.x, value.y, value.z];
+      } else {
+        [this.value[0], this.value[1], this.value[2]] = [value[0], value[1], value[2]];
+      }
+      super.value = this.value;
+    } else {
+      super.value = value;
     }
   }
 
@@ -81,7 +90,7 @@ export default class GUIColorInputElement extends GUIInputElement {
 }
 
 GUIInputElement.typeResolvers.set("color", (value, attributes) => {
-  return typeof value === "string" && ((value.length === 7 && value.startsWith("#")) || value.startsWith("rgb") || value.startsWith("hsl")) || (value.r !== undefined && value.g !== undefined && value.b !== undefined);
+  return typeof value === "string" && ((value.length === 7 && value.startsWith("#")) || value.startsWith("rgb") || value.startsWith("hsl")) || (typeof value === "object" && value.r !== undefined && value.g !== undefined && value.b !== undefined);
 });
 
 window.customElements.define("dgui-colorinput", GUIColorInputElement);

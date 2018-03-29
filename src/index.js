@@ -1,3 +1,4 @@
+import Loader from "../node_modules/dlib/utils/Loader.js";
 import GUIElement from "./GUIElement.js";
 import GUINodeElement from "./GUINodeElement.js";
 
@@ -34,6 +35,12 @@ const sendInputData = (e) => {
 }
 GUI.addEventListener("input", sendInputData);
 GUI.addEventListener("save", sendInputData);
+
+// Loader.load("../gui-data.json").then((data) => {
+//   Object.assign(GUI, data);
+// }).catch((error) => {
+//   console.log(error);
+// });
 
 window.DGUI = GUI;
 export default GUI;

@@ -67,12 +67,12 @@ export default class GUIInputElement extends HTMLElement {
       bubbles: true
     }));
   }
-  
+
   _onChange(e) {
     e.stopPropagation();
     this._updateValueFromInput(e.target);
   }
-  
+
   _onReset(e) {
     this.value = this.initialValue;
     this.dispatchEvent(new Event("input", {
@@ -93,7 +93,7 @@ export default class GUIInputElement extends HTMLElement {
 
   set object(value) {
     this._object = value;
-    if(this.initialValue === undefined && this.object && this.key) {
+    if (this.initialValue === undefined && this.object && this.key) {
       this.value = this.object[this.key];
     }
   }
@@ -104,32 +104,32 @@ export default class GUIInputElement extends HTMLElement {
 
   set key(value) {
     this._key = value;
-    if(this.initialValue === undefined && this.object && this.key) {
+    if (this.initialValue === undefined && this.object && this.key) {
       this.value = this.object[this.key];
     }
   }
 
   get key() {
-    return this._key || "value";
+    return this._key;
   }
 
   set value(value) {
-    if(this.initialValue === undefined) {
-      this.initialValue = value;
+    this._value = value;
+    if (this.initialValue === undefined) {
+      this.initialValue = this._value;
     }
-    if(!this.object) {
-      this.object = {value};
+    if (this.object && this.key) {
+      this.object[this.key] = this._value;
     }
-    this.object[this.key] = value;
-    this._updateInputFromValue(value);
-    
+    this._updateInputFromValue(this._value);
+
     this.dispatchEvent(new Event("change", {
       bubbles: true
     }));
   }
 
   get value() {
-    return this.object[this.key];
+    return this._value;
   }
 
   set label(value) {
@@ -144,7 +144,7 @@ export default class GUIInputElement extends HTMLElement {
 
   set name(value) {
     this._name = value;
-    if(!this.label) {
+    if (!this.label) {
       this.label = this.name;
     }
   }

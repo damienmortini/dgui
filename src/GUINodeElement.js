@@ -77,12 +77,16 @@ export default class GUINodeElement extends HTMLElement {
     return this._container.open;
   }
 
-  addInput(object, key, attributes = object) {
+  addInput(object, key, attributes) {
+    if(!key && !attributes) {
+      attributes = object;
+      object = undefined;
+    }
     attributes = Object.assign({}, attributes);
 
     if (!attributes.type) {
       GUIInputElement.typeResolvers.forEach((resolver, type) => {
-        if (resolver(attributes.value || object[key], attributes)) {
+        if (resolver(attributes.value || (object ? object[key] : undefined), attributes)) {
           attributes.type = type;
         }
       });
