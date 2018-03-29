@@ -43,7 +43,8 @@ export default class GUINodeElement extends HTMLElement {
   }
 
   set inputs(value) {
-    for (const data of value) {
+    const dataArray = Array.from(value);
+    for (const data of (dataArray.length ? dataArray : Object.entries(value))) {
       this.addInput(data[1] || data);
     }
   }
@@ -103,10 +104,14 @@ export default class GUINodeElement extends HTMLElement {
   }
 
   toJSON() {
+    const inputs = {};
+    for (const [key, value] of this.inputs) {
+      inputs[key] = value.toJSON();
+    }
     return {
       name: this.name,
       label: this.label,
-      inputs: [...this.inputs.values()]
+      inputs: inputs
     }
   }
 }

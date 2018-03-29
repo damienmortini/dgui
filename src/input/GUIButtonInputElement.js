@@ -7,7 +7,7 @@ export default class GUIButtonInputElement extends GUIInputElement {
       content: `
         <style>
           :host {
-            grid-template-columns: 1fr auto;
+            grid-template-columns: 1fr auto auto;
           }
 
           label {

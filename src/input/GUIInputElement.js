@@ -18,7 +18,7 @@ export default class GUIInputElement extends HTMLElement {
         :host {
           display: grid;
           max-width: 100%;
-          grid-template-columns: auto 1fr auto;
+          grid-template-columns: auto 1fr auto auto;
           grid-gap: 5px;
           align-items: center;
         }
@@ -36,6 +36,7 @@ export default class GUIInputElement extends HTMLElement {
       </style>
       <label></label>
       ${content}
+      <button id=\"save\">Save</button>
       <button id=\"reset\">✕</button>
     `;
   }
@@ -44,12 +45,19 @@ export default class GUIInputElement extends HTMLElement {
     this.shadowRoot.addEventListener("change", this._onChangeBinded = this._onChangeBinded || this._onChange.bind(this));
     this.shadowRoot.addEventListener("input", this._onInputBinded = this._onInputBinded || this._onInput.bind(this));
     this.shadowRoot.querySelector("#reset").addEventListener("click", this._onResetBinded = this._onResetBinded || this._onReset.bind(this));
+    this.shadowRoot.querySelector("#save").addEventListener("click", this.saveBinded = this.saveBinded || this.save.bind(this));
   }
 
   disconnectedCallback() {
     this.shadowRoot.removeEventListener("change", this._onChangeBinded);
     this.shadowRoot.removeEventListener("input", this._onInputBinded);
     this.shadowRoot.querySelector("#reset").removeEventListener("click", this._onResetBinded);
+  }
+
+  save() {
+    this.dispatchEvent(new Event("save", {
+      bubbles: true
+    }));
   }
 
   _onInput(e) {

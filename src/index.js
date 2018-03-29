@@ -1,4 +1,5 @@
 import GUIElement from "./GUIElement.js";
+import GUINodeElement from "./GUINodeElement.js";
 
 const GUI = new GUIElement();
 GUI.addNode({
@@ -12,18 +13,27 @@ GUI.addInput = (...parameters) => {
 
 const socket = new WebSocket("ws://localhost");
 socket.addEventListener("message", (event) => {
-  Object.assign(GUI, JSON.parse(event.data));
+  const data = JSON.parse(event.data);
+  if(data.type === "input") {
+    Object.assign(GUI, data.data);
+  }
 });
-GUI.addEventListener("input", (e) => {
+const sendInputData = (e) => {
   socket.send(JSON.stringify({
-    nodes: [{
-      name: e.target.parentElement.name,
-      inputs: [
-        e.target.toJSON()
-      ]
-    }]
+    type: e.type,
+    data: Object.assign(GUI.toJSON(), {
+      nodes: {
+        [e.target.parentElement.name]: Object.assign(e.target.parentElement.toJSON(), {
+          inputs: {
+            [e.target.name]: e.target.toJSON()
+          }
+        })
+      }
+    })
   }));
-});
+}
+GUI.addEventListener("input", sendInputData);
+GUI.addEventListener("save", sendInputData);
 
 window.DGUI = GUI;
 export default GUI;

@@ -17,7 +17,8 @@ export default class GUIElement extends HTMLElement {
   }
 
   set nodes(value) {
-    for (const data of value) {
+    const dataArray = Array.from(value);
+    for (const data of (dataArray.length ? dataArray : Object.entries(value))) {
       this.addNode(data[1] || data);
     }
   }
@@ -38,8 +39,12 @@ export default class GUIElement extends HTMLElement {
   }
 
   toJSON() {
+    const nodes = {};
+    for (const [key, value] of this.nodes) {
+      nodes[key] = value.toJSON();
+    }
     return {
-      nodes: [...this.nodes.values()]
+      nodes
     }
   }
 }

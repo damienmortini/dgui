@@ -1,5 +1,4 @@
 const browserSyncServer = require("browser-sync").create();
-require("./src/server.js");
 
 browserSyncServer.init({
   server: true,

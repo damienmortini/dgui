@@ -5,6 +5,7 @@
   "main": "src/index.js",
   "scripts": {
     "start": "node server.js",
+    "server": "nodemon --watch src/server.js src/server.js",
     "build": "rollup -c",
     "release": "npm run build && minify build/index.js -o build/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -14,6 +15,7 @@
   "dependencies": {
     "@webcomponents/webcomponentsjs": "^1.1.0",
     "dlib": "0.0.78",
+    "nodemon": "^1.17.2",
     "ws": "^5.1.0"
   },
   "devDependencies": {

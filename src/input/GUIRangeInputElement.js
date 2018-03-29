@@ -7,7 +7,7 @@ export default class GUIRangeInputElement extends GUIInputElement {
       content: `
         <style>
           :host {
-            grid-template-columns: auto 2.5fr 1fr auto;
+            grid-template-columns: auto 2.5fr 1fr auto auto;
           }
 
           input {

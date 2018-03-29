@@ -8,7 +8,7 @@ export default class GUIColorInputElement extends GUIInputElement {
       content: `
       <style>
         :host {
-          grid-template-columns: 2fr auto 1fr auto;
+          grid-template-columns: 2fr auto 1fr auto auto;
         }
         input {
           box-sizing: border-box;
