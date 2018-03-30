@@ -26,6 +26,10 @@ class GUIStaticElement extends GUIElement {
     });
   }
 
+  get inputs() {
+    return this.nodes.get("main").inputs;
+  }
+
   add(...parameters) {
     return this.nodes.get("main").addInput(...parameters);
   }
@@ -35,12 +39,6 @@ window.customElements.define("dgui-staticgui", GUIStaticElement);
 
 const GUI = document.createElement("dgui-staticgui");
 document.body.appendChild(GUI);
-
-GUI.connect();
-
-Loader.load("gui-data.json").then((data) => {
-  Object.assign(GUI, data);
-});
 
 window.dgui = GUI;
 export { GUI };

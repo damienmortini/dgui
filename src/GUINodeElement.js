@@ -92,7 +92,8 @@ export default class GUINodeElement extends HTMLElement {
       });
     }
     
-    let input = this.inputs.get(attributes.name);
+    let input = this.inputs.get(attributes.name || attributes.label || attributes.key);
+    
     if(!input) {
       input = document.createElement(window.customElements.get(`dgui-${attributes.type}input`) ? `dgui-${attributes.type}input` : "dgui-input");
       input.slot = "input";

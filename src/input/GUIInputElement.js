@@ -107,6 +107,9 @@ export default class GUIInputElement extends HTMLElement {
     if (this.initialValue === undefined && this.object && this.key) {
       this.value = this.object[this.key];
     }
+    if (!this.label) {
+      this.label = value;
+    }
   }
 
   get key() {
@@ -136,6 +139,9 @@ export default class GUIInputElement extends HTMLElement {
     const label = this.shadowRoot.querySelector("label");
     label.title = value;
     label.textContent = value;
+    if (!this.name && value) {
+      this.name = value;
+    }
   }
 
   get label() {
@@ -144,13 +150,11 @@ export default class GUIInputElement extends HTMLElement {
 
   set name(value) {
     this._name = value;
-    if (!this.label) {
-      this.label = this.name;
-    }
+    this.setAttribute("name", value);
   }
 
   get name() {
-    return this._name || this.label.toLowerCase() || this.key.toLowerCase();
+    return this._name;
   }
 
   toJSON() {
