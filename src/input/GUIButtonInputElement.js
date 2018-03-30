@@ -40,10 +40,11 @@ export default class GUIButtonInputElement extends GUIInputElement {
 
   set label(value) {
     this.button.textContent = value;
+    super.label = value;
   }
-
+  
   get label() {
-    return this.button.textContent;
+    return super.label;
   }
 }
 

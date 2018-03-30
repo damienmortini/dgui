@@ -14,6 +14,30 @@ export default class GUIElement extends HTMLElement {
     `;
 
     this._nodes = new Map();
+
+    const socket = new WebSocket("ws://localhost");
+    socket.addEventListener("message", (event) => {
+      const data = JSON.parse(event.data);
+      if (data.type === "input") {
+        Object.assign(this, data.data);
+      }
+    });
+    const sendInputData = (e) => {
+      socket.send(JSON.stringify({
+        type: e.type,
+        data: Object.assign(this.toJSON(), {
+          nodes: {
+            [e.target.parentElement.name]: Object.assign(e.target.parentElement.toJSON(), {
+              inputs: {
+                [e.target.name]: e.target.toJSON()
+              }
+            })
+          }
+        })
+      }));
+    }
+    this.addEventListener("input", sendInputData);
+    this.addEventListener("save", sendInputData);
   }
 
   set nodes(value) {
@@ -29,7 +53,7 @@ export default class GUIElement extends HTMLElement {
 
   addNode(attributes) {
     let node = this.nodes.get(attributes.name);
-    if(!node) {
+    if (!node) {
       node = document.createElement("dgui-node");
       node.slot = "node";
       this.appendChild(node);

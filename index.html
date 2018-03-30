@@ -89,6 +89,10 @@
         }).addEventListener("change", (e) => {
           console.log("Color Style", e.target.value);
         });
+        
+        Loader.load("gui-data.json").then((data) => {
+          Object.assign(dgui, data);
+        });
       }
       if (/\bdev\b/.test(window.location.search)) {
         script.type = "module";
