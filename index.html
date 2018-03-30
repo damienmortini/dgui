@@ -33,28 +33,28 @@
       const script = document.createElement("script");
       document.currentScript.parentNode.insertBefore(script, document.currentScript.nextSibling);
       script.onload = () => {
-        dgui.addInput({value: .5}, "value", {
+        dgui.add({value: .5}, "value", {
           label: "Number"
         }).addEventListener("change", (e) => {
           console.log("Number", e.target.value);
         });
-        dgui.addInput({value: 1}, "value", {
+        dgui.add({value: 1}, "value", {
           label: "Range",
           max: 2,
         }).addEventListener("change", (e) => {
           console.log("Range", e.target.value);
         });
-        dgui.addInput({value: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."}, "value", {
+        dgui.add({value: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."}, "value", {
           label: "Text"
         }).addEventListener("change", (e) => {
           console.log("Text", e.target.value);
         });
-        dgui.addInput({value: true}, "value", {
+        dgui.add({value: true}, "value", {
           label: "Checkbox"
         }).addEventListener("change", (e) => {
           console.log("Checkbox", e.target.value);
         });
-        dgui.addInput({
+        dgui.add({
           label: "Button",
           onclick: () => {
             return "Button return value";
@@ -62,7 +62,7 @@
         }).addEventListener("change", (e) => {
           console.log("Button", e.target.value);
         });
-        dgui.addInput({value: 2}, "value", {
+        dgui.add({value: 2}, "value", {
           label: "Select",
           options: [
             "One",
@@ -73,25 +73,21 @@
         }).addEventListener("change", (e) => {
           console.log("Select", e.target.value);
         });
-        dgui.addInput({value: {r: 1, g: .5, b: 0}}, "value", {
+        dgui.add({value: {r: 1, g: .5, b: 0}}, "value", {
           label: "Color RGB"
         }).addEventListener("change", (e) => {
           console.log("Color RGB", e.target.value);
         });
-        dgui.addInput({value: [0, 1, .5]}, "value", {
+        dgui.add({value: [0, 1, .5]}, "value", {
           label: "Color Array",
           type: "color"
         }).addEventListener("change", (e) => {
           console.log("Color Array", e.target.value);
         });
-        dgui.addInput({value: "rgba(127, 0, 255, 1)"}, "value", {
+        dgui.add({value: "rgba(127, 0, 255, 1)"}, "value", {
           label: "Color Style"
         }).addEventListener("change", (e) => {
           console.log("Color Style", e.target.value);
-        });
-        
-        Loader.load("gui-data.json").then((data) => {
-          Object.assign(dgui, data);
         });
       }
       if (/\bdev\b/.test(window.location.search)) {

@@ -14,15 +14,14 @@ export default class GUIElement extends HTMLElement {
     `;
 
     this._nodes = new Map();
+  }
 
-    const socket = new WebSocket("ws://localhost");
-    socket.addEventListener("message", (event) => {
-      const data = JSON.parse(event.data);
-      if (data.type === "input") {
-        Object.assign(this, data.data);
-      }
-    });
+  connect(url = "ws://localhost") {
+    const socket = new WebSocket(url);
     const sendInputData = (e) => {
+      if(socket.readyState !== WebSocket.OPEN) {
+        return;
+      }
       socket.send(JSON.stringify({
         type: e.type,
         data: Object.assign(this.toJSON(), {
@@ -36,7 +35,15 @@ export default class GUIElement extends HTMLElement {
         })
       }));
     }
-    this.addEventListener("input", sendInputData);
+    socket.addEventListener("message", (event) => {
+      const data = JSON.parse(event.data);
+      if (data.type === "change") {
+        this.removeEventListener("change", sendInputData);
+        Object.assign(this, data.data);
+        this.addEventListener("change", sendInputData);
+      }
+    });
+    this.addEventListener("change", sendInputData);
     this.addEventListener("save", sendInputData);
   }
 

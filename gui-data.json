@@ -1,0 +1,16 @@
+{
+	"nodes": {
+		"main": {
+			"name": "main",
+			"label": "GUI",
+			"inputs": {
+				"range": {
+					"name": "range",
+					"label": "Range",
+					"type": "range",
+					"value": 1.49
+				}
+			}
+		}
+	}
+}
