@@ -42,5 +42,5 @@ GUI.addEventListener("save", sendInputData);
 //   console.log(error);
 // });
 
-window.DGUI = GUI;
+window.dgui = GUI;
 export default GUI;
