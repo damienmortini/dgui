@@ -16,7 +16,6 @@ export default class GUINodeElement extends HTMLElement {
         :host {
           display: block; 
           resize: horizontal;
-          width: 300px;
           max-width: 100%;
           padding: 5px;
           font-family: monospace;

@@ -12,6 +12,7 @@ class GUIStaticElement extends GUIElement {
         position: absolute;
         top: 0;
         left: 0;
+        max-width: 300px;        
         max-height: 100%;
         overflow: auto;
       }
@@ -28,6 +29,14 @@ class GUIStaticElement extends GUIElement {
 
   get inputs() {
     return this.nodes.get("main").inputs;
+  }
+
+  get open() {
+    return this.nodes.get("main").open;
+  }
+
+  set open(value) {
+    this.nodes.get("main").open = value;
   }
 
   add(...parameters) {
