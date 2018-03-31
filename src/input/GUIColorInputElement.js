@@ -26,7 +26,7 @@ export default class GUIColorInputElement extends GUIInputElement {
     if (typeof value === "string") {
       this._initialValue = value;
     } else {
-      this._initialValue = value[0] === undefined ? { ...value } : [...value];
+      this._initialValue = value[0] === undefined ? Object.assign({}, value) : [...value];
     }
   }
 
