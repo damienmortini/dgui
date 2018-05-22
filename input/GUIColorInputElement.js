@@ -1,4 +1,4 @@
-import Color from "../../node_modules/dlib/math/Color.js";
+import Color from "../node_modules/dlib/math/Color.js";
 import GUIInputElement from "./GUIInputElement.js";
 
 export default class GUIColorInputElement extends GUIInputElement {
