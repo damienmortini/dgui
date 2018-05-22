@@ -60,16 +60,15 @@ export default class GUIRangeInputElement extends GUIInputElement {
   }
 
   _updateInputFromValue(value) {
-    if(this.shadowRoot.activeElement !== this._numberInput) {
+    if (this._activeInput !== this._numberInput) {
       this._numberInput.valueAsNumber = value;
     }
     this._rangeInput.valueAsNumber = value;
+    this._activeInput = null;
   }
 
   _updateValueFromInput(input) {
-    if(this.shadowRoot.activeElement !== input) {
-      return;
-    }
+    this._activeInput = input;
     this.value = isNaN(input.valueAsNumber) ? this.value : input.valueAsNumber;
   }
 }

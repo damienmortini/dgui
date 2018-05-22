@@ -11,8 +11,8 @@
   </script>
 
   <meta charset="UTF-8">
-  <title>dgui</title>
-  <meta name="description" content="dgui">
+  <title>GUI</title>
+  <meta name="description" content="GUI">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="index.css">
   <style>
@@ -28,75 +28,65 @@
 <body>
   <script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
 
-  <script type="text/javascript">
-    {
-      const script = document.createElement("script");
-      document.currentScript.parentNode.insertBefore(script, document.currentScript.nextSibling);
-      script.onload = () => {
-        dgui.add({value: .5}, "value", {
-          label: "Number"
-        }).addEventListener("change", (e) => {
-          console.log("Number", e.target.value);
-        });
-        dgui.add({value: 1}, "value", {
-          label: "Range",
-          max: 2,
-        }).addEventListener("change", (e) => {
-          console.log("Range", e.target.value);
-        });
-        dgui.add({value: "Lorem ipsum dolor sit amet, consectetur adipiscing elit."}, "value", {
-          label: "Text"
-        }).addEventListener("change", (e) => {
-          console.log("Text", e.target.value);
-        });
-        dgui.add({value: true}, "value", {
-          label: "Checkbox"
-        }).addEventListener("change", (e) => {
-          console.log("Checkbox", e.target.value);
-        });
-        dgui.add({
-          label: "Button",
-          onclick: () => {
-            return "Button return value";
-          }
-        }).addEventListener("change", (e) => {
-          console.log("Button", e.target.value);
-        });
-        dgui.add({value: 2}, "value", {
-          label: "Select",
-          options: [
-            "One",
-            2,
-            true,
-            [4, 8, 16, 32]
-          ]
-        }).addEventListener("change", (e) => {
-          console.log("Select", e.target.value);
-        });
-        dgui.add({value: {r: 1, g: .5, b: 0}}, "value", {
-          label: "Color RGB"
-        }).addEventListener("change", (e) => {
-          console.log("Color RGB", e.target.value);
-        });
-        dgui.add({value: [0, 1, .5]}, "value", {
-          label: "Color Array",
-          type: "color"
-        }).addEventListener("change", (e) => {
-          console.log("Color Array", e.target.value);
-        });
-        dgui.add({value: "rgba(127, 0, 255, 1)"}, "value", {
-          label: "Color Style"
-        }).addEventListener("change", (e) => {
-          console.log("Color Style", e.target.value);
-        });
+  <script type="module">
+    import GUI from "./index.js";
+
+    GUI.add({ value: .5 }, "value", {
+      label: "Number"
+    }).addEventListener("change", (e) => {
+      console.log("Number", e.target.value);
+    });
+    GUI.add({ value: 1 }, "value", {
+      label: "Range",
+      max: 2,
+    }).addEventListener("change", (e) => {
+      console.log("Range", e.target.value);
+    });
+    GUI.add({ value: "Lorem ipsum dolor sit amet, consectetur adipiscing elit." }, "value", {
+      label: "Text"
+    }).addEventListener("change", (e) => {
+      console.log("Text", e.target.value);
+    });
+    GUI.add({ value: true }, "value", {
+      label: "Checkbox"
+    }).addEventListener("change", (e) => {
+      console.log("Checkbox", e.target.value);
+    });
+    GUI.add({
+      label: "Button",
+      onclick: () => {
+        return "Button return value";
       }
-      if (/\bdev\b/.test(window.location.search)) {
-        script.type = "module";
-        script.src = "./index.js";
-      } else {
-        script.src = "./build/index.js";
-      }
-    }
+    }).addEventListener("change", (e) => {
+      console.log("Button", e.target.value);
+    });
+    GUI.add({ value: 2 }, "value", {
+      label: "Select",
+      options: [
+        "One",
+        2,
+        true,
+        [4, 8, 16, 32]
+      ]
+    }).addEventListener("change", (e) => {
+      console.log("Select", e.target.value);
+    });
+    GUI.add({ value: { r: 1, g: .5, b: 0 } }, "value", {
+      label: "Color RGB"
+    }).addEventListener("change", (e) => {
+      console.log("Color RGB", e.target.value);
+    });
+    GUI.add({ value: [0, 1, .5] }, "value", {
+      label: "Color Array",
+      type: "color"
+    }).addEventListener("change", (e) => {
+      console.log("Color Array", e.target.value);
+    });
+    GUI.add({ value: "rgba(127, 0, 255, 1)" }, "value", {
+      label: "Color Style"
+    }).addEventListener("change", (e) => {
+      console.log("Color Style", e.target.value);
+    });
   </script>
 </body>
 
