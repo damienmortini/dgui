@@ -41,7 +41,10 @@ export default class GUISelectInputElement extends GUIInputElement {
   }
   
   _updateValueFromInput(input) {
-    this.value = this.options[input.selectedIndex];
+    const option = this.options[input.selectedIndex];
+    if(this.value !== option) {
+      this.value = option;
+    }
   }
 }
 
