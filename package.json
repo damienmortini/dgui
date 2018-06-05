@@ -1,7 +1,7 @@
 {
   "name": "dgui",
   "version": "0.0.1",
-  "description": "",
+  "description": "The ultimate GUI to become",
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
