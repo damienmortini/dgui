@@ -18,13 +18,11 @@ export default class GUIDataController {
   }
 
   onGUIChange() {
-    console.log("change");
-    
     clearTimeout(this._setTimeout);
     this._setTimeout = setTimeout(() => {
       const urlSearchParams = new URLSearchParams(location.hash);
       urlSearchParams.set("dgui", JSON.stringify(this._gui));
-      location.hash = urlSearchParams.toString();
+      // location.hash = urlSearchParams.toString();
     }, 100);
   }
 

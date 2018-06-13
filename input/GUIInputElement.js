@@ -118,10 +118,6 @@ export default class GUIInputElement extends HTMLElement {
   }
 
   set value(value) {
-    if(this._value === value && this.initialValue !== undefined) {
-      return;
-    }
-    
     this._value = value;
     
     if (this.object && this.key) {

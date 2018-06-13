@@ -17,15 +17,17 @@ export default class GUISelectInputElement extends GUIInputElement {
 
   set options(value) {
     this._options = value;
+    this._stringifiedOptions = [];
     for (let index = 0; index < this._selectInput.options.length; index++) {
       this._selectInput.remove(index);
     }
-    for (let option of this._options) {
+    for (let [i, option] of this._options.entries()) {
       const optionElement = document.createElement("option");
       optionElement.value = option;
       optionElement.text = option;
       optionElement.selected = option === this.value;
       this._selectInput.add(optionElement);
+      this._stringifiedOptions[i] = JSON.stringify(option);
     }
   }
 
@@ -37,7 +39,7 @@ export default class GUISelectInputElement extends GUIInputElement {
     if(!this.options) {
       return;
     }
-    this._selectInput.selectedIndex = this.options.indexOf(value);
+    this._selectInput.selectedIndex = this._stringifiedOptions.indexOf(JSON.stringify(value));
   }
   
   _updateValueFromInput(input) {

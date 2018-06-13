@@ -4,17 +4,22 @@
 			"name": "main",
 			"label": "GUI",
 			"inputs": {
-				"Range": {
-					"name": "Range",
-					"label": "Range",
-					"type": "range",
-					"value": 0.66
-				},
 				"Select": {
 					"name": "Select",
 					"label": "Select",
 					"type": "select",
-					"value": true
+					"value": [
+						4,
+						8,
+						16,
+						32
+					]
+				},
+				"Range": {
+					"name": "Range",
+					"label": "Range",
+					"type": "range",
+					"value": 1.43
 				},
 				"Button": {
 					"name": "Button",
