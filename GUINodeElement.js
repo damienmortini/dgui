@@ -2,10 +2,10 @@ import GUIInputElement from "./input/GUIInputElement.js";
 import "./input/GUINumberInputElement.js";
 import "./input/GUITextInputElement.js";
 import "./input/GUIRangeInputElement.js";
-import "./input/GUISelectInputElement.js";
 import "./input/GUICheckboxInputElement.js";
 import "./input/GUIButtonInputElement.js";
 import "./input/GUIColorInputElement.js";
+import "./input/GUISelectInputElement.js";
 
 export default class GUINodeElement extends HTMLElement {
   constructor() {

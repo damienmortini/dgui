@@ -18,6 +18,16 @@ export default class GUIButtonInputElement extends GUIInputElement {
       `
     });
     this.button = this.shadowRoot.querySelector("button");
+    this.button.onclick = (e) => {
+      if(this.onclick) {
+        this.value = this._onclick(e);
+        this.dispatchEvent(new Event("input", {
+          bubbles: true
+        }));
+      } else {
+        this.value.call(this.object);
+      }
+    };
   }
 
   _updateInputFromValue() { }
@@ -26,12 +36,6 @@ export default class GUIButtonInputElement extends GUIInputElement {
 
   set onclick(value) {
     this._onclick = value;
-    this.button.onclick = (e) => {
-      this.value = value(e);
-      this.dispatchEvent(new Event("input", {
-        bubbles: true
-      }));
-    };
   }
 
   get onclick() {
@@ -48,6 +52,6 @@ export default class GUIButtonInputElement extends GUIInputElement {
   }
 }
 
-GUIInputElement.typeResolvers.set("button", (value, attributes) => attributes.onclick !== undefined);
+GUIInputElement.typeResolvers.set("button", (value, attributes) => typeof value === "function" || attributes.onclick !== undefined);
 
 window.customElements.define("dgui-buttoninput", GUIButtonInputElement);

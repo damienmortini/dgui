@@ -30,6 +30,10 @@ export default class GUIInputElement extends HTMLElement {
           white-space: nowrap;
         }
 
+        button {
+          height: 100%;
+        }
+
         #reset {
           width: 30px;
         }
