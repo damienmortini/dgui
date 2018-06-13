@@ -1,4 +1,6 @@
-import GUINodeElement from "./GUINodeElement.js";
+import WebSocket from "./node_modules/dlib/utils/WebSocket.js";
+
+import "./GUINodeElement.js";
 
 export default class GUIElement extends HTMLElement {
   constructor() {
@@ -16,13 +18,44 @@ export default class GUIElement extends HTMLElement {
     this._nodes = new Map();
   }
 
-  connect(url = "ws://localhost") {
-    const socket = new WebSocket(url);
-    const sendInputData = (e) => {
-      if(socket.readyState !== WebSocket.OPEN) {
+  get dataFileURL() {
+    return this._dataFileURL;
+  }
+
+  set dataFileURL(value) {
+    this._dataFileURL = value;
+    if (this.webSocket) {
+      this.webSocket.send(JSON.stringify({
+        type: "datafileurl",
+        data: this._dataFileURL
+      }));
+    }
+    fetch(this._dataFileURL).then((response) => {
+      if(response.status !== 404) {
+        return response.json();
+      }
+    }).then((data) => {
+      if (this._dataFileURL !== value) {
         return;
       }
-      socket.send(JSON.stringify({
+      Object.assign(this, data);
+    });
+  }
+
+  connect({
+    url = "wss://localhost:8000"
+  } = {}) {
+    this.webSocket = new WebSocket(url);
+
+    if (this.dataFileURL) {
+      this.webSocket.send(JSON.stringify({
+        type: "datafileurl",
+        data: this.dataFileURL
+      }));
+    }
+
+    const sendInputData = (e) => {
+      this.webSocket.send(JSON.stringify({
         type: e.type,
         data: Object.assign(this.toJSON(), {
           nodes: {
@@ -35,7 +68,7 @@ export default class GUIElement extends HTMLElement {
         })
       }));
     }
-    socket.addEventListener("message", (event) => {
+    this.webSocket.addEventListener("message", (event) => {
       const data = JSON.parse(event.data);
       if (data.type === "change") {
         this.removeEventListener("change", sendInputData);

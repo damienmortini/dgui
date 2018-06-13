@@ -24,7 +24,6 @@ export default class GUIInputElement extends HTMLElement {
         }
 
         label {
-          // width: 50px;
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
@@ -107,9 +106,7 @@ export default class GUIInputElement extends HTMLElement {
     if (this.initialValue === undefined && this.object && this.key) {
       this.value = this.object[this.key];
     }
-    if (!this.label) {
-      this.label = value;
-    }
+    this.setAttribute("name", this.name);
   }
 
   get key() {
@@ -136,25 +133,24 @@ export default class GUIInputElement extends HTMLElement {
   }
 
   set label(value) {
+    this._label = value;
     const label = this.shadowRoot.querySelector("label");
-    label.title = value;
-    label.textContent = value;
-    if (!this.name && value) {
-      this.name = value;
-    }
+    label.title = this._label;
+    label.textContent = this._label;
+    this.setAttribute("name", this.name);
   }
 
   get label() {
-    return this.shadowRoot.querySelector("label").textContent;
+    return this._label || this._name || this._key;
   }
 
   set name(value) {
     this._name = value;
-    this.setAttribute("name", value);
+    this.setAttribute("name", this.name);
   }
 
   get name() {
-    return this._name;
+    return this._name || this.label || this.key;
   }
 
   toJSON() {

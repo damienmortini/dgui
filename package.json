@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
-    "server": "nodemon --watch server server",
+    "server": "nodemon --watch server server/index.js",
     "build": "rollup -c",
     "release": "npm run build && minify build/index.js -o build/index.js",
     "bump": "npm version patch && npm publish",
