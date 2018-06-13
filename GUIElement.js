@@ -1,4 +1,6 @@
-import GUINodeElement from "./GUINodeElement.js";
+import "./GUINodeElement.js";
+
+import GUIDataController from "./GUIDataController.js";
 
 export default class GUIElement extends HTMLElement {
   constructor() {
@@ -14,37 +16,23 @@ export default class GUIElement extends HTMLElement {
     `;
 
     this._nodes = new Map();
+
+    this._dataController = new GUIDataController(this);
   }
 
-  connect(url = "ws://localhost") {
-    const socket = new WebSocket(url);
-    const sendInputData = (e) => {
-      if(socket.readyState !== WebSocket.OPEN) {
-        return;
-      }
-      socket.send(JSON.stringify({
-        type: e.type,
-        data: Object.assign(this.toJSON(), {
-          nodes: {
-            [e.target.parentElement.name]: Object.assign(e.target.parentElement.toJSON(), {
-              inputs: {
-                [e.target.name]: e.target.toJSON()
-              }
-            })
-          }
-        })
-      }));
-    }
-    socket.addEventListener("message", (event) => {
-      const data = JSON.parse(event.data);
-      if (data.type === "change") {
-        this.removeEventListener("change", sendInputData);
-        Object.assign(this, data.data);
-        this.addEventListener("change", sendInputData);
-      }
-    });
-    this.addEventListener("change", sendInputData);
-    this.addEventListener("save", sendInputData);
+  get dataFileURL() {
+    return this._dataController.dataFileURL;
+  }
+
+  set dataFileURL(value) {
+    this._dataController.dataFileURL = value;
+    this._dataFileURL = value;
+  }
+
+  connect({
+    url = "wss://localhost:8000"
+  } = {}) {
+    this._dataController.connect({ url });
   }
 
   set nodes(value) {

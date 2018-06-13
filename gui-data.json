@@ -4,11 +4,23 @@
 			"name": "main",
 			"label": "GUI",
 			"inputs": {
-				"range": {
-					"name": "range",
+				"Range": {
+					"name": "Range",
 					"label": "Range",
 					"type": "range",
-					"value": 1.49
+					"value": 0.66
+				},
+				"Select": {
+					"name": "Select",
+					"label": "Select",
+					"type": "select",
+					"value": true
+				},
+				"Button": {
+					"name": "Button",
+					"label": "Button",
+					"type": "button",
+					"value": "Value returned"
 				}
 			}
 		}

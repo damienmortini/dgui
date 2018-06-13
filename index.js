@@ -16,6 +16,9 @@ class GUIStaticElement extends GUIElement {
       }
     </style>
     `;
+
+    this.dataFileURL = "gui-data.json";
+    this.connect();
   }
 
   connectedCallback() {

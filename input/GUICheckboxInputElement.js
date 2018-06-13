@@ -7,10 +7,7 @@ export default class GUICheckboxInputElement extends GUIInputElement {
     });
   }
 
-  _onChange(e) {
-    super._onInput(e);
-    super._onChange(e);
-  }
+  _onChange(e) { }
 
   _updateInputFromValue(value) {
     this.shadowRoot.querySelector("input").checked = value;
