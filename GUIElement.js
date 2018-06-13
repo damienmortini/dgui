@@ -1,6 +1,6 @@
-import WebSocket from "./node_modules/dlib/utils/WebSocket.js";
-
 import "./GUINodeElement.js";
+
+import GUIDataController from "./GUIDataController.js";
 
 export default class GUIElement extends HTMLElement {
   constructor() {
@@ -16,68 +16,23 @@ export default class GUIElement extends HTMLElement {
     `;
 
     this._nodes = new Map();
+
+    this._dataController = new GUIDataController(this);
   }
 
   get dataFileURL() {
-    return this._dataFileURL;
+    return this._dataController.dataFileURL;
   }
 
   set dataFileURL(value) {
+    this._dataController.dataFileURL = value;
     this._dataFileURL = value;
-    if (this.webSocket) {
-      this.webSocket.send(JSON.stringify({
-        type: "datafileurl",
-        data: this._dataFileURL
-      }));
-    }
-    fetch(this._dataFileURL).then((response) => {
-      if(response.status !== 404) {
-        return response.json();
-      }
-    }).then((data) => {
-      if (this._dataFileURL !== value) {
-        return;
-      }
-      Object.assign(this, data);
-    });
   }
 
   connect({
     url = "wss://localhost:8000"
   } = {}) {
-    this.webSocket = new WebSocket(url);
-
-    if (this.dataFileURL) {
-      this.webSocket.send(JSON.stringify({
-        type: "datafileurl",
-        data: this.dataFileURL
-      }));
-    }
-
-    const sendInputData = (e) => {
-      this.webSocket.send(JSON.stringify({
-        type: e.type,
-        data: Object.assign(this.toJSON(), {
-          nodes: {
-            [e.target.parentElement.name]: Object.assign(e.target.parentElement.toJSON(), {
-              inputs: {
-                [e.target.name]: e.target.toJSON()
-              }
-            })
-          }
-        })
-      }));
-    }
-    this.webSocket.addEventListener("message", (event) => {
-      const data = JSON.parse(event.data);
-      if (data.type === "change") {
-        this.removeEventListener("change", sendInputData);
-        Object.assign(this, data.data);
-        this.addEventListener("change", sendInputData);
-      }
-    });
-    this.addEventListener("change", sendInputData);
-    this.addEventListener("save", sendInputData);
+    this._dataController.connect({ url });
   }
 
   set nodes(value) {

@@ -22,6 +22,8 @@ export default class GUIColorInputElement extends GUIInputElement {
     this._colorInput = this.shadowRoot.querySelector(`input[type="color"]`);
   }
 
+  _onChange(e) { }
+
   set initialValue(value) {
     if (typeof value === "string") {
       this._initialValue = value;
@@ -37,18 +39,18 @@ export default class GUIColorInputElement extends GUIInputElement {
   set value(value) {
     if (typeof this.value === "object" && typeof value === "string") {
       const RGBA = Color.styleToRGBA(this._valueToHexadecimal(value));
-      if (this.value.r) {
+      if (this.value.r !== undefined) {
         [this.value.r, this.value.g, this.value.b] = [RGBA[0], RGBA[1], RGBA[2]];
-      } else if (this.value.x) {
+      } else if (this.value.x !== undefined) {
         [this.value.x, this.value.y, this.value.z] = [RGBA[0], RGBA[1], RGBA[2]];
       } else {
         [this.value[0], this.value[1], this.value[2]] = [RGBA[0], RGBA[1], RGBA[2]];
       }
       super.value = this.value;
     } else if (typeof this.value === "object" && typeof value === "object") {
-      if (this.value.r) {
+      if (this.value.r !== undefined) {
         [this.value.r, this.value.g, this.value.b] = [value.r, value.g, value.b];
-      } else if (this.value.x) {
+      } else if (this.value.x !== undefined) {
         [this.value.x, this.value.y, this.value.z] = [value.x, value.y, value.z];
       } else {
         [this.value[0], this.value[1], this.value[2]] = [value[0], value[1], value[2]];
@@ -77,9 +79,9 @@ export default class GUIColorInputElement extends GUIInputElement {
 
     if (typeof value === "string") {
       RGBA = Color.styleToRGBA(value);
-    } else if (value.r) {
+    } else if (value.r !== undefined) {
       RGBA = [value.r, value.g, value.b, 1];
-    } else if (value.x) {
+    } else if (value.x !== undefined) {
       RGBA = [value.x, value.y, value.z, 1];
     } else {
       RGBA = [value[0], value[1], value[2], 1];

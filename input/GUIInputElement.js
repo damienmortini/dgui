@@ -114,18 +114,24 @@ export default class GUIInputElement extends HTMLElement {
   }
 
   set value(value) {
-    this._value = value;
-    if (this.initialValue === undefined) {
-      this.initialValue = this._value;
+    if(this._value === value && this.initialValue !== undefined) {
+      return;
     }
+    
+    this._value = value;
+    
     if (this.object && this.key) {
       this.object[this.key] = this._value;
     }
     this._updateInputFromValue(this._value);
 
-    this.dispatchEvent(new Event("change", {
-      bubbles: true
-    }));
+    if (this.initialValue === undefined) {
+      this.initialValue = this._value;
+    } else {
+      this.dispatchEvent(new Event("change", {
+        bubbles: true
+      }));
+    }
   }
 
   get value() {
