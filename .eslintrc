@@ -1,4 +1,5 @@
 {
+  "extends": ["eslint:recommended", "google"],
   "env": {
     "browser": true,
     "node": true,
@@ -9,6 +10,8 @@
   },
   "rules": {
     "no-console": 1,
-    "no-underscore-dangle": 0
+    "require-jsdoc": 0,
+    "max-len": 0,
+    "object-curly-spacing": 0
   }
 }

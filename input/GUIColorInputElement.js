@@ -1,11 +1,13 @@
-import Color from "../node_modules/dlib/math/Color.js";
-import GUIInputElement from "./GUIInputElement.js";
+import Color from '../node_modules/dlib/math/Color.js';
+import GUIInputElement from './GUIInputElement.js';
 
-export default class GUIColorInputElement extends GUIInputElement {
+export default class GUIColorInputElement extends window.HTMLElement {
   constructor() {
-    super({
-      type: "color",
-      content: `
+    super();
+
+    this.type = 'color';
+
+    this.attachShadow({ mode: 'open' }).innerHTML = `
       <style>
         :host {
           grid-template-columns: 2fr auto 1fr auto auto;
@@ -16,28 +18,33 @@ export default class GUIColorInputElement extends GUIInputElement {
         }
       </style>
       <input type="text" size="7">
-      <input type="color">`
-    });
+      <input type="color">
+    `;
+
     this._textInput = this.shadowRoot.querySelector(`input[type="text"]`);
     this._colorInput = this.shadowRoot.querySelector(`input[type="color"]`);
   }
 
-  _onChange(e) { }
-
-  set initialValue(value) {
-    if (typeof value === "string") {
-      this._initialValue = value;
-    } else {
-      this._initialValue = value[0] === undefined ? Object.assign({}, value) : [...value];
-    }
+  connectedCallback() {
+    this.shadowRoot.addEventListener('change', this._onChangeBinded = this._onChangeBinded || this._onChange.bind(this));
+    this.shadowRoot.addEventListener('input', this._onInputBinded = this._onInputBinded || this._onInput.bind(this));
   }
 
-  get initialValue() {
-    return this._initialValue;
+  disconnectedCallback() {
+    this.shadowRoot.removeEventListener('change', this._onChangeBinded);
+    this.shadowRoot.removeEventListener('input', this._onInputBinded);
+  }
+
+  _onChange(e) {
+    console.log('change');
+  }
+
+  _onInput(e) {
+    console.log('input');
   }
 
   set value(value) {
-    if (typeof this.value === "object" && typeof value === "string") {
+    if (typeof this.value === 'object' && typeof value === 'string') {
       const RGBA = Color.styleToRGBA(this._valueToHexadecimal(value));
       if (this.value.r !== undefined) {
         [this.value.r, this.value.g, this.value.b] = [RGBA[0], RGBA[1], RGBA[2]];
@@ -46,8 +53,9 @@ export default class GUIColorInputElement extends GUIInputElement {
       } else {
         [this.value[0], this.value[1], this.value[2]] = [RGBA[0], RGBA[1], RGBA[2]];
       }
+
       super.value = this.value;
-    } else if (typeof this.value === "object" && typeof value === "object") {
+    } else if (typeof this.value === 'object' && typeof value === 'object') {
       if (this.value.r !== undefined) {
         [this.value.r, this.value.g, this.value.b] = [value.r, value.g, value.b];
       } else if (this.value.x !== undefined) {
@@ -55,9 +63,8 @@ export default class GUIColorInputElement extends GUIInputElement {
       } else {
         [this.value[0], this.value[1], this.value[2]] = [value[0], value[1], value[2]];
       }
-      super.value = this.value;
     } else {
-      super.value = value;
+      this.value = value;
     }
   }
 
@@ -77,7 +84,7 @@ export default class GUIColorInputElement extends GUIInputElement {
   _valueToHexadecimal(value) {
     let RGBA;
 
-    if (typeof value === "string") {
+    if (typeof value === 'string') {
       RGBA = Color.styleToRGBA(value);
     } else if (value.r !== undefined) {
       RGBA = [value.r, value.g, value.b, 1];
@@ -87,12 +94,12 @@ export default class GUIColorInputElement extends GUIInputElement {
       RGBA = [value[0], value[1], value[2], 1];
     }
 
-    return `#${Math.floor(RGBA[0] * 255).toString(16).padStart(2, "0")}${Math.floor(RGBA[1] * 255).toString(16).padStart(2, "0")}${Math.floor(RGBA[2] * 255).toString(16).padStart(2, "0")}`;
+    return `#${Math.floor(RGBA[0] * 255).toString(16).padStart(2, '0')}${Math.floor(RGBA[1] * 255).toString(16).padStart(2, '0')}${Math.floor(RGBA[2] * 255).toString(16).padStart(2, '0')}`;
   }
 }
 
-GUIInputElement.typeResolvers.set("color", (value, attributes) => {
-  return typeof value === "string" && ((value.length === 7 && value.startsWith("#")) || value.startsWith("rgb") || value.startsWith("hsl")) || (typeof value === "object" && value.r !== undefined && value.g !== undefined && value.b !== undefined);
+GUIInputElement.typeResolvers.set('color', (value, attributes) => {
+  return typeof value === 'string' && ((value.length === 7 && value.startsWith('#')) || value.startsWith('rgb') || value.startsWith('hsl')) || (typeof value === 'object' && value.r !== undefined && value.g !== undefined && value.b !== undefined);
 });
 
-window.customElements.define("dgui-colorinput", GUIColorInputElement);
+window.customElements.define('dgui-colorinput', GUIColorInputElement);

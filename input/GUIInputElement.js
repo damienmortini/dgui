@@ -5,16 +5,16 @@ export default class GUIInputElement extends HTMLElement {
     return TYPE_RESOLVERS;
   }
 
-  constructor({
-    type = "",
-    content = ""
-  } = {}) {
+  static get typeMap() {
+    return new Map([
+      ['color', 'dgui-colorinput'],
+    ]);
+  }
+
+  constructor() {
     super();
 
-    this.type = type || this.getAttribute("type") || "text";
-    content = content || `<input type="${this.type}"></input>`;
-
-    this.attachShadow({ mode: "open" }).innerHTML = `
+    this.attachShadow({mode: 'open'}).innerHTML = `
       <style>
         :host {
           display: grid;
@@ -39,64 +39,55 @@ export default class GUIInputElement extends HTMLElement {
         }
       </style>
       <label></label>
-      ${content}
-      <button id=\"save\">Save</button>
-      <button id=\"reset\">✕</button>
+      <slot></slot>
+      <button id="save">Save</button>
+      <button id="reset">✕</button>
     `;
 
-    this.name = this.getAttribute("name");
-    this.label = this.getAttribute("label");
-    this.value = this.getAttribute("value")
+    this.type = this.getAttribute('type') || 'text';
+    this.name = this.getAttribute('name');
+    this.label = this.getAttribute('label');
+    this.value = this.getAttribute('value');
+  }
+
+  set type(value) {
+    if (this._type === value) {
+      return;
+    }
+    this._type = value;
+
+    this._input = document.createElement(GUIInputElement.typeMap.get(this._type) || 'input');
+    this._input.type = this._type;
+    this.appendChild(this._input);
+  }
+
+  get type() {
+    return this._type;
   }
 
   connectedCallback() {
-    this.shadowRoot.addEventListener("change", this._onChangeBinded = this._onChangeBinded || this._onChange.bind(this));
-    this.shadowRoot.addEventListener("input", this._onInputBinded = this._onInputBinded || this._onInput.bind(this));
-    this.shadowRoot.querySelector("#reset").addEventListener("click", this._onResetBinded = this._onResetBinded || this._onReset.bind(this));
-    this.shadowRoot.querySelector("#save").addEventListener("click", this.saveBinded = this.saveBinded || this.save.bind(this));
+    this.shadowRoot.querySelector('#reset').addEventListener('click', this._onResetBinded = this._onResetBinded || this._onReset.bind(this));
+    this.shadowRoot.querySelector('#save').addEventListener('click', this.saveBinded = this.saveBinded || this.save.bind(this));
   }
 
   disconnectedCallback() {
-    this.shadowRoot.removeEventListener("change", this._onChangeBinded);
-    this.shadowRoot.removeEventListener("input", this._onInputBinded);
-    this.shadowRoot.querySelector("#reset").removeEventListener("click", this._onResetBinded);
+    this.shadowRoot.querySelector('#reset').removeEventListener('click', this._onResetBinded);
   }
 
   save() {
-    this.dispatchEvent(new Event("save", {
-      bubbles: true
+    this.dispatchEvent(new Event('save', {
+      bubbles: true,
     }));
-  }
-
-  _onInput(e) {
-    e.stopPropagation();
-    this._updateValueFromInput(e.target);
-    this.dispatchEvent(new Event("input", {
-      bubbles: true
-    }));
-  }
-
-  _onChange(e) {
-    e.stopPropagation();
-    this._updateValueFromInput(e.target);
   }
 
   _onReset(e) {
     this.value = this.initialValue;
-    this.dispatchEvent(new Event("input", {
-      bubbles: true
+    this.dispatchEvent(new Event('input', {
+      bubbles: true,
     }));
-    this.dispatchEvent(new Event("reset", {
-      bubbles: true
+    this.dispatchEvent(new Event('reset', {
+      bubbles: true,
     }));
-  }
-
-  _updateValueFromInput(input) {
-    this.value = input.value;
-  }
-
-  _updateInputFromValue(value) {
-    this.shadowRoot.querySelector("input").value = value;
   }
 
   set object(value) {
@@ -115,7 +106,7 @@ export default class GUIInputElement extends HTMLElement {
     if (this.initialValue === undefined && this.object && this.key) {
       this.value = this.object[this.key];
     }
-    this.setAttribute("name", this.name);
+    this.setAttribute('name', this.name);
   }
 
   get key() {
@@ -124,31 +115,31 @@ export default class GUIInputElement extends HTMLElement {
 
   set value(value) {
     this._value = value;
-    
+
     if (this.object && this.key) {
       this.object[this.key] = this._value;
     }
-    this._updateInputFromValue(this._value);
+
+    this._input = value;
 
     if (this.initialValue === undefined) {
       this.initialValue = this._value;
     } else {
-      this.dispatchEvent(new Event("change", {
-        bubbles: true
+      this.dispatchEvent(new Event('change', {
+        bubbles: true,
       }));
     }
   }
 
   get value() {
-    return this._value;
+    return this._input.value;
   }
 
   set label(value) {
     this._label = value;
-    const label = this.shadowRoot.querySelector("label");
+    const label = this.shadowRoot.querySelector('label');
     label.title = this._label;
     label.textContent = this._label;
-    this.setAttribute("name", this.name);
   }
 
   get label() {
@@ -156,12 +147,11 @@ export default class GUIInputElement extends HTMLElement {
   }
 
   set name(value) {
-    this._name = value;
-    this.setAttribute("name", this.name);
+    this._input.name = value;
   }
 
   get name() {
-    return this._name || this.label || this.key;
+    return this._input.name || this.label || this.key;
   }
 
   toJSON() {
@@ -169,11 +159,11 @@ export default class GUIInputElement extends HTMLElement {
       name: this.name,
       label: this.label,
       type: this.type,
-      value: this.value
+      value: this.value,
     };
   }
 }
 
-GUIInputElement.typeResolvers.set("any", (value, attributes) => true);
+GUIInputElement.typeResolvers.set('any', (value, attributes) => true);
 
-window.customElements.define("dgui-input", GUIInputElement);
+window.customElements.define('dgui-input', GUIInputElement);
