@@ -1,5 +1,4 @@
 import GUIElement from "./GUIElement.js";
-import GUINodeElement from "./GUINodeElement.js";
 
 class GUIStaticElement extends GUIElement {
   constructor() {

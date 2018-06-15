@@ -30,7 +30,7 @@ export default class GUINodeElement extends HTMLElement {
       </style>
       <details>
         <summary></summary>
-        <slot name="input"></slot>
+        <slot></slot>
       </details>
     `;
 
@@ -39,6 +39,8 @@ export default class GUINodeElement extends HTMLElement {
     this._container = this.shadowRoot.querySelector("details");
 
     this.open = true;
+
+    this.shadowRoot.querySelector("summary").textContent = this.label;
   }
 
   set inputs(value) {
@@ -65,7 +67,7 @@ export default class GUINodeElement extends HTMLElement {
   }
 
   get label() {
-    return this._container.querySelector("summary").textContent;
+    return this._container.querySelector("summary").textContent || this.getAttribute("label") || "";
   }
 
   set open(value) {
@@ -109,8 +111,13 @@ export default class GUINodeElement extends HTMLElement {
 
   toJSON() {
     const inputs = {};
-    for (const [key, value] of this.inputs) {
-      inputs[key] = value.toJSON();
+    for (const [i, child] of [...this.children].entries()) {
+      const data = child.toJSON ? child.toJSON() : {
+        name: child.name,
+        type: child.type,
+        value: child.value
+      };
+      inputs[child.name || i] = data;
     }
     return {
       name: this.name,

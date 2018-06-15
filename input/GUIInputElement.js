@@ -7,11 +7,12 @@ export default class GUIInputElement extends HTMLElement {
 
   constructor({
     type = "",
-    content = `<input type="${type}"></input>`
+    content = ""
   } = {}) {
     super();
 
-    this.type = type;
+    this.type = type || this.getAttribute("type") || "text";
+    content = content || `<input type="${this.type}"></input>`;
 
     this.attachShadow({ mode: "open" }).innerHTML = `
       <style>
@@ -42,6 +43,10 @@ export default class GUIInputElement extends HTMLElement {
       <button id=\"save\">Save</button>
       <button id=\"reset\">✕</button>
     `;
+
+    this.name = this.getAttribute("name");
+    this.label = this.getAttribute("label");
+    this.value = this.getAttribute("value")
   }
 
   connectedCallback() {
