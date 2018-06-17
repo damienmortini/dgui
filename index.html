@@ -35,12 +35,13 @@
     <!-- <dgui-rangeinput name="Input" value="Ok"></dgui-input> -->
   <!-- </dgui-node> -->
 
-  <dgui-input type="color" name="input" value="#ff0000"></dgui-input>
+  <input-color name="color" value="#ff0000"></input-color>
+  <dgui-input type="color" name="input" value="#ffff00"></dgui-input>
 
   <script type="module">
     import GUI from "./GUINodeElement.js";
 
-    console.log(document.body.querySelector("dgui-node").toJSON());
+    console.log(document.body.querySelector("input-color").toJSON());
     
   </script>
 </body>

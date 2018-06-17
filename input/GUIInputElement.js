@@ -7,7 +7,7 @@ export default class GUIInputElement extends HTMLElement {
 
   static get typeMap() {
     return new Map([
-      ['color', 'dgui-colorinput'],
+      ['color', 'input-color'],
     ]);
   }
 
@@ -120,15 +120,9 @@ export default class GUIInputElement extends HTMLElement {
       this.object[this.key] = this._value;
     }
 
-    this._input = value;
-
-    if (this.initialValue === undefined) {
-      this.initialValue = this._value;
-    } else {
-      this.dispatchEvent(new Event('change', {
-        bubbles: true,
-      }));
-    }
+    console.log(this._input.value, value);
+    
+    this._input.value = value;
   }
 
   get value() {
@@ -143,7 +137,7 @@ export default class GUIInputElement extends HTMLElement {
   }
 
   get label() {
-    return this._label || this._name || this._key;
+    return this._label || this._input.name || this._key;
   }
 
   set name(value) {

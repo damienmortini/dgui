@@ -1,7 +1,6 @@
 import Color from '../node_modules/dlib/math/Color.js';
-import GUIInputElement from './GUIInputElement.js';
 
-export default class GUIColorInputElement extends window.HTMLElement {
+export default class ColorInputElement extends window.HTMLElement {
   constructor() {
     super();
 
@@ -10,7 +9,8 @@ export default class GUIColorInputElement extends window.HTMLElement {
     this.attachShadow({ mode: 'open' }).innerHTML = `
       <style>
         :host {
-          grid-template-columns: 2fr auto 1fr auto auto;
+          display: grid;
+          grid-template-columns: 3fr 1fr;
         }
         input {
           box-sizing: border-box;
@@ -23,6 +23,10 @@ export default class GUIColorInputElement extends window.HTMLElement {
 
     this._textInput = this.shadowRoot.querySelector(`input[type="text"]`);
     this._colorInput = this.shadowRoot.querySelector(`input[type="color"]`);
+
+    if (this.getAttribute('value')) {
+      this.value = this.getAttribute('value');
+    }
   }
 
   connectedCallback() {
@@ -36,40 +40,52 @@ export default class GUIColorInputElement extends window.HTMLElement {
   }
 
   _onChange(e) {
+    e.stopPropagation();
     console.log('change');
+    this.dispatchEvent(new Event('change', {
+      bubbles: true,
+    }));
   }
 
   _onInput(e) {
+    e.stopPropagation();
     console.log('input');
+    this.dispatchEvent(new Event('input', {
+      bubbles: true,
+    }));
+    this.value = e.target.value;
   }
 
   set value(value) {
-    if (typeof this.value === 'object' && typeof value === 'string') {
-      const RGBA = Color.styleToRGBA(this._valueToHexadecimal(value));
-      if (this.value.r !== undefined) {
-        [this.value.r, this.value.g, this.value.b] = [RGBA[0], RGBA[1], RGBA[2]];
-      } else if (this.value.x !== undefined) {
-        [this.value.x, this.value.y, this.value.z] = [RGBA[0], RGBA[1], RGBA[2]];
-      } else {
-        [this.value[0], this.value[1], this.value[2]] = [RGBA[0], RGBA[1], RGBA[2]];
-      }
+    if (this.defaultValue) {
+      this.defaultValue = this._valueToHexadecimal(value);
+    }
 
-      super.value = this.value;
-    } else if (typeof this.value === 'object' && typeof value === 'object') {
-      if (this.value.r !== undefined) {
-        [this.value.r, this.value.g, this.value.b] = [value.r, value.g, value.b];
-      } else if (this.value.x !== undefined) {
-        [this.value.x, this.value.y, this.value.z] = [value.x, value.y, value.z];
+    if (typeof this._value === 'object' && typeof value === 'string') {
+      const RGBA = Color.styleToRGBA(this._valueToHexadecimal(value));
+      if (this._value.r !== undefined) {
+        [this._value.r, this._value.g, this._value.b] = [RGBA[0], RGBA[1], RGBA[2]];
+      } else if (this._value.x !== undefined) {
+        [this._value.x, this._value.y, this._value.z] = [RGBA[0], RGBA[1], RGBA[2]];
       } else {
-        [this.value[0], this.value[1], this.value[2]] = [value[0], value[1], value[2]];
+        [this._value[0], this._value[1], this._value[2]] = [RGBA[0], RGBA[1], RGBA[2]];
+      }
+    } else if (typeof this._value === 'object' && typeof value === 'object') {
+      if (this._value.r !== undefined) {
+        [this._value.r, this._value.g, this._value.b] = [value.r, value.g, value.b];
+      } else if (this._value.x !== undefined) {
+        [this._value.x, this._value.y, this._value.z] = [value.x, value.y, value.z];
+      } else {
+        [this._value[0], this._value[1], this._value[2]] = [value[0], value[1], value[2]];
       }
     } else {
-      this.value = value;
+      this._value = value;
     }
+    this._updateInputFromValue(this._value);
   }
 
   get value() {
-    return super.value;
+    return this._value;
   }
 
   _updateInputFromValue(value) {
@@ -98,8 +114,4 @@ export default class GUIColorInputElement extends window.HTMLElement {
   }
 }
 
-GUIInputElement.typeResolvers.set('color', (value, attributes) => {
-  return typeof value === 'string' && ((value.length === 7 && value.startsWith('#')) || value.startsWith('rgb') || value.startsWith('hsl')) || (typeof value === 'object' && value.r !== undefined && value.g !== undefined && value.b !== undefined);
-});
-
-window.customElements.define('dgui-colorinput', GUIColorInputElement);
+window.customElements.define('input-color', ColorInputElement);
