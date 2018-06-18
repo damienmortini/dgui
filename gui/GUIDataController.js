@@ -1,4 +1,4 @@
-import WebSocket from './node_modules/dlib/utils/WebSocket.js';
+import WebSocket from '../node_modules/dlib/utils/WebSocket.js';
 
 export default class GUIDataController {
   constructor(gui) {

@@ -4,7 +4,7 @@ import './input/GUITextInputElement.js';
 import './input/GUIRangeInputElement.js';
 import './input/GUICheckboxInputElement.js';
 import './input/GUIButtonInputElement.js';
-import './input/GUIColorInputElement.js';
+import './input/ColorInputElement.js';
 import './input/GUISelectInputElement.js';
 
 export default class GUINodeInputElement extends HTMLElement {

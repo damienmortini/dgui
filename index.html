@@ -14,7 +14,7 @@
   <title>GUI</title>
   <meta name="description" content="GUI">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="index.css">
+  <!-- <link rel="stylesheet" href="index.css"> -->
   <style>
     html,
     body {
@@ -35,13 +35,24 @@
     <!-- <dgui-rangeinput name="Input" value="Ok"></dgui-input> -->
   <!-- </dgui-node> -->
 
-  <input-color name="color" value="#ff0000"></input-color>
-  <dgui-input type="color" name="input" value="#ffff00"></dgui-input>
+  <!-- <input-color name="color" value="#ff0000"></input-color>
+   -->
+  <dgui-input name="Text" value="Lorem Ipsum"></dgui-input>
+  <dgui-input name="Input 2" type="range" value="2"></dgui-input>
+  <dgui-input name="Input 2" type="range" value="2"></dgui-input>
+  <dgui-input name="Input 2" type="range" value="2"></dgui-input>
+  <dgui-input name="Input 2" type="range" value="2"></dgui-input>
 
   <script type="module">
-    import GUI from "./GUINodeElement.js";
+    import "./index.js";
 
-    console.log(document.body.querySelector("input-color").toJSON());
+    document.body.querySelector("dgui-input").addEventListener("change", (e) => {
+      console.log(e);
+    });
+    document.body.querySelector("dgui-input").addEventListener("input", (e) => {
+      console.log(e);
+    });
+    console.log(document.body.querySelector("dgui-input").toJSON());
     
   </script>
 </body>

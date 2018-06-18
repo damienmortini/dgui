@@ -9,6 +9,7 @@
     "sourceType": "module"
   },
   "rules": {
+    "quotes": [2, "double"],
     "no-console": 1,
     "require-jsdoc": 0,
     "max-len": 0,

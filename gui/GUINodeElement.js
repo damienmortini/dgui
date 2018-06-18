@@ -1,17 +1,10 @@
-import GUIInputElement from './input/GUIInputElement.js';
-import './input/GUINumberInputElement.js';
-import './input/GUITextInputElement.js';
-import './input/GUIRangeInputElement.js';
-import './input/GUICheckboxInputElement.js';
-import './input/GUIButtonInputElement.js';
-import './input/GUIColorInputElement.js';
-import './input/GUISelectInputElement.js';
+import GUIInputElement from "./GUIInputElement.js";
 
 export default class GUINodeElement extends HTMLElement {
   constructor() {
     super();
 
-    this.attachShadow({mode: 'open'}).innerHTML = `
+    this.attachShadow({mode: "open"}).innerHTML = `
       <style>
         :host {
           display: block; 
@@ -36,13 +29,13 @@ export default class GUINodeElement extends HTMLElement {
 
     this._inputs = new Map();
 
-    this._container = this.shadowRoot.querySelector('details');
+    this._container = this.shadowRoot.querySelector("details");
 
     this.open = true;
 
-    console.log('fdlksh');
+    console.log("fdlksh");
 
-    this.shadowRoot.querySelector('summary').textContent = this.label;
+    this.shadowRoot.querySelector("summary").textContent = this.label;
   }
 
   set inputs(value) {
@@ -57,19 +50,19 @@ export default class GUINodeElement extends HTMLElement {
   }
 
   set name(value) {
-    this.setAttribute('name', value);
+    this.setAttribute("name", value);
   }
 
   get name() {
-    return this.getAttribute('name') || this.label.toLowerCase();
+    return this.getAttribute("name") || this.label.toLowerCase();
   }
 
   set label(value) {
-    this._container.querySelector('summary').textContent = value;
+    this._container.querySelector("summary").textContent = value;
   }
 
   get label() {
-    return this._container.querySelector('summary').textContent || this.getAttribute('label') || '';
+    return this._container.querySelector("summary").textContent || this.getAttribute("label") || "";
   }
 
   set open(value) {
@@ -98,8 +91,8 @@ export default class GUINodeElement extends HTMLElement {
     let input = this.inputs.get(attributes.name || attributes.label || attributes.key);
 
     if (!input) {
-      input = document.createElement(window.customElements.get(`dgui-${attributes.type}input`) ? `dgui-${attributes.type}input` : 'dgui-input');
-      input.slot = 'input';
+      input = document.createElement(window.customElements.get(`dgui-${attributes.type}input`) ? `dgui-${attributes.type}input` : "dgui-input");
+      input.slot = "input";
       this.appendChild(input);
     }
     Object.assign(input, Object.assign({
@@ -113,7 +106,7 @@ export default class GUINodeElement extends HTMLElement {
 
   toJSON() {
     const inputs = {};
-    for (const [i, child] of [...this.querySelectorAll('gui-node')].entries()) {
+    for (const [i, child] of [...this.querySelectorAll("gui-node")].entries()) {
       inputs[child.name || i] = child.toJSON();
     }
     return {
@@ -124,4 +117,4 @@ export default class GUINodeElement extends HTMLElement {
   }
 }
 
-window.customElements.define('dgui-node', GUINodeElement);
+window.customElements.define("dgui-node", GUINodeElement);

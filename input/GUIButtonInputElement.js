@@ -1,4 +1,4 @@
-import GUIInputElement from "./GUIInputElement.js";
+import GUIInputElement from "../gui/GUIInputElement";
 
 export default class GUIButtonInputElement extends GUIInputElement {
   constructor() {
