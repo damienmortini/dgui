@@ -4,6 +4,7 @@ export default {
         "color": "input-color",
         "number": "input-number",
         "range": "input-range",
+        "select": "input-select",
     },
     typeResolvers: {
         "text": (value) => typeof value === "string",

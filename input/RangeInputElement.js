@@ -7,13 +7,9 @@ export default class RangeInputElement extends HTMLElement {
         :host {
           display: inline-flex;
         }
-        
-        input {
-          box-sizing: border-box;
+
+        input[type="range"] {
           flex: 1;
-          // display: inline-block;
-          // width: 100%;
-          // height: 100%;
         }
       </style>
       <input type="range"><input type="number">

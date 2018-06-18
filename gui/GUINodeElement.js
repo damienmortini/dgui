@@ -4,14 +4,13 @@ export default class GUINodeElement extends HTMLElement {
   constructor() {
     super();
 
-    this.attachShadow({mode: "open"}).innerHTML = `
+    this.attachShadow({ mode: "open" }).innerHTML = `
       <style>
         :host {
           display: block; 
           resize: horizontal;
           max-width: 100%;
           padding: 5px;
-          font-family: monospace;
           max-height: 100%;
           box-sizing: border-box;
           overflow: auto;
@@ -33,9 +32,9 @@ export default class GUINodeElement extends HTMLElement {
 
     this.open = true;
 
-    console.log("fdlksh");
-
     this.shadowRoot.querySelector("summary").textContent = this.label;
+
+    this.name = this.getAttribute("name");
   }
 
   set inputs(value) {
@@ -50,19 +49,12 @@ export default class GUINodeElement extends HTMLElement {
   }
 
   set name(value) {
-    this.setAttribute("name", value);
+    this._name = value;
+    this._container.querySelector("summary").textContent = this._name;
   }
 
   get name() {
-    return this.getAttribute("name") || this.label.toLowerCase();
-  }
-
-  set label(value) {
-    this._container.querySelector("summary").textContent = value;
-  }
-
-  get label() {
-    return this._container.querySelector("summary").textContent || this.getAttribute("label") || "";
+    return this._name;
   }
 
   set open(value) {
@@ -105,13 +97,16 @@ export default class GUINodeElement extends HTMLElement {
   }
 
   toJSON() {
-    const inputs = {};
-    for (const [i, child] of [...this.querySelectorAll("gui-node")].entries()) {
-      inputs[child.name || i] = child.toJSON();
+    const inputs = [];
+    for (const child of this.children) {
+      inputs.push(child.toJSON ? child.toJSON() : {
+        name: child.name,
+        type: child.type,
+        value: child.value,
+      });
     }
     return {
       name: this.name,
-      label: this.label,
       inputs: inputs,
     };
   }

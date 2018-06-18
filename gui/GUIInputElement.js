@@ -6,7 +6,7 @@ import "../input/RangeInputElement.js";
 // import "../input/GUICheckboxInputElement.js";
 // import "../input/GUIButtonInputElement.js";
 import "../input/ColorInputElement.js";
-// import "../input/GUISelectInputElement.js";
+import "../input/SelectInputElement.js";
 
 export default class GUIInputElement extends HTMLElement {
   constructor() {
@@ -36,6 +36,9 @@ export default class GUIInputElement extends HTMLElement {
 
     this.type = this.getAttribute("type") || undefined;
     this.name = this.getAttribute("name") || undefined;
+    if (this.getAttribute("options")) {
+      this.options = this.getAttribute("options");
+    }
     this.value = this.getAttribute("value") || "";
   }
 
@@ -95,7 +98,7 @@ export default class GUIInputElement extends HTMLElement {
 
   set object(value) {
     this._object = value;
-    if (this.value === undefined && this.object && this.key) {
+    if (this.defaultValue === undefined && this.object && this.key) {
       this.value = this.object[this.key];
     }
   }
@@ -106,7 +109,7 @@ export default class GUIInputElement extends HTMLElement {
 
   set key(value) {
     this._key = value;
-    if (this.value === undefined && this.object && this.key) {
+    if (this.defaultValue === undefined && this.object && this.key) {
       this.value = this.object[this.key];
     }
   }
@@ -148,6 +151,14 @@ export default class GUIInputElement extends HTMLElement {
 
   get name() {
     return this._name || this._label || this._key;
+  }
+
+  set options(value) {
+    this._input.options = value;
+  }
+
+  get options() {
+    return this._input.options;
   }
 
   toJSON() {
