@@ -39,7 +39,9 @@ export default class GUIInputElement extends HTMLElement {
     if (this.getAttribute("options")) {
       this.options = this.getAttribute("options");
     }
-    this.value = this.getAttribute("value") || "";
+    if (this.getAttribute("value")) {
+      this.value = this.getAttribute("value");
+    }
   }
 
   set type(value) {
