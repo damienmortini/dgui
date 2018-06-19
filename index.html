@@ -43,15 +43,16 @@
     <dgui-input name="Number" type="number" value="5"></dgui-input>
     <dgui-input name="Range" type="range" value="0.2"></dgui-input>
     <dgui-input name="Select" type="select" value="second" options="false,1,&quot;second&quot;,[1, 2, 3, 4],{&quot;five&quot;:5}"></dgui-input>
+    <dgui-input name="Checkbox" type="checkbox" value="false"></dgui-input>
   </dgui-node>
 
   <script type="module">
     import "./index.js";
 
-    document.body.querySelector("dgui-input[type=\"select\"]").addEventListener("change", (e) => {
+    document.body.querySelector("dgui-input[type=\"checkbox\"]").addEventListener("change", (e) => {
       console.log(e);
     });
-    document.body.querySelector("dgui-input[type=\"select\"]").addEventListener("input", (e) => {
+    document.body.querySelector("dgui-input[type=\"checkbox\"]").addEventListener("input", (e) => {
       console.log(e);
     });
     console.log(document.body.querySelector("dgui-node").toJSON());

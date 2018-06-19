@@ -1,23 +1,19 @@
-export default class TextInputElement extends HTMLElement {
+export default class CheckboxInputElement extends HTMLElement {
   constructor() {
     super();
 
-    this.type = "text";
+    this.type = "checkbox";
 
     this.attachShadow({ mode: "open" }).innerHTML = `
       <style>
-        textarea {
-          width: 100%;
-          height: 100%;
-          box-sizing: border-box;
-          resize: vertical;
+        input {
           vertical-align: middle;
         }
       </style>
-      <textarea rows="1"></textarea>
+      <input type="checkbox"></input>
     `;
 
-    this._textarea = this.shadowRoot.querySelector("textarea");
+    this._input = this.shadowRoot.querySelector("input");
 
     if (this.getAttribute("value")) {
       this.value = this.getAttribute("value");
@@ -37,16 +33,18 @@ export default class TextInputElement extends HTMLElement {
   }
 
   set value(value) {
+    value = typeof value === "string" ? value === "true" : value;
+
     if (this.defaultValue === undefined) {
       this.defaultValue = value;
     }
 
-    this._textarea.value = value;
+    this._input.checked = value;
   }
 
   get value() {
-    return this._textarea.value;
+    return this._input.checked;
   }
 }
 
-window.customElements.define("input-text", TextInputElement);
+window.customElements.define("input-checkbox", CheckboxInputElement);

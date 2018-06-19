@@ -3,7 +3,7 @@ import GUIConfig from "./GUIConfig.js";
 import "../input/NumberInputElement.js";
 import "../input/TextInputElement.js";
 import "../input/RangeInputElement.js";
-// import "../input/GUICheckboxInputElement.js";
+import "../input/CheckboxInputElement.js";
 // import "../input/GUIButtonInputElement.js";
 import "../input/ColorInputElement.js";
 import "../input/SelectInputElement.js";

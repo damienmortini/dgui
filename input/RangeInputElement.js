@@ -2,6 +2,8 @@ export default class RangeInputElement extends HTMLElement {
   constructor() {
     super();
 
+    this.type = "range";
+
     this.attachShadow({ mode: "open" }).innerHTML = `
       <style>
         :host {
@@ -53,7 +55,7 @@ export default class RangeInputElement extends HTMLElement {
   }
 
   set value(value) {
-    if (!this.defaultValue) {
+    if (this.defaultValue === undefined) {
       this.defaultValue = value;
     }
 

@@ -50,7 +50,7 @@ export default class ColorInputElement extends HTMLElement {
   }
 
   set value(value) {
-    if (!this.defaultValue) {
+    if (this.defaultValue === undefined) {
       this.defaultValue = this._valueToHexadecimal(value);
     }
 

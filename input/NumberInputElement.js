@@ -2,6 +2,8 @@ export default class NumberInputElement extends HTMLElement {
   constructor() {
     super();
 
+    this.type = "number";
+
     this.attachShadow({ mode: "open" }).innerHTML = `
       <style>
         input {
@@ -12,7 +14,7 @@ export default class NumberInputElement extends HTMLElement {
       </style>
       <input type="number">
     `;
-    this._numberInput = this.shadowRoot.querySelector("input");
+    this._input = this.shadowRoot.querySelector("input");
 
     if (this.getAttribute("value")) {
       this.value = this.getAttribute("value");
@@ -32,39 +34,39 @@ export default class NumberInputElement extends HTMLElement {
   }
 
   set value(value) {
-    if (!this.defaultValue) {
+    if (this.defaultValue === undefined) {
       this.defaultValue = value;
     }
 
-    this._numberInput.valueAsNumber = value;
+    this._input.valueAsNumber = value;
   }
 
   get value() {
-    return this._numberInput.valueAsNumber;
+    return this._input.valueAsNumber;
   }
 
   set step(value) {
-    this._numberInput.step = value;
+    this._input.step = value;
   }
 
   get step() {
-    return parseFloat(this._numberInput.step);
+    return parseFloat(this._input.step);
   }
 
   set min(value) {
-    this._numberInput.min = value;
+    this._input.min = value;
   }
 
   get min() {
-    return parseFloat(this._numberInput.min);
+    return parseFloat(this._input.min);
   }
 
   set max(value) {
-    this._numberInput.max = value;
+    this._input.max = value;
   }
 
   get max() {
-    return parseFloat(this._numberInput.max);
+    return parseFloat(this._input.max);
   }
 }
 
