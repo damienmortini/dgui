@@ -38,23 +38,18 @@
   <!-- <input-color name="color" value="#ff0000"></input-color>
    -->
   <dgui-node name="Main">
-    <dgui-input name="Text" value="Lorem Ipsum"></dgui-input>
-    <dgui-input name="Color" type="color" value="#ff0000"></dgui-input>
-    <dgui-input name="Number" type="number" value="5"></dgui-input>
-    <dgui-input name="Range" type="range" value="0.2"></dgui-input>
-    <dgui-input name="Select" type="select" value="second" options="false,1,&quot;second&quot;,[1, 2, 3, 4],{&quot;five&quot;:5}"></dgui-input>
-    <dgui-input name="Checkbox" type="checkbox" value="false"></dgui-input>
+    <dgui-input-button name="Button" value="3" onclick="console.log(Math.random())"></dgui-input-button>
+    <dgui-input-checkbox name="Checkbox" type="checkbox" value="false"></dgui-input-checkbox>
+    <dgui-input-color name="Color" type="color" value="#ff0000"></dgui-input-color>
+    <dgui-input-number name="Number" type="number" value="5"></dgui-input-number>
+    <dgui-input-range name="Range" type="range" value="0.2"></dgui-input-range>
+    <dgui-input-select name="Select" type="select" value="second" options="false,1,&quot;second&quot;,[1, 2, 3, 4],{&quot;five&quot;:5}"></dgui-input-select>
+    <dgui-input-text name="Text" value="Lorem Ipsum"></dgui-input-text>
   </dgui-node>
 
   <script type="module">
     import "./index.js";
 
-    document.body.querySelector("dgui-input[type=\"checkbox\"]").addEventListener("change", (e) => {
-      console.log(e);
-    });
-    document.body.querySelector("dgui-input[type=\"checkbox\"]").addEventListener("input", (e) => {
-      console.log(e);
-    });
     console.log(document.body.querySelector("dgui-node").toJSON());
     
   </script>

@@ -23,9 +23,13 @@ export default class ColorInputElement extends HTMLElement {
     this._textInput = this.shadowRoot.querySelector("input[type=\"text\"]");
     this._colorInput = this.shadowRoot.querySelector("input[type=\"color\"]");
 
-    if (this.getAttribute("value")) {
-      this.value = this.getAttribute("value");
+    if (this.hasAttribute("value")) {
+      this.value = this.defaultValue = this.getAttribute("value");
     }
+    if (this.hasAttribute("name")) {
+      this.name = this.getAttribute("name");
+    }
+    this.disabled = this.hasAttribute("disabled");
   }
 
   connectedCallback() {
@@ -50,12 +54,10 @@ export default class ColorInputElement extends HTMLElement {
   }
 
   set value(value) {
-    if (this.defaultValue === undefined) {
-      this.defaultValue = this._valueToHexadecimal(value);
-    }
+    const hexValue = this._valueToHexadecimal(value);
 
     if (typeof this._value === "object" && typeof value === "string") {
-      const RGBA = Color.styleToRGBA(this._valueToHexadecimal(value));
+      const RGBA = Color.styleToRGBA(hexValue);
       if (this._value.r !== undefined) {
         [this._value.r, this._value.g, this._value.b] = [RGBA[0], RGBA[1], RGBA[2]];
       } else if (this._value.x !== undefined) {
@@ -74,20 +76,24 @@ export default class ColorInputElement extends HTMLElement {
     } else {
       this._value = value;
     }
-    this._updateInputFromValue(this._value);
+
+    if (this.shadowRoot.activeElement !== this._textInput) {
+      this._textInput.value = hexValue;
+    }
+    this._colorInput.value = hexValue;
   }
 
   get value() {
     return this._value;
   }
 
-  _updateInputFromValue(value) {
-    const hexValue = this._valueToHexadecimal(value);
+  set disabled(value) {
+    this._textInput.disabled = value;
+    this._colorInput.disabled = value;
+  }
 
-    if (this.shadowRoot.activeElement !== this._textInput) {
-      this._textInput.value = hexValue;
-    }
-    this._colorInput.value = hexValue;
+  get disabled() {
+    return this._textInput.disable;
   }
 
   _valueToHexadecimal(value) {
@@ -107,4 +113,4 @@ export default class ColorInputElement extends HTMLElement {
   }
 }
 
-window.customElements.define("input-color", ColorInputElement);
+window.customElements.define("dgui-input-color", ColorInputElement);

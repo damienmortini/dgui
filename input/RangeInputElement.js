@@ -20,9 +20,13 @@ export default class RangeInputElement extends HTMLElement {
     this._rangeInput = this.shadowRoot.querySelector("input[type=\"range\"]");
     this._numberInput = this.shadowRoot.querySelector("input[type=\"number\"]");
 
-    if (this.getAttribute("value")) {
-      this.value = this.getAttribute("value");
+    if (this.hasAttribute("value")) {
+      this.value = this.defaultValue = parseFloat(this.getAttribute("value"));
     }
+    if (this.hasAttribute("name")) {
+      this.name = this.getAttribute("name");
+    }
+    this.disabled = this.hasAttribute("disabled");
   }
 
   connectedCallback() {
@@ -55,10 +59,6 @@ export default class RangeInputElement extends HTMLElement {
   }
 
   set value(value) {
-    if (this.defaultValue === undefined) {
-      this.defaultValue = value;
-    }
-
     this._numberInput.valueAsNumber = value;
     this._rangeInput.valueAsNumber = value;
   }
@@ -93,6 +93,15 @@ export default class RangeInputElement extends HTMLElement {
   get max() {
     return parseFloat(this._numberInput.max);
   }
+
+  set disabled(value) {
+    this._numberInput.disabled = value;
+    this._rangeInput.disabled = value;
+  }
+
+  get disabled() {
+    return this._numberInput.disabled;
+  }
 }
 
-window.customElements.define("input-range", RangeInputElement);
+window.customElements.define("dgui-input-range", RangeInputElement);

@@ -19,9 +19,13 @@ export default class TextInputElement extends HTMLElement {
 
     this._textarea = this.shadowRoot.querySelector("textarea");
 
-    if (this.getAttribute("value")) {
-      this.value = this.getAttribute("value");
+    if (this.hasAttribute("value")) {
+      this.value = this.defaultValue = this.getAttribute("value");
     }
+    if (this.hasAttribute("name")) {
+      this.name = this.getAttribute("name");
+    }
+    this.disabled = this.hasAttribute("disabled");
   }
 
   connectedCallback() {
@@ -37,16 +41,20 @@ export default class TextInputElement extends HTMLElement {
   }
 
   set value(value) {
-    if (this.defaultValue === undefined) {
-      this.defaultValue = value;
-    }
-
     this._textarea.value = value;
   }
 
   get value() {
     return this._textarea.value;
   }
+
+  set disabled(value) {
+    this._textarea.disabled = value;
+  }
+
+  get disabled() {
+    return this._textarea.disabled;
+  }
 }
 
-window.customElements.define("input-text", TextInputElement);
+window.customElements.define("dgui-input-text", TextInputElement);

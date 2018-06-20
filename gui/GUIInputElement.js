@@ -4,7 +4,7 @@ import "../input/NumberInputElement.js";
 import "../input/TextInputElement.js";
 import "../input/RangeInputElement.js";
 import "../input/CheckboxInputElement.js";
-// import "../input/GUIButtonInputElement.js";
+import "../input/ButtonInputElement.js";
 import "../input/ColorInputElement.js";
 import "../input/SelectInputElement.js";
 
