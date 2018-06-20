@@ -7,14 +7,18 @@ export default class RangeInputElement extends HTMLElement {
     this.attachShadow({ mode: "open" }).innerHTML = `
       <style>
         :host {
-          display: inline-flex;
+          display: inline-grid;
+          grid-template-columns: .6fr .4fr;
         }
-
-        input[type="range"] {
-          flex: 1;
+        input {
+          width: 100%;
+          height: 100%;
+          box-sizing: border-box;
+          margin: 0;
         }
       </style>
-      <input type="range"><input type="number">
+      <input type="range">
+      <input type="number">
     `;
 
     this._rangeInput = this.shadowRoot.querySelector("input[type=\"range\"]");

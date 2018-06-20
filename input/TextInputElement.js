@@ -6,11 +6,13 @@ export default class TextInputElement extends HTMLElement {
 
     this.attachShadow({ mode: "open" }).innerHTML = `
       <style>
+        :host {
+          display: inline-block;
+        }
         textarea {
           width: 100%;
           height: 100%;
           box-sizing: border-box;
-          resize: vertical;
           vertical-align: middle;
         }
       </style>

@@ -6,6 +6,9 @@ export default class SelectInputElement extends HTMLElement {
 
     this.attachShadow({ mode: "open" }).innerHTML = `
       <style>
+        :host {
+          display: inline-block;
+        }
         select {
           width: 100%;
           height: 100%;

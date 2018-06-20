@@ -9,10 +9,18 @@ export default class ColorInputElement extends HTMLElement {
     this.attachShadow({ mode: "open" }).innerHTML = `
       <style>
         :host {
-          display: inline-flex;
+          display: inline-grid;
+          grid-template-columns: .75fr .25fr;
         }
-
+        input {
+          width: 100%;
+          height: 100%;
+          box-sizing: border-box;
+        }
         input[type="text"] {
+          flex: 2;
+        }
+        input[type="color"] {
           flex: 1;
         }
       </style>
