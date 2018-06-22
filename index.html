@@ -38,7 +38,7 @@
   <!-- <input-color name="color" value="#ff0000"></input-color>
    -->
   <dgui-node name="Main">
-    <dgui-input-button name="Button" value="3" onclick="console.log(Math.random())"></dgui-input-button>
+    <dgui-input-button name="Button" value="3" onclick="this.value = Math.random()"></dgui-input-button>
     <dgui-input-checkbox name="Checkbox" type="checkbox" value="false"></dgui-input-checkbox>
     <dgui-input-color name="Color" type="color" value="#ff0000"></dgui-input-color>
     <dgui-input-number name="Number" type="number" value="5"></dgui-input-number>
@@ -50,7 +50,10 @@
   <script type="module">
     import "./index.js";
 
-    console.log(document.body.querySelector("dgui-node").toJSON());
+    document.body.querySelector("dgui-node").addEventListener("change", (e) => {
+      console.log(e.target);
+      console.log(document.body.querySelector("dgui-node").toJSON());
+    });
     
   </script>
 </body>

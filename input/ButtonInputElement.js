@@ -22,15 +22,6 @@ export default class ButtonInputElement extends HTMLElement {
     this._slot = this.shadowRoot.querySelector("slot");
     this._button = this.shadowRoot.querySelector("button");
 
-    // this._button.onclick = (e) => {
-    //   if (this.onclick) {
-    //     this.value = this._onclick(e);
-    //     this.dispatchEvent(new Event("input", {
-    //       bubbles: true,
-    //     }));
-    //   }
-    // };
-
     if (this.hasAttribute("value")) {
       this.value = this.defaultValue = this.getAttribute("value");
     }
@@ -54,6 +45,9 @@ export default class ButtonInputElement extends HTMLElement {
 
   set value(value) {
     this._value = value;
+    this.dispatchEvent(new Event("change", {
+      bubbles: true,
+    }));
   }
 
   get value() {
