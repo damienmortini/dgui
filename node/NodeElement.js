@@ -1,6 +1,4 @@
-import GUIInputElement from "./GUIInputElement.js";
-
-export default class GUINodeElement extends HTMLElement {
+export default class NodeElement extends HTMLElement {
   constructor() {
     super();
 
@@ -72,14 +70,6 @@ export default class GUINodeElement extends HTMLElement {
     }
     attributes = Object.assign({}, attributes);
 
-    if (!attributes.type) {
-      GUIInputElement.typeResolvers.forEach((resolver, type) => {
-        if (resolver(attributes.value || (object ? object[key] : undefined), attributes)) {
-          attributes.type = type;
-        }
-      });
-    }
-
     let input = this.inputs.get(attributes.name || attributes.label || attributes.key);
 
     if (!input) {
@@ -112,4 +102,4 @@ export default class GUINodeElement extends HTMLElement {
   }
 }
 
-window.customElements.define("dgui-node", GUINodeElement);
+window.customElements.define("dgui-node", NodeElement);

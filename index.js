@@ -1,2 +1,1 @@
-import "./gui/GUINodeElement.js";
-import "./gui/GUIInputElement.js";
+import "./node/NodeElement.js";

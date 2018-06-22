@@ -37,14 +37,17 @@
 
   <!-- <input-color name="color" value="#ff0000"></input-color>
    -->
+  
+  <dgui-input-button name="Button" value="3" onclick="this.value = Math.random()"></dgui-input-button>
+  <dgui-input-checkbox name="Checkbox" type="checkbox" value="false"></dgui-input-checkbox>
+  <dgui-input-color name="Color" type="color" value="#ff0000"></dgui-input-color>
+  <dgui-input-number name="Number" type="number" value="5"></dgui-input-number>
+  <dgui-input-range name="Range" type="range" value="0.2"></dgui-input-range>
+  <dgui-input-select name="Select" type="select" value="second" options="false,1,&quot;second&quot;,[1, 2, 3, 4],{&quot;five&quot;:5}"></dgui-input-select>
+  <dgui-input-text name="Text" value="Lorem Ipsum"></dgui-input-text>
+  
   <dgui-node name="Main">
-    <dgui-input-button name="Button" value="3" onclick="this.value = Math.random()"></dgui-input-button>
-    <dgui-input-checkbox name="Checkbox" type="checkbox" value="false"></dgui-input-checkbox>
-    <dgui-input-color name="Color" type="color" value="#ff0000"></dgui-input-color>
-    <dgui-input-number name="Number" type="number" value="5"></dgui-input-number>
-    <dgui-input-range name="Range" type="range" value="0.2"></dgui-input-range>
-    <dgui-input-select name="Select" type="select" value="second" options="false,1,&quot;second&quot;,[1, 2, 3, 4],{&quot;five&quot;:5}"></dgui-input-select>
-    <dgui-input-text name="Text" value="Lorem Ipsum"></dgui-input-text>
+      <dgui-node-input name="Button" type="button" value="3" onclick="this.value = Math.random()"></dgui-node-input>
   </dgui-node>
 
   <script type="module">

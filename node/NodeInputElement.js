@@ -8,7 +8,7 @@ import "../input/ButtonInputElement.js";
 import "../input/ColorInputElement.js";
 import "../input/SelectInputElement.js";
 
-export default class GUIInputElement extends HTMLElement {
+export default class NodeInputElement extends HTMLElement {
   constructor() {
     super();
 
@@ -172,4 +172,4 @@ export default class GUIInputElement extends HTMLElement {
   }
 }
 
-window.customElements.define("dgui-input", GUIInputElement);
+window.customElements.define("dgui-node-input", NodeInputElement);
