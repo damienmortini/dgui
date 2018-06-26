@@ -1,4 +1,4 @@
-import "./GUINodeElement.js";
+import "../node/NodeElement";
 
 import GUIDataController from "./GUIDataController.js";
 

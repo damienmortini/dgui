@@ -6,6 +6,9 @@ export default class NumberInputElement extends HTMLElement {
 
     this.attachShadow({ mode: "open" }).innerHTML = `
       <style>
+        :host {
+          display: inline-block;
+        }
         input {
           box-sizing: border-box;
           width: 100%;
@@ -16,9 +19,13 @@ export default class NumberInputElement extends HTMLElement {
     `;
     this._input = this.shadowRoot.querySelector("input");
 
-    if (this.getAttribute("value")) {
-      this.value = this.getAttribute("value");
+    if (this.hasAttribute("value")) {
+      this.value = this.defaultValue = parseFloat(this.getAttribute("value"));
     }
+    if (this.hasAttribute("name")) {
+      this.name = this.getAttribute("name");
+    }
+    this.disabled = this.hasAttribute("disabled");
   }
 
   connectedCallback() {
@@ -34,10 +41,6 @@ export default class NumberInputElement extends HTMLElement {
   }
 
   set value(value) {
-    if (this.defaultValue === undefined) {
-      this.defaultValue = value;
-    }
-
     this._input.valueAsNumber = value;
   }
 
@@ -68,6 +71,14 @@ export default class NumberInputElement extends HTMLElement {
   get max() {
     return parseFloat(this._input.max);
   }
+
+  set disabled(value) {
+    this._input.disabled = value;
+  }
+
+  get disabled() {
+    return this._input.disabled;
+  }
 }
 
-window.customElements.define("input-number", NumberInputElement);
+window.customElements.define("dgui-input-number", NumberInputElement);

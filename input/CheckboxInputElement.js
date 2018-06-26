@@ -6,8 +6,13 @@ export default class CheckboxInputElement extends HTMLElement {
 
     this.attachShadow({ mode: "open" }).innerHTML = `
       <style>
+        :host {
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+        }
         input {
-          vertical-align: middle;
+          margin : 0;
         }
       </style>
       <input type="checkbox"></input>
@@ -15,9 +20,13 @@ export default class CheckboxInputElement extends HTMLElement {
 
     this._input = this.shadowRoot.querySelector("input");
 
-    if (this.getAttribute("value")) {
-      this.value = this.getAttribute("value");
+    if (this.hasAttribute("value")) {
+      this.value = this.defaultValue = this.getAttribute("value") === "true";
     }
+    if (this.hasAttribute("name")) {
+      this.name = this.getAttribute("name");
+    }
+    this.disabled = this.hasAttribute("disabled");
   }
 
   connectedCallback() {
@@ -32,19 +41,37 @@ export default class CheckboxInputElement extends HTMLElement {
     this.dispatchEvent(new event.constructor(event.type, event));
   }
 
+  set defaultValue(value) {
+    this._input.defaultChecked = value;
+  }
+
+  get defaultValue() {
+    return this._input.defaultChecked;
+  }
+
   set value(value) {
-    value = typeof value === "string" ? value === "true" : value;
-
-    if (this.defaultValue === undefined) {
-      this.defaultValue = value;
-    }
-
     this._input.checked = value;
   }
 
   get value() {
     return this._input.checked;
   }
+
+  set name(value) {
+    this._input.name = value;
+  }
+
+  get name() {
+    return this._input.name;
+  }
+
+  set disabled(value) {
+    this._input.disabled = value;
+  }
+
+  get disabled() {
+    return this._input.disabled;
+  }
 }
 
-window.customElements.define("input-checkbox", CheckboxInputElement);
+window.customElements.define("dgui-input-checkbox", CheckboxInputElement);
