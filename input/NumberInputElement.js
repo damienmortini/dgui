@@ -1,4 +1,8 @@
 export default class NumberInputElement extends HTMLElement {
+  static get observedAttributes() {
+    return ["name", "value", "step", "min", "max", "disabled"];
+  }
+
   constructor() {
     super();
 
@@ -19,25 +23,13 @@ export default class NumberInputElement extends HTMLElement {
     `;
     this._input = this.shadowRoot.querySelector("input");
 
-    if (this.hasAttribute("value")) {
-      this.value = this.defaultValue = parseFloat(this.getAttribute("value"));
-    }
-    if (this.hasAttribute("name")) {
-      this.name = this.getAttribute("name");
-    }
-    this.disabled = this.hasAttribute("disabled");
+    this.shadowRoot.addEventListener("change", (event) => {
+      this.dispatchEvent(new event.constructor(event.type, event));
+    });
   }
 
-  connectedCallback() {
-    this.shadowRoot.addEventListener("change", this._onChangeBinded = this._onChangeBinded || this._onChange.bind(this));
-  }
-
-  disconnectedCallback() {
-    this.shadowRoot.removeEventListener("change", this._onChangeBinded);
-  }
-
-  _onChange(event) {
-    this.dispatchEvent(new event.constructor(event.type, event));
+  attributeChangedCallback(name, oldValue, newValue) {
+    this[name] = name === "disabled" ? newValue !== null : newValue;
   }
 
   set value(value) {

@@ -1,4 +1,8 @@
 export default class ButtonInputElement extends HTMLElement {
+  static get observedAttributes() {
+    return ["name", "value", "disabled"];
+  }
+
   constructor() {
     super();
 
@@ -22,29 +26,37 @@ export default class ButtonInputElement extends HTMLElement {
     this._slot = this.shadowRoot.querySelector("slot");
     this._button = this.shadowRoot.querySelector("button");
 
-    if (this.hasAttribute("value")) {
-      this.value = this.defaultValue = this.getAttribute("value");
+    this._button.onclick = (event) => {
+      this.dispatchEvent(new event.constructor("input", event));
+    };
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (name in this) {
+      this[name] = newValue;
     }
-    if (this.hasAttribute("name")) {
-      this.name = this.getAttribute("name");
-    }
-    this.disabled = this.hasAttribute("disabled");
-    if (this.hasAttribute("onclick")) {
-      this.onclick = this.getAttribute("onclick");
-    }
+    this._button.setAttribute(name, newValue);
   }
 
   set name(value) {
     this._name = value;
-    this._slot.textContent = value;
   }
 
   get name() {
     return this._name;
   }
 
+  get disabled() {
+    return this._button.disabled;
+  }
+
+  set disabled(value) {
+    this._button.disabled = value;
+  }
+
   set value(value) {
     this._value = value;
+    this._slot.textContent = this._value;
     this.dispatchEvent(new Event("change", {
       bubbles: true,
     }));
@@ -52,22 +64,6 @@ export default class ButtonInputElement extends HTMLElement {
 
   get value() {
     return this._value;
-  }
-
-  set disabled(value) {
-    this._button.disabled = value;
-  }
-
-  get disabled() {
-    return this._button.disabled;
-  }
-
-  set onclick(value) {
-    this._button.onclick = value;
-  }
-
-  get onclick() {
-    return this._button.onclick;
   }
 }
 
