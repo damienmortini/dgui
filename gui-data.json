@@ -1,33 +1,48 @@
 {
-	"nodes": {
-		"main": {
-			"name": "main",
-			"label": "GUI",
-			"inputs": {
-				"Select": {
-					"name": "Select",
-					"label": "Select",
-					"type": "select",
-					"value": [
-						4,
-						8,
-						16,
-						32
-					]
-				},
-				"Range": {
-					"name": "Range",
-					"label": "Range",
-					"type": "range",
-					"value": 1.43
-				},
-				"Button": {
-					"name": "Button",
-					"label": "Button",
-					"type": "button",
-					"value": "Value returned"
-				}
+	"main": {
+		"name": "Main",
+		"nodes": [
+			{
+				"name": "Select",
+				"type": "select",
+				"value": 8,
+				"options": [
+					4,
+					8,
+					16,
+					32
+				]
+			},
+			{
+				"name": "Checkbox",
+				"type": "checkbox",
+				"value": true
+			},
+			{
+				"name": "Color",
+				"type": "color",
+				"value": "#ff0000"
+			},
+			{
+				"name": "Number",
+				"type": "number",
+				"value": "1.8"
+			},
+			{
+				"name": "Range",
+				"type": "range",
+				"value": 1.43
+			},
+			{
+				"name": "Button",
+				"type": "button",
+				"value": "Value returned"
+			},
+			{
+				"name": "Text",
+				"type": "text",
+				"value": "Lorem ipsum"
 			}
-		}
+		]
 	}
 }

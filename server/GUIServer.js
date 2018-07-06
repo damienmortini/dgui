@@ -1,5 +1,5 @@
 const fs = require("fs");
-const WebSocket = require("ws");
+const WebSocket = require("../../../AppData/Local/Microsoft/TypeScript/2.9/node_modules/@types/ws/index");
 const WebSocketServer = WebSocket.Server;
 const https = require("https");
 

@@ -1,6 +1,11 @@
 import Color from "../node_modules/dlib/math/Color.js";
+import "../node/NodeElement.js";
 
-export default class ColorInputElement extends HTMLElement {
+export default class ColorInputNodeElement extends HTMLElement {
+  static get observedAttributes() {
+    return ["name", "value", "disabled"];
+  }
+
   constructor() {
     super();
 
@@ -9,56 +14,41 @@ export default class ColorInputElement extends HTMLElement {
     this.attachShadow({ mode: "open" }).innerHTML = `
       <style>
         :host {
-          display: inline-grid;
-          grid-template-columns: .75fr .25fr;
+          display: block;
         }
         input {
           width: 100%;
-          height: 100%;
           box-sizing: border-box;
         }
-        input[type="text"] {
-          flex: 2;
-        }
-        input[type="color"] {
-          flex: 1;
+        label {
+          margin-right: 10px;
         }
       </style>
-      <input type="text">
-      <input type="color">
+      <dgui-node>
+        <label></label>
+        <input type="text">
+        <input type="color">
+      </dgui-node>
     `;
 
+    this._label = this.shadowRoot.querySelector("label");
     this._textInput = this.shadowRoot.querySelector("input[type=\"text\"]");
     this._colorInput = this.shadowRoot.querySelector("input[type=\"color\"]");
 
-    if (this.hasAttribute("value")) {
-      this.value = this.defaultValue = this.getAttribute("value");
-    }
-    if (this.hasAttribute("name")) {
-      this.name = this.getAttribute("name");
-    }
-    this.disabled = this.hasAttribute("disabled");
+    this.shadowRoot.addEventListener("change", () => {
+      event.stopImmediatePropagation();
+      this.dispatchEvent(new event.constructor(event.type, event));
+    });
+
+    this.shadowRoot.addEventListener("input", () => {
+      event.stopImmediatePropagation();
+      this.value = event.target.value;
+      this.dispatchEvent(new event.constructor(event.type, event));
+    });
   }
 
-  connectedCallback() {
-    this.shadowRoot.addEventListener("change", this._onChangeBinded = this._onChangeBinded || this._onChange.bind(this));
-    this.shadowRoot.addEventListener("input", this._onInputBinded = this._onInputBinded || this._onInput.bind(this));
-  }
-
-  disconnectedCallback() {
-    this.shadowRoot.removeEventListener("change", this._onChangeBinded);
-    this.shadowRoot.removeEventListener("input", this._onInputBinded);
-  }
-
-  _onChange(event) {
-    event.stopImmediatePropagation();
-    this.dispatchEvent(new event.constructor(event.type, event));
-  }
-
-  _onInput(event) {
-    event.stopImmediatePropagation();
-    this.value = event.target.value;
-    this.dispatchEvent(new event.constructor(event.type, event));
+  attributeChangedCallback(name, oldValue, newValue) {
+    this[name] = name === "disabled" ? newValue !== null : newValue;
   }
 
   set value(value) {
@@ -91,6 +81,16 @@ export default class ColorInputElement extends HTMLElement {
     this._colorInput.value = hexValue;
   }
 
+  get name() {
+    return this._textInput.name;
+  }
+  
+  set name(value) {
+    this._label.textContent = value;
+    this._textInput.name = value;
+    this._colorInput.name = value;
+  }
+
   get value() {
     return this._value;
   }
@@ -121,4 +121,4 @@ export default class ColorInputElement extends HTMLElement {
   }
 }
 
-window.customElements.define("dgui-input-color", ColorInputElement);
+window.customElements.define("dgui-node-input-color", ColorInputNodeElement);

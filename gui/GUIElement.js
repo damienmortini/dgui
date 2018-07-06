@@ -1,6 +1,6 @@
-import "../node/NodeElement";
+import "../node/NodeGroupElement";
 
-import GUIDataController from "./GUIDataController.js";
+import GUIDataController from "./GUIDataController";
 
 export default class GUIElement extends HTMLElement {
   constructor() {

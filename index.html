@@ -43,12 +43,13 @@
   <!-- <dgui-input-color name="Color" type="color" value="#ff0000"></dgui-input-color> -->
   <!-- <dgui-input-number name="Number" type="number" value="5"></dgui-input-number> -->
   <!-- <dgui-input-range name="Range" type="range" value="0.2"></dgui-input-range> -->
-  <!-- <dgui-input-select name="Select" type="select" value="second" options="false,1,&quot;second&quot;,[1, 2, 3, 4],{&quot;five&quot;:5}"></dgui-input-select> -->
+  <!-- <dgui-input-select name="Select" type="select" value="second" data-options="false,1,&quot;second&quot;,[1, 2, 3, 4],{&quot;five&quot;:5}"></dgui-input-select> -->
   <!-- <dgui-input-text name="Text" value="Lorem Ipsum"></dgui-input-text> -->
-
-  <!-- <dgui-input name="Text" value="Lorem Ipsum" type="button" onclick="this.value = Math.random()"></dgui-input> -->
   
-  <dgui-node name="Main">
+  <!-- <dgui-input name="Text" value="Lorem Ipsum" type="button" onclick="this.value = Math.random()"></dgui-input> -->
+  <!-- <dgui-input name="Select" type="select" value="second" data-options="false,1,&quot;second&quot;,[1, 2, 3, 4],{&quot;five&quot;:5}"></dgui-input>
+  
+  <dgui-node name="Main" draggable="true">
       <dgui-node-component>
           <dgui-input name="Button" type="button" value="3" oninput="console.log('click', Math.random(), this);this.value = Math.random()"></dgui-input>
       </dgui-node-component>
@@ -57,8 +58,29 @@
       </dgui-node-component>
   </dgui-node>
 
+  <dgui-node name="Main" draggable="true">
+    <dgui-node-component>
+        <dgui-input name="Button" type="button" value="3" oninput="console.log('click', Math.random(), this);this.value = Math.random()"></dgui-input>
+    </dgui-node-component>
+    <dgui-node-component>
+      <dgui-input name="Number" type="number" value="8"></dgui-input>
+    </dgui-node-component>
+</dgui-node> -->
+
   <script type="module">
     import "./index.js";
+
+    const node = document.createElement("dgui-node-group");
+    node.style.width = "300px";
+    node.draggable = true;
+    document.body.appendChild(node);
+    
+    fetch("gui-data.json").then(response => response.json()).then(data => {
+      Object.assign(node, data.main);
+
+      console.log(JSON.stringify(node));
+      
+    });
 
     // document.body.querySelector("dgui-node").addEventListener("change", (e) => {
     //   console.log(e.target);

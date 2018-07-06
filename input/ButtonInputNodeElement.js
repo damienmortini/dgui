@@ -1,4 +1,6 @@
-export default class ButtonInputElement extends HTMLElement {
+import "../node/NodeElement.js";
+
+export default class ButtonInputNodeElement extends HTMLElement {
   static get observedAttributes() {
     return ["name", "value", "disabled"];
   }
@@ -11,16 +13,18 @@ export default class ButtonInputElement extends HTMLElement {
     this.attachShadow({ mode: "open" }).innerHTML = `
       <style>
         :host {
-          display: inline-block;
+          display: block;
         }
         button {
           width: 100%;
           height: 100%;
         }
       </style>
-      <button>
-        <slot></slot>
-      </button>
+      <dgui-node>
+        <button>
+          <slot></slot>
+        </button>
+      </dgui-node>
     `;
 
     this._slot = this.shadowRoot.querySelector("slot");
@@ -34,11 +38,13 @@ export default class ButtonInputElement extends HTMLElement {
   attributeChangedCallback(name, oldValue, newValue) {
     if (name in this) {
       this[name] = newValue;
+    } else {
+      this._button.setAttribute(name, newValue);
     }
-    this._button.setAttribute(name, newValue);
   }
 
   set name(value) {
+    this._slot.textContent = value;
     this._name = value;
   }
 
@@ -56,7 +62,6 @@ export default class ButtonInputElement extends HTMLElement {
 
   set value(value) {
     this._value = value;
-    this._slot.textContent = this._value;
     this.dispatchEvent(new Event("change", {
       bubbles: true,
     }));
@@ -67,4 +72,4 @@ export default class ButtonInputElement extends HTMLElement {
   }
 }
 
-window.customElements.define("dgui-input-button", ButtonInputElement);
+window.customElements.define("dgui-node-input-button", ButtonInputNodeElement);

@@ -1,16 +1,16 @@
-import GUIConfig from "../gui/GUIConfig.js";
+import GUIConfig from "./GUIConfig.js";
 
 import "../input/NumberInputElement.js";
-import "../input/TextInputElement.js";
-import "../input/RangeInputElement.js";
-import "../input/CheckboxInputElement.js";
-import "../input/ButtonInputElement.js";
-import "../input/ColorInputElement.js";
-import "../input/SelectInputElement.js";
+import "../input/TextInputNodeElement.js";
+import "../input/RangeInputNodeElement.js";
+import "../input/CheckboxInputNodeElement.js";
+import "../input/ButtonInputNodeElement.js";
+import "../input/ColorInputNodeElement.js";
+import "../input/SelectInputNodeElement.js";
 
 export default class GUIInputElement extends HTMLElement {
   static get observedAttributes() {
-    return ["type", "name", "value", "disabled", "options"];
+    return ["type", "name", "value", "disabled"];
   }
 
   constructor() {
@@ -49,6 +49,7 @@ export default class GUIInputElement extends HTMLElement {
 
   attributeChangedCallback(name, oldValue, newValue) {
     this[name] = name === "disabled" ? newValue === "" : newValue;
+    this._input.setAttribute(name, newValue);
   }
 
   get type() {
@@ -78,8 +79,10 @@ export default class GUIInputElement extends HTMLElement {
     if (this._input) {
       newInput.name = this._input.name;
       newInput.value = this._input.value;
-      newInput.options = this._input.options;
       newInput.disabled = this._input.disabled;
+      for (const key in this.dataset) {
+        newInput[key] = this.dataset[key];
+      }
       this._input.remove();
     }
     this._input = newInput;
@@ -113,28 +116,6 @@ export default class GUIInputElement extends HTMLElement {
     this._input.defaultValue = value;
   }
 
-  get object() {
-    return this._object;
-  }
-
-  set object(value) {
-    this._object = value;
-    if (this.defaultValue === undefined && this.object && this.key) {
-      this.value = this.object[this.key];
-    }
-  }
-
-  get key() {
-    return this._key;
-  }
-
-  set key(value) {
-    this._key = value;
-    if (this.defaultValue === undefined && this.object && this.key) {
-      this.value = this.object[this.key];
-    }
-  }
-
   get value() {
     return this._input.value;
   }
@@ -148,10 +129,6 @@ export default class GUIInputElement extends HTMLElement {
         }
       }
       this.type = type;
-    }
-
-    if (this.object && this.key) {
-      this.object[this.key] = value;
     }
     this._input.value = value;
   }
@@ -176,16 +153,8 @@ export default class GUIInputElement extends HTMLElement {
     return this._input.disabled;
   }
 
-  set options(value) {
-    this._input.options = value;
-  }
-
-  get options() {
-    return this._input.options;
-  }
-
   toJSON() {
-    return {
+    return this._input.toJSON ? this._input.toJSON() : {
       name: this.name,
       type: this.type,
       value: this.value,
