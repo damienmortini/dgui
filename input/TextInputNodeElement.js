@@ -34,7 +34,7 @@ export default class TextInputNodeElement extends HTMLElement {
     this._textarea = this.shadowRoot.querySelector("textarea");
     this._label = this.shadowRoot.querySelector("label");
 
-    this.shadowRoot.addEventListener("change", () => {
+    this.shadowRoot.addEventListener("change", (event) => {
       this.dispatchEvent(new event.constructor(event.type, event));
     });
   }

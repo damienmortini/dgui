@@ -35,12 +35,12 @@ export default class ColorInputNodeElement extends HTMLElement {
     this._textInput = this.shadowRoot.querySelector("input[type=\"text\"]");
     this._colorInput = this.shadowRoot.querySelector("input[type=\"color\"]");
 
-    this.shadowRoot.addEventListener("change", () => {
+    this.shadowRoot.addEventListener("change", (event) => {
       event.stopImmediatePropagation();
       this.dispatchEvent(new event.constructor(event.type, event));
     });
 
-    this.shadowRoot.addEventListener("input", () => {
+    this.shadowRoot.addEventListener("input", (event) => {
       event.stopImmediatePropagation();
       this.value = event.target.value;
       this.dispatchEvent(new event.constructor(event.type, event));

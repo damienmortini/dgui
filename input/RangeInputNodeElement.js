@@ -36,14 +36,6 @@ export default class RangeInputNodeElement extends HTMLElement {
     this._rangeInput = this.shadowRoot.querySelector("input[type=\"range\"]");
     this._numberInput = this.shadowRoot.querySelector("input[type=\"number\"]");
 
-    if (this.hasAttribute("value")) {
-      this.value = this.defaultValue = parseFloat(this.getAttribute("value"));
-    }
-    if (this.hasAttribute("name")) {
-      this.name = this.getAttribute("name");
-    }
-    this.disabled = this.hasAttribute("disabled");
-
     const onInput = (event) => {
       this.dispatchEvent(new event.constructor(event.type, event));
       this._numberInput.valueAsNumber = event.target.valueAsNumber;

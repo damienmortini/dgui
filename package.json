@@ -14,15 +14,15 @@
   "author": "Damien Mortini",
   "license": "MIT",
   "dependencies": {
-    "@webcomponents/webcomponentsjs": "^2.0.0",
+    "@webcomponents/webcomponentsjs": "^2.0.2",
     "dlib": "0.0.81",
     "nodemon": "^1.17.5",
-    "ws": "^5.2.0"
+    "ws": "^5.2.1"
   },
   "devDependencies": {
     "babel-minify": "^0.4.3",
-    "browser-sync": "^2.24.4",
+    "browser-sync": "^2.24.5",
     "http2": "^3.3.7",
-    "rollup": "^0.60.2"
+    "rollup": "^0.62.0"
   }
 }
