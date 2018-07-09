@@ -14,7 +14,7 @@ export default class NumberInputElement extends HTMLElement {
       <style>
         :host {
           display: grid;
-          grid-template-columns: auto auto auto 3fr 1fr auto;
+          grid-template-columns: auto auto auto 1fr auto;
           grid-gap: 5px;
           align-items: center;
         }
