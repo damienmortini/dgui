@@ -1,4 +1,4 @@
-import "../node/NodeElement.js";
+import "../misc/DraggableHandlerElement.js";
 
 export default class CheckboxInputNodeElement extends HTMLElement {
   static get observedAttributes() {
@@ -13,20 +13,21 @@ export default class CheckboxInputNodeElement extends HTMLElement {
     this.attachShadow({ mode: "open" }).innerHTML = `
       <style>
         :host {
-          display: block;
-        }
-        label {
-          margin-right: 10px;
+          display: grid;
+          grid-template-columns: auto auto auto 1fr auto;
+          grid-gap: 5px;
+          align-items: center;
         }
         input {
           flex: 1;
           margin : 0;
         }
       </style>
-      <dgui-node>
-        <label></label>
-        <input type="checkbox"></input>
-      </dgui-node>
+      <dgui-node-in data-to="this.getRootNode().host"></dgui-node-in>
+      <dgui-draggable-handler data-target="this.getRootNode().host"></dgui-draggable-handler>
+      <label></label>
+      <input type="checkbox"></input>
+      <dgui-node-out data-from="this.getRootNode().host"></dgui-node-out>
     `;
 
     this._input = this.shadowRoot.querySelector("input");
@@ -72,6 +73,14 @@ export default class CheckboxInputNodeElement extends HTMLElement {
 
   set disabled(value) {
     this._input.disabled = value;
+  }
+
+  toJSON() {
+    return {
+      name: this.name,
+      type: this.type,
+      value: this.value,
+    };
   }
 }
 

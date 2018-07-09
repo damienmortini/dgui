@@ -1,5 +1,4 @@
-import "./NodeElement.js";
-import DraggableHandler from "./DraggableHandler.js";
+import "../misc/DraggableHandlerElement.js";
 import GUIConfig from "../gui/GUIConfig.js";
 
 export default class NodeGroupElement extends HTMLElement {
@@ -22,14 +21,20 @@ export default class NodeGroupElement extends HTMLElement {
           overflow: auto;
         }
 
+        dgui-draggable-handler {
+          position: absolute;
+          width: calc(100% - 2px);
+          left: 1px;
+        }
+
         details summary {
+          position: relative;
           padding: 5px;
-          background: lightgrey;
           outline: none;
         }
       </style>
       <details>
-        <summary></summary>
+        <summary><span class="name"></span><dgui-draggable-handler data-target="this.getRootNode().host"></dgui-draggable-handler></summary>
         <slot></slot>
       </details>
     `;
@@ -37,7 +42,7 @@ export default class NodeGroupElement extends HTMLElement {
     this._container = this.shadowRoot.querySelector("details");
     this.open = true;
 
-    this._draggableHandler = new DraggableHandler(this, this.shadowRoot.querySelector("summary"));
+    // this._draggableHandler = new DraggableHandler(this, this.shadowRoot.querySelector("summary"));
 
     this._nodes = new Map();
   }
@@ -51,31 +56,28 @@ export default class NodeGroupElement extends HTMLElement {
 
   set nodes(value) {
     this.innerHTML = "";
-
-    for (let component of value) {
-      if (this._nodes.has(component.name)) {
-        Object.assign(this.nodes.get(component.name), component);
-      } else {
-        let componentElement;
-        if (component.nodes) {
-          componentElement = document.createElement("dgui-node-group");
-        } else {
-          componentElement = document.createElement(GUIConfig.inputTypeMap[component.type]);
+    for (let node of value) {
+      if (!node.type) {
+        node.type = "text";
+        for (const typeResolverKey in GUIConfig.typeResolvers) {
+          node.type = GUIConfig.typeResolvers[typeResolverKey](node) ? typeResolverKey : node.type;
         }
-        Object.assign(componentElement, component);
-        this.appendChild(componentElement);
-        this._nodes.set(component.name, componentElement);
       }
+
+      let nodeElement = this._nodes.get(node.name) || document.createElement(GUIConfig.inputTypeMap[node.type] || node.type);
+      this._nodes.set(node.name, nodeElement);
+      Object.assign(nodeElement, node);
+      this.appendChild(nodeElement);
     }
   }
 
   get nodes() {
-    return this._nodes.values();
+    return JSON.parse(JSON.stringify([...this._nodes.values()]));
   }
 
   set name(value) {
     this._name = value;
-    this._container.querySelector("summary").textContent = this._name;
+    this._container.querySelector("summary .name").textContent = this._name;
   }
 
   get name() {
@@ -96,7 +98,6 @@ export default class NodeGroupElement extends HTMLElement {
 
   set draggable(value) {
     super.draggable = value;
-    this._draggableHandler.enabled = value;
   }
 
   addInput(object, key, attributes) {
@@ -123,17 +124,9 @@ export default class NodeGroupElement extends HTMLElement {
   }
 
   toJSON() {
-    const inputs = [];
-    for (const child of this.children) {
-      inputs.push(child.toJSON ? child.toJSON() : {
-        name: child.name,
-        type: child.type,
-        value: child.value,
-      });
-    }
     return {
       name: this.name,
-      inputs: inputs,
+      nodes: this.nodes,
     };
   }
 }

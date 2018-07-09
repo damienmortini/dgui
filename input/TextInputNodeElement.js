@@ -1,4 +1,4 @@
-import "../node/NodeElement.js";
+import "../misc/DraggableHandlerElement.js";
 
 export default class TextInputNodeElement extends HTMLElement {
   static get observedAttributes() {
@@ -13,7 +13,10 @@ export default class TextInputNodeElement extends HTMLElement {
     this.attachShadow({ mode: "open" }).innerHTML = `
       <style>
         :host {
-          display: block;
+          display: grid;
+          grid-template-columns: auto auto auto 1fr auto;
+          grid-gap: 5px;
+          align-items: center;
         }
         textarea {
           width: 100%;
@@ -21,14 +24,12 @@ export default class TextInputNodeElement extends HTMLElement {
           box-sizing: border-box;
           vertical-align: middle;
         }
-        label {
-          margin-right: 10px;
-        }
       </style>
-      <dgui-node>
-        <label></label>
-        <textarea rows="1"></textarea>
-      </dgui-node>
+      <dgui-node-in data-to="this.getRootNode().host"></dgui-node-in>
+      <dgui-draggable-handler data-target="this.getRootNode().host"></dgui-draggable-handler>
+      <label></label>
+      <textarea rows="1"></textarea>
+      <dgui-node-out data-from="this.getRootNode().host"></dgui-node-out>
     `;
 
     this._textarea = this.shadowRoot.querySelector("textarea");
@@ -66,6 +67,14 @@ export default class TextInputNodeElement extends HTMLElement {
 
   set disabled(value) {
     this._textarea.disabled = value;
+  }
+
+  toJSON() {
+    return {
+      name: this.name,
+      type: this.type,
+      value: this.value,
+    };
   }
 }
 

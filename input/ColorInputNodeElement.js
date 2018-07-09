@@ -1,5 +1,4 @@
 import Color from "../node_modules/dlib/math/Color.js";
-import "../node/NodeElement.js";
 
 export default class ColorInputNodeElement extends HTMLElement {
   static get observedAttributes() {
@@ -14,21 +13,22 @@ export default class ColorInputNodeElement extends HTMLElement {
     this.attachShadow({ mode: "open" }).innerHTML = `
       <style>
         :host {
-          display: block;
+          display: grid;
+          grid-template-columns: auto auto auto 3fr 1fr auto;
+          grid-gap: 5px;
+          align-items: center;
         }
         input {
           width: 100%;
           box-sizing: border-box;
         }
-        label {
-          margin-right: 10px;
-        }
       </style>
-      <dgui-node>
-        <label></label>
-        <input type="text">
-        <input type="color">
-      </dgui-node>
+      <dgui-node-in data-to="this.getRootNode().host"></dgui-node-in>
+      <dgui-draggable-handler data-target="this.getRootNode().host"></dgui-draggable-handler>
+      <label></label>
+      <input type="text">
+      <input type="color">
+      <dgui-node-out data-from="this.getRootNode().host"></dgui-node-out>
     `;
 
     this._label = this.shadowRoot.querySelector("label");
@@ -49,6 +49,10 @@ export default class ColorInputNodeElement extends HTMLElement {
 
   attributeChangedCallback(name, oldValue, newValue) {
     this[name] = name === "disabled" ? newValue !== null : newValue;
+  }
+
+  get value() {
+    return this._value;
   }
 
   set value(value) {
@@ -84,15 +88,11 @@ export default class ColorInputNodeElement extends HTMLElement {
   get name() {
     return this._textInput.name;
   }
-  
+
   set name(value) {
     this._label.textContent = value;
     this._textInput.name = value;
     this._colorInput.name = value;
-  }
-
-  get value() {
-    return this._value;
   }
 
   set disabled(value) {
@@ -118,6 +118,14 @@ export default class ColorInputNodeElement extends HTMLElement {
     }
 
     return `#${Math.floor(RGBA[0] * 255).toString(16).padStart(2, "0")}${Math.floor(RGBA[1] * 255).toString(16).padStart(2, "0")}${Math.floor(RGBA[2] * 255).toString(16).padStart(2, "0")}`;
+  }
+
+  toJSON() {
+    return {
+      name: this.name,
+      type: this.type,
+      value: this._valueToHexadecimal(this.value),
+    };
   }
 }
 

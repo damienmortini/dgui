@@ -72,7 +72,6 @@
 
     const node = document.createElement("dgui-node-group");
     node.style.width = "300px";
-    node.draggable = true;
     document.body.appendChild(node);
     
     fetch("gui-data.json").then(response => response.json()).then(data => {

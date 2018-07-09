@@ -1,4 +1,4 @@
-import "../node/NodeElement.js";
+import "../misc/DraggableHandlerElement.js";
 
 export default class NumberInputElement extends HTMLElement {
   static get observedAttributes() {
@@ -13,21 +13,22 @@ export default class NumberInputElement extends HTMLElement {
     this.attachShadow({ mode: "open" }).innerHTML = `
       <style>
         :host {
-          display: block;
+          display: grid;
+          grid-template-columns: auto auto auto 3fr 1fr auto;
+          grid-gap: 5px;
+          align-items: center;
         }
         input {
           box-sizing: border-box;
           width: 100%;
           height: 100%;
         }
-        label {
-          margin-right: 10px;
-        }
       </style>
-      <dgui-node>
-        <label></label>
-        <input type="number">
-      </dgui-node>
+      <dgui-node-in data-to="this.getRootNode().host"></dgui-node-in>
+      <dgui-draggable-handler data-target="this.getRootNode().host"></dgui-draggable-handler>
+      <label></label>
+      <input type="number">
+      <dgui-node-out data-from="this.getRootNode().host"></dgui-node-out>
     `;
     this._input = this.shadowRoot.querySelector("input");
     this._label = this.shadowRoot.querySelector("label");

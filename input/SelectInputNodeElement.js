@@ -1,5 +1,3 @@
-import "../node/NodeElement.js";
-
 export default class SelectInputNodeElement extends HTMLElement {
   static get observedAttributes() {
     return ["name", "value", "disabled"];
@@ -13,20 +11,21 @@ export default class SelectInputNodeElement extends HTMLElement {
     this.attachShadow({ mode: "open" }).innerHTML = `
       <style>
         :host {
-          display: block;
+          display: grid;
+          grid-template-columns: auto auto auto 1fr auto;
+          grid-gap: 5px;
+          align-items: center;
         }
         select {
           width: 100%;
           height: 100%;
         }
-        label {
-          margin-right: 10px;
-        }
       </style>
-      <dgui-node>
-        <label></label>
-        <select></select>
-      </dgui-node>
+      <dgui-node-in data-to="this.getRootNode().host"></dgui-node-in>
+      <dgui-draggable-handler data-target="this.getRootNode().host"></dgui-draggable-handler>
+      <label></label>
+      <select></select>
+      <dgui-node-out data-from="this.getRootNode().host"></dgui-node-out>
     `;
 
     this._optionsMap = new Map();
@@ -57,9 +56,7 @@ export default class SelectInputNodeElement extends HTMLElement {
 
   set options(value) {
     this._options = value instanceof Array ? value : JSON.parse(`[${value}]`);
-    for (let index = 0; index < this._select.options.length; index++) {
-      this._select.remove(index);
-    }
+    this._select.innerHTML = "";
     for (let option of this._options) {
       const optionElement = document.createElement("option");
       const stringifiedOption = typeof option === "object" ? JSON.stringify(option) : option.toString();
@@ -69,6 +66,7 @@ export default class SelectInputNodeElement extends HTMLElement {
       this._select.add(optionElement);
       this._optionsMap.set(stringifiedOption, option);
     }
+    this.value = this._value;
   }
 
   get options() {
@@ -80,6 +78,7 @@ export default class SelectInputNodeElement extends HTMLElement {
   }
 
   set value(value) {
+    this._value = value;
     this._select.value = value;
   }
 
