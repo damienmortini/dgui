@@ -3,7 +3,7 @@ import GUIConfig from "../gui/GUIConfig.js";
 
 export default class NodeGroupElement extends HTMLElement {
   static get observedAttributes() {
-    return ["name", "draggable"];
+    return ["name"];
   }
 
   constructor() {
@@ -13,12 +13,10 @@ export default class NodeGroupElement extends HTMLElement {
       <style>
         :host {
           display: block;
-          resize: both;
           padding: 5px;
           max-width: 100%;
           max-height: 100%;
           box-sizing: border-box;
-          overflow: auto;
         }
 
         dgui-draggable-handler {
@@ -34,15 +32,13 @@ export default class NodeGroupElement extends HTMLElement {
         }
       </style>
       <details>
-        <summary><span class="name"></span><dgui-draggable-handler data-target="this.getRootNode().host"></dgui-draggable-handler></summary>
+        <summary><span></span><dgui-draggable-handler data-target="this.getRootNode().host"></dgui-draggable-handler></summary>
         <slot></slot>
       </details>
     `;
 
     this._container = this.shadowRoot.querySelector("details");
     this.open = true;
-
-    // this._draggableHandler = new DraggableHandler(this, this.shadowRoot.querySelector("summary"));
 
     this._nodes = new Map();
   }
@@ -51,7 +47,7 @@ export default class NodeGroupElement extends HTMLElement {
     if (oldValue === newValue) {
       return;
     }
-    this[name] = name === "draggable" ? newValue === "true" : newValue;
+    this[name] = newValue;
   }
 
   set nodes(value) {
@@ -77,7 +73,7 @@ export default class NodeGroupElement extends HTMLElement {
 
   set name(value) {
     this._name = value;
-    this._container.querySelector("summary .name").textContent = this._name;
+    this._container.querySelector("summary span").textContent = this._name;
   }
 
   get name() {
@@ -90,37 +86,6 @@ export default class NodeGroupElement extends HTMLElement {
 
   get open() {
     return this._container.open;
-  }
-
-  get draggable() {
-    return super.draggable;
-  }
-
-  set draggable(value) {
-    super.draggable = value;
-  }
-
-  addInput(object, key, attributes) {
-    if (!key && !attributes) {
-      attributes = object;
-      object = undefined;
-    }
-    attributes = Object.assign({}, attributes);
-
-    let input = this.inputs.get(attributes.name || attributes.label || attributes.key);
-
-    if (!input) {
-      input = document.createElement(window.customElements.get(`dgui-${attributes.type}input`) ? `dgui-${attributes.type}input` : "dgui-input");
-      input.slot = "input";
-      this.appendChild(input);
-    }
-    Object.assign(input, Object.assign({
-      object,
-      key,
-    }, attributes));
-    this.inputs.set(input.name, input);
-
-    return input;
   }
 
   toJSON() {

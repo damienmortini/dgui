@@ -33,9 +33,11 @@ export default class CheckboxInputNodeElement extends HTMLElement {
     this._input = this.shadowRoot.querySelector("input");
     this._label = this.shadowRoot.querySelector("label");
 
-    this.shadowRoot.addEventListener("change", (event) => {
+    const dispatchEvent = (event) => {
       this.dispatchEvent(new event.constructor(event.type, event));
-    });
+    };
+    this.shadowRoot.addEventListener("input", dispatchEvent);
+    this.shadowRoot.addEventListener("change", dispatchEvent);
   }
 
   attributeChangedCallback(name, oldValue, newValue) {

@@ -39,9 +39,7 @@ export default class GUI {
       document.body.appendChild(nodeGroup);
     }
 
-    console.log(nodeGroup.nodes);
     nodeGroup.nodes = [...nodeGroup.nodes, attributes];
-    console.log(nodeGroup.nodes);
 
     if (typeof object === "object" && typeof key === "string") {
       object[key] = attributes.value;
