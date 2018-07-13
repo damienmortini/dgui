@@ -2,6 +2,8 @@
 
 # dgui
 
+Node based GUI acting as a bridge to share data between any app using Web Sockets.
+
 ## Initialization
 
 * Install dependencies with `npm install`
