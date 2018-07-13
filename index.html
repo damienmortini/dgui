@@ -14,7 +14,6 @@
   <title>GUI</title>
   <meta name="description" content="GUI">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- <link rel="stylesheet" href="index.css"> -->
   <style>
     html,
     body {
@@ -65,7 +64,7 @@
     <dgui-node-component>
       <dgui-input name="Number" type="number" value="8"></dgui-input>
     </dgui-node-component>
-</dgui-node> -->
+  </dgui-node> -->
 
   <script type="module">
     import "./index.js";
@@ -76,16 +75,8 @@
     
     fetch("gui-data.json").then(response => response.json()).then(data => {
       Object.assign(node, data.main);
-
       console.log(JSON.stringify(node));
-      
     });
-
-    // document.body.querySelector("dgui-node").addEventListener("change", (e) => {
-    //   console.log(e.target);
-    //   console.log(document.body.querySelector("dgui-node").toJSON());
-    // });
-    
   </script>
 </body>
 

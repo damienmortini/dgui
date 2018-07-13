@@ -5,7 +5,7 @@ const https = require("https");
 
 const server = new https.createServer({
   key: fs.readFileSync("server/certs/server.key"),
-  cert: fs.readFileSync("server/certs/server.crt")
+  cert: fs.readFileSync("server/certs/server.crt"),
 }, (req, res) => {
   res.writeHead(200);
   res.end("WebSocket server running");
@@ -26,15 +26,15 @@ module.exports = class GUIServer {
       }
       Object.assign(target, source);
       Object.assign(source, target);
-    }
+    };
 
     this.webSocketServer.on("connection", (webSocket) => {
       console.log("GUI - Connected");
-      var dataFileURL = "";
+      let dataFileURL = "";
       webSocket.on("message", (message) => {
         const data = JSON.parse(message);
         if (data.type === "save") {
-          if(!dataFileURL) {
+          if (!dataFileURL) {
             return;
           }
           let guiData;
@@ -46,7 +46,7 @@ module.exports = class GUIServer {
 
           deepAssign(guiData, data.data);
 
-          fs.writeFile(dataFileURL, JSON.stringify(guiData, undefined, "\t"), function (error) {
+          fs.writeFile(dataFileURL, JSON.stringify(guiData, undefined, "\t"), function(error) {
             if (error) throw error;
           });
         } else if (data.type === "datafileurl") {
@@ -67,4 +67,4 @@ module.exports = class GUIServer {
       });
     });
   }
-}
+};

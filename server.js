@@ -1,4 +1,4 @@
-const browserSyncServer = require("../../AppData/Local/Microsoft/TypeScript/2.9/node_modules/@types/browser-sync/index").create();
+const browserSyncServer = require("browser-sync").create();
 
 browserSyncServer.init({
   server: {
