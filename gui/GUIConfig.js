@@ -1,5 +1,5 @@
-import "../node/NodeInElement.js";
-import "../node/NodeOutElement.js";
+import "../node/NodeLinkElement.js";
+import "../node/NodeConnectorElement.js";
 import "../misc/DraggableHandlerElement.js";
 
 export default {

@@ -24,18 +24,20 @@ export default class NumberInputElement extends HTMLElement {
           height: 100%;
         }
       </style>
-      <dgui-node-in data-to="this.getRootNode().host"></dgui-node-in>
+      <dgui-node-connector data-destination="this.getRootNode().host"></dgui-node-connector>
       <dgui-draggable-handler data-target="this.getRootNode().host"></dgui-draggable-handler>
       <label></label>
       <input type="number">
-      <dgui-node-out data-from="this.getRootNode().host"></dgui-node-out>
+      <dgui-node-connector data-source="this.getRootNode().host"></dgui-node-connector>
     `;
     this._input = this.shadowRoot.querySelector("input");
     this._label = this.shadowRoot.querySelector("label");
 
-    this.shadowRoot.addEventListener("change", (event) => {
+    const dispatchEvent = (event) => {
       this.dispatchEvent(new event.constructor(event.type, event));
-    });
+    };
+    this.shadowRoot.addEventListener("change", dispatchEvent);
+    this.shadowRoot.addEventListener("input", dispatchEvent);
   }
 
   attributeChangedCallback(name, oldValue, newValue) {

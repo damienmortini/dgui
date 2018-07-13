@@ -25,11 +25,11 @@ export default class TextInputNodeElement extends HTMLElement {
           vertical-align: middle;
         }
       </style>
-      <dgui-node-in data-to="this.getRootNode().host"></dgui-node-in>
+      <dgui-node-connector data-destination="this.getRootNode().host"></dgui-node-connector>
       <dgui-draggable-handler data-target="this.getRootNode().host"></dgui-draggable-handler>
       <label></label>
       <textarea rows="1"></textarea>
-      <dgui-node-out data-from="this.getRootNode().host"></dgui-node-out>
+      <dgui-node-connector data-source="this.getRootNode().host"></dgui-node-connector>
     `;
 
     this._textarea = this.shadowRoot.querySelector("textarea");

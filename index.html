@@ -34,6 +34,10 @@
     node.style.width = "300px";
     document.body.appendChild(node);
 
+    // node.addEventListener("change", (event) => {
+    //   console.log(event);
+    // })
+
     fetch("gui-data.json").then(response => response.json()).then(data => {
       Object.assign(node, data);
       console.log(JSON.stringify(node));

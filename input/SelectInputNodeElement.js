@@ -21,11 +21,11 @@ export default class SelectInputNodeElement extends HTMLElement {
           height: 100%;
         }
       </style>
-      <dgui-node-in data-to="this.getRootNode().host"></dgui-node-in>
+      <dgui-node-connector data-destination="this.getRootNode().host"></dgui-node-connector>
       <dgui-draggable-handler data-target="this.getRootNode().host"></dgui-draggable-handler>
       <label></label>
       <select></select>
-      <dgui-node-out data-from="this.getRootNode().host"></dgui-node-out>
+      <dgui-node-connector data-source="this.getRootNode().host"></dgui-node-connector>
     `;
 
     this._optionsMap = new Map();

@@ -69,7 +69,7 @@
 				{
 					"name": "Color",
 					"type": "color",
-					"value": "#ff0000"
+					"value": "#ffff00"
 				},
 				{
 					"name": "Number",
