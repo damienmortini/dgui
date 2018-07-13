@@ -54,10 +54,13 @@ export default class NodeGroupElement extends HTMLElement {
     this.innerHTML = "";
     for (let node of value) {
       if (!node.type) {
-        node.type = "text";
         for (const typeResolverKey in GUIConfig.typeResolvers) {
           node.type = GUIConfig.typeResolvers[typeResolverKey](node) ? typeResolverKey : node.type;
         }
+      }
+
+      if (!node.type && node.nodes) {
+        node.type = "dgui-node-group";
       }
 
       let nodeElement = this._nodes.get(node.name) || document.createElement(GUIConfig.inputTypeMap[node.type] || node.type);

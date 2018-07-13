@@ -1,48 +1,97 @@
 {
-	"main": {
-		"name": "Main",
-		"nodes": [
-			{
-				"name": "Select",
-				"type": "select",
-				"value": 8,
-				"options": [
-					4,
-					8,
-					16,
-					32
-				]
-			},
-			{
-				"name": "Checkbox",
-				"type": "checkbox",
-				"value": true
-			},
-			{
-				"name": "Color",
-				"type": "color",
-				"value": "#ff0000"
-			},
-			{
-				"name": "Number",
-				"type": "number",
-				"value": "1.8"
-			},
-			{
-				"name": "Range",
-				"type": "range",
-				"value": 1.43
-			},
-			{
-				"name": "Button",
-				"type": "button",
-				"value": "Value returned"
-			},
-			{
-				"name": "Text",
-				"type": "text",
-				"value": "Lorem ipsum"
-			}
-		]
-	}
+	"name": "Root",
+	"nodes": [
+		{
+			"name": "First node",
+			"nodes": [
+				{
+					"name": "Select",
+					"type": "select",
+					"value": 8,
+					"options": [
+						4,
+						8,
+						16,
+						32
+					]
+				},
+				{
+					"name": "Checkbox",
+					"type": "checkbox",
+					"value": true
+				},
+				{
+					"name": "Color",
+					"type": "color",
+					"value": "#ff0000"
+				},
+				{
+					"name": "Number",
+					"type": "number",
+					"value": "1.8"
+				},
+				{
+					"name": "Range",
+					"type": "range",
+					"value": 1.43
+				},
+				{
+					"name": "Button",
+					"type": "button",
+					"value": "Value returned"
+				},
+				{
+					"name": "Text",
+					"type": "text",
+					"value": "Lorem ipsum"
+				}
+			]
+		},
+		{
+			"name": "Second node",
+			"nodes": [
+				{
+					"name": "Select",
+					"type": "select",
+					"value": 8,
+					"options": [
+						4,
+						8,
+						16,
+						32
+					]
+				},
+				{
+					"name": "Checkbox",
+					"type": "checkbox",
+					"value": true
+				},
+				{
+					"name": "Color",
+					"type": "color",
+					"value": "#ff0000"
+				},
+				{
+					"name": "Number",
+					"type": "number",
+					"value": "1.8"
+				},
+				{
+					"name": "Range",
+					"type": "range",
+					"value": 1.43
+				},
+				{
+					"name": "Button",
+					"type": "button",
+					"value": "Value returned"
+				},
+				{
+					"name": "Text",
+					"type": "text",
+					"value": "Lorem ipsum"
+				}
+			]
+		}
+	]
 }
