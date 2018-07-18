@@ -1,8 +1,8 @@
-import "../misc/DraggableHandlerElement.js";
+import NodeElement from "../node/NodeElement.js";
 
-export default class RangeInputNodeElement extends HTMLElement {
+export default class RangeInputNodeElement extends NodeElement {
   static get observedAttributes() {
-    return ["name", "value", "disabled"];
+    return [...NodeElement.observedAttributes, "value"];
   }
 
   constructor() {
@@ -26,7 +26,7 @@ export default class RangeInputNodeElement extends HTMLElement {
         }
       </style>
       <dgui-node-connector data-destination="this.getRootNode().host"></dgui-node-connector>
-      <dgui-draggable-handler data-target="this.getRootNode().host"></dgui-draggable-handler>
+      <dgui-draggable-handle data-target="this.getRootNode().host"></dgui-draggable-handle>
       <label></label>
       <input type="range">
       <input type="number">

@@ -54,9 +54,12 @@ export default class NodeConnectorElement extends HTMLElement {
     switch (name) {
       case "data-source":
         this.source = eval(newValue);
+        console.log(this.source);
+        
         break;
-      case "data-destination":
+        case "data-destination":
         this.destination = eval(newValue);
+        console.log(this.destination);
         break;
     }
   }
@@ -106,6 +109,9 @@ export default class NodeConnectorElement extends HTMLElement {
     }
     if (this.destination) {
       this.destination.value = value;
+      this.destination.dispatchEvent(new Event("input", {
+        bubbles: true,
+      }));
       this.destination.dispatchEvent(new Event("change", {
         bubbles: true,
       }));

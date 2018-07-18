@@ -27,21 +27,36 @@
 <body>
   <script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
 
+  <dgui-node name="First node"x="0" y="100" width="200">
+    <section>
+      <input type="text"><dgui-node-connector data-source="this.previousSibling"></dgui-node-connector>
+    </section>
+  </dgui-node>
+  
+  <dgui-node name="Second node" oninput="this.querySelector('#tata').value = this.querySelector('#toto').value + '_yoyo'" x="200" y="300" width="200">
+    <section>
+      <dgui-node-connector data-destination="this.nextSibling"></dgui-node-connector><input type="text" id="toto">
+    </section>
+    <section>
+      <input type="text" id="tata" disabled style="width: 100%; box-sizing: border-box;">
+    </section>
+  </dgui-node>
+
   <script type="module">
     import "./index.js";
 
-    const node = document.createElement("dgui-node-group");
-    node.style.width = "300px";
-    document.body.appendChild(node);
+    // const node = document.createElement("dgui-node-group");
+    // node.style.width = "300px";
+    // document.body.appendChild(node);
 
     // node.addEventListener("change", (event) => {
     //   console.log(event);
     // })
 
-    fetch("gui-data.json").then(response => response.json()).then(data => {
-      Object.assign(node, data);
-      console.log(JSON.stringify(node));
-    });
+    // fetch("gui-data.json").then(response => response.json()).then(data => {
+    //   Object.assign(node, data);
+    //   console.log(JSON.stringify(node));
+    // });
   </script>
 </body>
 

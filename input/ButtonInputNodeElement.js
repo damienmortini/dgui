@@ -1,5 +1,3 @@
-import "../misc/DraggableHandlerElement.js";
-
 export default class ButtonInputNodeElement extends HTMLElement {
   static get observedAttributes() {
     return ["name", "value", "disabled"];
@@ -24,7 +22,7 @@ export default class ButtonInputNodeElement extends HTMLElement {
         }
       </style>
       <dgui-node-connector data-destination="this.getRootNode().host"></dgui-node-connector>
-      <dgui-draggable-handler data-target="this.getRootNode().host"></dgui-draggable-handler>
+      <dgui-draggable-handle data-target="this.getRootNode().host"></dgui-draggable-handle>
       <button>
         <slot></slot>
       </button>

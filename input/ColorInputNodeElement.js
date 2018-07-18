@@ -24,7 +24,7 @@ export default class ColorInputNodeElement extends HTMLElement {
         }
       </style>
       <dgui-node-connector data-destination="this.getRootNode().host"></dgui-node-connector>
-      <dgui-draggable-handler data-target="this.getRootNode().host"></dgui-draggable-handler>
+      <dgui-draggable-handle data-target="this.getRootNode().host"></dgui-draggable-handle>
       <label></label>
       <input type="text">
       <input type="color">

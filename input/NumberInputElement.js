@@ -1,5 +1,3 @@
-import "../misc/DraggableHandlerElement.js";
-
 export default class NumberInputElement extends HTMLElement {
   static get observedAttributes() {
     return ["name", "value", "step", "min", "max", "disabled"];
@@ -25,7 +23,7 @@ export default class NumberInputElement extends HTMLElement {
         }
       </style>
       <dgui-node-connector data-destination="this.getRootNode().host"></dgui-node-connector>
-      <dgui-draggable-handler data-target="this.getRootNode().host"></dgui-draggable-handler>
+      <dgui-draggable-handle data-target="this.getRootNode().host"></dgui-draggable-handle>
       <label></label>
       <input type="number">
       <dgui-node-connector data-source="this.getRootNode().host"></dgui-node-connector>

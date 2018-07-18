@@ -1,8 +1,20 @@
+window.addEventListener("guinodeconnect", (event) => {
+  // const element = document.createElement("dgui-node-link");
+  // event.path[0].appendChild(element);
+});
+
 export default class NodeLinkElement extends HTMLElement {
   constructor() {
     super();
 
     this.attachShadow({ mode: "open" }).innerHTML = `
+      <style>
+        :host {
+          position: absolute;
+          top: 0;
+          left: 0;
+        }
+      </style>
       link
     `;
   }

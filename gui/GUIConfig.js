@@ -1,6 +1,7 @@
 import "../node/NodeLinkElement.js";
 import "../node/NodeConnectorElement.js";
-import "../misc/DraggableHandlerElement.js";
+import "../misc/DraggableHandleElement.js";
+import "../node/NodeElement.js";
 
 export default {
     inputTypeMap: {
