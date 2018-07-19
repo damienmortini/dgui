@@ -124,7 +124,7 @@ export default class DraggableHandleElement extends HTMLElement {
     this._offsetY = this._target.offsetTop;
 
     this._target.style.willChange = "transform";
-    window.addEventListener("pointermove", this._onPointerMoveBinded);
+    window.addEventListener("pointermove", this._onPointerMoveBinded, { passive: false });
     window.addEventListener("pointerup", this._onPointerUpBinded);
     window.addEventListener("touchmove", this._preventDefaultBinded, { passive: false });
   }

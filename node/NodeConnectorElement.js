@@ -9,6 +9,15 @@ export default class NodeConnectorElement extends HTMLElement {
     super();
 
     this.attachShadow({ mode: "open" }).innerHTML = `
+      <style>
+        :host {
+          display: inline-block;
+        }
+        input {
+          vertical-align: middle;
+          margin: 2px;
+        }
+      </style>
       <input type="radio" disabled>
       <slot></slot>
     `;
@@ -23,6 +32,7 @@ export default class NodeConnectorElement extends HTMLElement {
     window.addEventListener("guinodeconnect", (event) => {
       activeConnector = event.path[0];
     });
+
     this.addEventListener("pointerdown", () => {
       if (!this.source) {
         return;
@@ -32,6 +42,7 @@ export default class NodeConnectorElement extends HTMLElement {
         composed: true,
       }));
     });
+
     this.addEventListener("pointerup", () => {
       if (activeConnector) {
         if (activeConnector === this) {
@@ -54,12 +65,9 @@ export default class NodeConnectorElement extends HTMLElement {
     switch (name) {
       case "data-source":
         this.source = eval(newValue);
-        console.log(this.source);
-        
         break;
-        case "data-destination":
+      case "data-destination":
         this.destination = eval(newValue);
-        console.log(this.destination);
         break;
     }
   }
@@ -86,13 +94,31 @@ export default class NodeConnectorElement extends HTMLElement {
       element.value = this.value;
     }
     this.connected = true;
+    this.dispatchEvent(new Event("guinodeconnected", {
+      bubbles: true,
+      composed: true,
+    }));
+    element.dispatchEvent(new Event("guinodeconnected", {
+      bubbles: true,
+      composed: true,
+    }));
   }
 
   disconnect(element) {
     this.connectedElements.delete(element);
     element._parentConnector = null;
     element.connected = false;
+    element.dispatchEvent(new Event("guinodedisconnected", {
+      bubbles: true,
+      composed: true,
+    }));
     this.connected = !!this.connectedElements.size;
+    if (!this.connected) {
+      this.dispatchEvent(new Event("guinodedisconnected", {
+        bubbles: true,
+        composed: true,
+      }));
+    }
   }
 
   _onSourceChange(event) {
