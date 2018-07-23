@@ -37,6 +37,7 @@ export default class NodeLinkElement extends HTMLElement {
           left: 0;
           width: 100%;
           height: 100%;
+          z-index: 2;
         }
         svg {
           width: 100%;

@@ -10,11 +10,15 @@ export default class RangeInputNodeElement extends NodeElement {
 
     this.type = "range";
 
-    this.attachShadow({ mode: "open" }).innerHTML = `
+    this.shadowRoot.querySelector("slot").innerHTML = `
       <style>
         :host {
+          resize: horizontal;
+        }
+
+        slot {
           display: grid;
-          grid-template-columns: auto auto auto 2fr 1fr auto;
+          grid-template-columns: auto auto 2fr 1fr auto;
           grid-gap: 5px;
           align-items: center;
         }
@@ -26,7 +30,6 @@ export default class RangeInputNodeElement extends NodeElement {
         }
       </style>
       <dgui-node-connector data-destination="this.getRootNode().host"></dgui-node-connector>
-      <dgui-draggable-handle data-target="this.getRootNode().host"></dgui-draggable-handle>
       <label></label>
       <input type="range">
       <input type="number">
@@ -38,16 +41,12 @@ export default class RangeInputNodeElement extends NodeElement {
     this._numberInput = this.shadowRoot.querySelector("input[type=\"number\"]");
 
     const onInput = (event) => {
-      this.dispatchEvent(new event.constructor(event.type, event));
       this._numberInput.valueAsNumber = event.target.valueAsNumber;
       this._rangeInput.valueAsNumber = event.target.valueAsNumber;
+      this.dispatchEvent(new event.constructor(event.type, event));
     };
     this.shadowRoot.addEventListener("input", onInput);
     this.shadowRoot.addEventListener("change", onInput);
-  }
-
-  attributeChangedCallback(name, oldValue, newValue) {
-    this[name] = name === "disabled" ? newValue !== null : newValue;
   }
 
   set defaultValue(value) {

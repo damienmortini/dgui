@@ -10,13 +10,14 @@ export default class NodeElement extends HTMLElement {
       <style>
         :host {
           display: block;
+          overflow: auto;
+          resize: both;
         }
         
         :host([draggable]) {
           border: 1px dotted;
           position: absolute;
-          overflow: auto;
-          resize: both;
+          background: white;
         }
 
         :host([draggable]:hover) {
@@ -25,20 +26,26 @@ export default class NodeElement extends HTMLElement {
 
         :host([draggable]:focus-within) {
           border: 1px solid;
+          z-index: 1;
+        }
+
+        details, slot {
+          padding: 5px;
         }
 
         details summary {
           position: relative;
           padding: 5px;
           outline: none;
-          background: lightgrey;
         }
       </style>
       <dgui-draggable-handle draggable="false" data-target="this.getRootNode().host">
-        <details>
-          <summary></summary>
-          <slot></slot>
-        </details>
+        <slot name="content">
+          <details>
+            <summary></summary>
+            <slot></slot>
+          </details>
+        </slot>
       </dgui-draggable-handle>
     `;
 
