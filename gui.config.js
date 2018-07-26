@@ -1,8 +1,3 @@
-import "../node/NodeLinkElement.js";
-import "../node/NodeConnectorElement.js";
-import "../misc/DraggableHandleElement.js";
-import "../node/NodeElement.js";
-
 export default {
     inputTypeMap: {
         "button": "dgui-node-input-button",

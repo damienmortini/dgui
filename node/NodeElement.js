@@ -38,15 +38,19 @@ export default class NodeElement extends HTMLElement {
           padding: 5px;
           outline: none;
         }
+
+        dgui-draggable {
+          display: contents;
+        }
       </style>
-      <dgui-draggable-handle draggable="false" data-target="this.getRootNode().host">
+      <dgui-draggable draggable="false" data-target="this.getRootNode().host">
         <slot name="content">
           <details>
             <summary></summary>
             <slot></slot>
           </details>
         </slot>
-      </dgui-draggable-handle>
+      </dgui-draggable>
     `;
 
     this._details = this.shadowRoot.querySelector("details");
@@ -67,7 +71,7 @@ export default class NodeElement extends HTMLElement {
         this.enabled = this[name] = newValue !== null;
         break;
       case "draggable":
-        this.shadowRoot.querySelector("dgui-draggable-handle").setAttribute(name, newValue);
+        this.shadowRoot.querySelector("dgui-draggable").setAttribute(name, newValue);
         break;
       default:
         this[name] = newValue;

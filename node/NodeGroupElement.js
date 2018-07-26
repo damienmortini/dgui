@@ -1,5 +1,5 @@
-import "../misc/DraggableHandleElement.js";
-import GUIConfig from "../gui/GUIConfig.js";
+import "../misc/DraggableElement.js";
+import GUIConfig from "../gui.config.js";
 
 export default class NodeGroupElement extends HTMLElement {
   static get observedAttributes() {
@@ -19,7 +19,7 @@ export default class NodeGroupElement extends HTMLElement {
           box-sizing: border-box;
         }
 
-        dgui-draggable-handle {
+        dgui-draggable {
           position: absolute;
           width: calc(100% - 2px);
           left: 1px;
@@ -32,7 +32,7 @@ export default class NodeGroupElement extends HTMLElement {
         }
       </style>
       <details>
-        <summary><span></span><dgui-draggable-handle data-target="this.getRootNode().host"></dgui-draggable-handle></summary>
+        <summary><span></span><dgui-draggable data-target="this.getRootNode().host"></dgui-draggable></summary>
         <slot></slot>
       </details>
     `;
