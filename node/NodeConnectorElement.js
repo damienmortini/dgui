@@ -16,10 +16,12 @@ export default class NodeConnectorElement extends HTMLElement {
       <style>
         :host {
           display: inline-block;
+          cursor: pointer;
         }
         input {
-          display: block;
-          margin: 0;
+          cursor: pointer;
+          display: inline-block;
+          margin: 3px;
         }
       </style>
       <input type="radio" disabled>
@@ -89,10 +91,6 @@ export default class NodeConnectorElement extends HTMLElement {
 
   connect(element) {
     if (element instanceof NodeConnectorElement) {
-      if (element._parentConnector) {
-        element._parentConnector.disconnect(element);
-      }
-      element._parentConnector = this;
       element.connected = true;
     }
     this.connectedElements.add(element);

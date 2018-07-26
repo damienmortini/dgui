@@ -28,36 +28,39 @@
   <script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
 
   <dgui-board>
-    <dgui-node name="Input node" x="50" y="100" width="250">
-      <input type="text">
-      <dgui-node-connector data-source="this.previousElementSibling"></dgui-node-connector>
-    </dgui-node>
-  
-    <dgui-node name="Output node" oninput="this.querySelector('#result').value = this.querySelector('#source').value + ' World!'"
-      x="350" y="200" width="250">
-      <dgui-node-connector data-destination="this.nextElementSibling"></dgui-node-connector>
-      <input type="text" id="source">
-      <input type="text" id="result" disabled style="width: 100%; box-sizing: border-box;">
-    </dgui-node>
-  
-    <dgui-node name="Third node" x="300" y="400" width="250">
-      <section>
-        <dgui-node-connector data-destination="this.nextElementSibling"></dgui-node-connector>
+    <dgui-layer>
+      <dgui-node name="Input node" x="50" y="100" width="250">
         <input type="text">
         <dgui-node-connector data-source="this.previousElementSibling"></dgui-node-connector>
-      </section>
-    </dgui-node>
-  
-    <dgui-node name="Fourth node" oninput="this.querySelector('#tata').value = this.querySelector('#toto').value + '_yoyo'" x="200" y="500" width="250">
-      <section>
+      </dgui-node>
+
+      <dgui-node name="Output node" oninput="this.querySelector('#result').value = this.querySelector('#source').value + ' World!'"
+        x="350" y="200" width="250">
         <dgui-node-connector data-destination="this.nextElementSibling"></dgui-node-connector>
-        <input type="text" id="toto">
-        <dgui-node-connector data-source="this.previousElementSibling"></dgui-node-connector>
-      </section>
-      <section>
-        <input type="text" id="tata" disabled style="width: 100%; box-sizing: border-box;">
-      </section>
-    </dgui-node>
+        <input type="text" id="source">
+        <input type="text" id="result" disabled style="width: 100%; box-sizing: border-box;">
+      </dgui-node>
+
+      <dgui-node name="Third node" x="300" y="400" width="250">
+        <section>
+          <dgui-node-connector data-destination="this.nextElementSibling"></dgui-node-connector>
+          <input type="text">
+          <dgui-node-connector data-source="this.previousElementSibling"></dgui-node-connector>
+        </section>
+      </dgui-node>
+
+      <dgui-node name="Fourth node" oninput="this.querySelector('#tata').value = this.querySelector('#toto').value + '_yoyo'" x="200"
+        y="500" width="250">
+        <section>
+          <dgui-node-connector data-destination="this.nextElementSibling"></dgui-node-connector>
+          <input type="text" id="toto">
+          <dgui-node-connector data-source="this.previousElementSibling"></dgui-node-connector>
+        </section>
+        <section>
+          <input type="text" id="tata" disabled style="width: 100%; box-sizing: border-box;">
+        </section>
+      </dgui-node>
+    </dgui-layer>
   </dgui-board>
 
 

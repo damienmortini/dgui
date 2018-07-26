@@ -17,7 +17,7 @@ export default class NodeElement extends HTMLElement {
         :host([draggable]) {
           border: 1px dotted;
           position: absolute;
-          background: white;
+          background: rgba(255, 255, 255, .9);
         }
 
         :host([draggable]:hover) {

@@ -54,11 +54,11 @@ export default class ZoomableElement extends HTMLElement {
     }
 
     this._zoom = value;
-
+    
     this._zoom = Math.max(0, this._zoom);
     
     this.style.transform = `scale(${this._zoom})`;
-  
+    
     this.dispatchEvent(new Event("zoom"));
   }
 }
