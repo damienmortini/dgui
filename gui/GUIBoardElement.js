@@ -28,7 +28,7 @@ export default class GUIBoardElement extends HTMLElement {
           height: 100%;
         }
       </style>
-      <dgui-zoomable>
+      <dgui-zoomable data-listener="this.getRootNode().host" min=".1" max="3">
         <dgui-draggable draggable="true" data-deep-drag-factor="true" data-handle="this.getRootNode().host">
           <slot></slot>
         </dgui-draggable>

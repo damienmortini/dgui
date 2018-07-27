@@ -1,10 +1,12 @@
 let draggedElement;
 
 export default class ZoomableElement extends HTMLElement {
+  static get observedAttributes() {
+    return ["data-listener", "min", "max", "zoom"];
+  }
+
   constructor() {
     super();
-
-    this.zoom = 1;
 
     this.attachShadow({ mode: "open" }).innerHTML = `
       <style>
@@ -29,10 +31,28 @@ export default class ZoomableElement extends HTMLElement {
       </style>
       <slot></slot>
     `;
+
+    this._min = 0;
+    this._max = Infinity;
+    this._zoom = 1;
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (oldValue === newValue) {
+      return;
+    }
+    switch (name) {
+      case "data-listener":
+        this.listener = new Function(`return ${newValue}`).apply(this);
+        break;
+      default:
+        this[name] = parseFloat(newValue);
+        break;
+    }
   }
 
   connectedCallback() {
-    this.addEventListener("wheel", this._onWheelBinded = this._onWheelBinded || this._onWheel.bind(this));
+    this.listener = this.listener || this;
   }
 
   disconnectedCallback() {
@@ -41,25 +61,56 @@ export default class ZoomableElement extends HTMLElement {
 
   _onWheel(event) {
     this.style.transformOrigin = "50% 50%";
-    this.zoom += event.wheelDeltaY * .0002;
+    this.zoom += event.wheelDeltaY * .0004;
   }
-  
+
+  get listener() {
+    return this._listener;
+  }
+
+  set listener(value) {
+    if (this._listener) {
+      this._listener.removeEventListener("wheel", this._onWheelBinded);
+    }
+    this._listener = value;
+    this._listener.addEventListener("wheel", this._onWheelBinded = this._onWheelBinded || this._onWheel.bind(this));
+  }
+
   get zoom() {
     return this._zoom;
   }
-  
+
   set zoom(value) {
-    if(value === this._zoom) {
+
+    if (value === this._zoom) {
       return;
     }
 
     this._zoom = value;
-    
-    this._zoom = Math.max(0, this._zoom);
-    
+
+    this._zoom = Math.min(this.max, Math.max(this.min, this._zoom));
+
     this.style.transform = `scale(${this._zoom})`;
-    
+
     this.dispatchEvent(new Event("zoom"));
+  }
+
+  get min() {
+    return this._min;
+  }
+
+  set min(value) {
+    this._min = value;
+    this.zoom = this.zoom;
+  }
+
+  get max() {
+    return this._max;
+  }
+
+  set max(value) {
+    this._max = value;
+    this.zoom = this.zoom;
   }
 }
 
