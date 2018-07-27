@@ -35,17 +35,26 @@ export default class NodeLinkSystemElement extends HTMLElement {
 
   _onNodeConnect(event) {
     this._currentLink = document.createElement("dgui-node-link");
-    this._currentLink.in = event.path[0];
+    if(event.target.destination) {
+      this._currentLink.out = event.target;
+    } else {
+      this._currentLink.in = event.target;
+    }
+    this._linkMap.set(this._currentLink.in, this._currentLink);
     this.appendChild(this._currentLink);
   }
 
   _onNodeConnected(event) {
-    this._currentLink.out = event.path[0];
-    this._linkMap.set(this._currentLink.out, this._currentLink);
+    if (this._currentLink.out && this._currentLink.out !== event.target) {
+      this._currentLink.in = event.target;
+    }
+    if (this._currentLink.in && this._currentLink.in !== event.target) {
+      this._currentLink.out = event.target;
+    }
   }
 
   _onNodeDisconnected(event) {
-    const link = this._linkMap.get(event.path[0]);
+    const link = this._linkMap.get(event.target);
     if (link) {
       link.remove();
     }
@@ -62,7 +71,7 @@ export default class NodeLinkSystemElement extends HTMLElement {
   }
 
   set listener(value) {
-    if(this._listener) {
+    if (this._listener) {
       this._removeEventListeners();
     }
 

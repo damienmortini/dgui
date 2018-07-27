@@ -1,9 +1,5 @@
 let activeConnector = null;
 
-window.addEventListener("guinodeconnect", (event) => {
-  activeConnector = event.path[0];
-});
-
 export default class NodeConnectorElement extends HTMLElement {
   static get observedAttributes() {
     return ["data-source", "data-destination"];
@@ -29,7 +25,6 @@ export default class NodeConnectorElement extends HTMLElement {
     `;
 
     this.connectedElements = new Set();
-    this._parentConnector = null;
 
     this._radio = this.shadowRoot.querySelector("input");
 
@@ -43,13 +38,13 @@ export default class NodeConnectorElement extends HTMLElement {
     if (this.destination) {
       this.destination = this.destination;
     }
-    this.addEventListener("pointerup", this._onPointerUp);
     this.addEventListener("pointerdown", this._onPointerDown);
+    this.addEventListener("pointerup", this._onPointerUp);
   }
 
   disconnectedCallback() {
-    this.removeEventListener("pointerup", this._onPointerUp);
     this.removeEventListener("pointerdown", this._onPointerDown);
+    this.removeEventListener("pointerup", this._onPointerUp);
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
@@ -65,27 +60,41 @@ export default class NodeConnectorElement extends HTMLElement {
         break;
     }
   }
+
   _onPointerDown() {
-    if (!this.source) {
+    if (activeConnector) {
       return;
     }
+    activeConnector = this;
     this.dispatchEvent(new Event("guinodeconnect", {
       bubbles: true,
       composed: true,
     }));
+    window.addEventListener("pointerup", this._onWindowPointerUpBinded = this._onWindowPointerUpBinded || this._onWindowPointerUp.bind(this));
   }
 
-  _onPointerUp() {
-    if (activeConnector) {
-      if (activeConnector === this) {
+  _onPointerUp(event) {
+    if (!activeConnector || activeConnector === this) {
+      return;
+    }
+    if(activeConnector.destination) {
+      this.connect(activeConnector);
+    } else {
+      activeConnector.connect(this);
+    }
+    activeConnector = null;
+  }
+
+  _onWindowPointerUp(event) {
+    for (const element of event.path) {
+      if (element instanceof NodeConnectorElement) {
         return;
       }
-      activeConnector.connect(this);
+    }
+    window.removeEventListener("pointerup", this._onWindowPointerUpBinded);
+    if (activeConnector) {
+      activeConnector.disconnect();
       activeConnector = null;
-    } else {
-      if (!this.source && this._parentConnector) {
-        this._parentConnector.disconnect(this);
-      }
     }
   }
 
@@ -109,14 +118,16 @@ export default class NodeConnectorElement extends HTMLElement {
   }
 
   disconnect(element) {
-    this.connectedElements.delete(element);
-    element._parentConnector = null;
-    element.connected = false;
-    element.dispatchEvent(new Event("guinodedisconnected", {
-      bubbles: true,
-      composed: true,
-    }));
+    if (element) {
+      this.connectedElements.delete(element);
+      element.connected = false;
+      element.dispatchEvent(new Event("guinodedisconnected", {
+        bubbles: true,
+        composed: true,
+      }));
+    }
     this.connected = !!this.connectedElements.size;
+
     if (!this.connected) {
       this.dispatchEvent(new Event("guinodedisconnected", {
         bubbles: true,
