@@ -16,7 +16,7 @@ export default class NodeLinkElement extends HTMLElement {
           position: absolute;
           top: 0;
           left: 0;
-          pointer-events: none;
+          // pointer-events: none;
         }
         svg {
           position: absolute;
@@ -29,10 +29,19 @@ export default class NodeLinkElement extends HTMLElement {
           width: 1px;
           height: 1px;
         }
+        path {
+          fill: transparent;
+          stroke: black;
+          stroke-width: 1px;
+        }
+        path:hover {
+          stroke-width: 2px;
+          stroke: red;
+        }
       </style>
       <div id="scale-marker"></div>
       <svg>
-        <path d="M10 10 C 20 20, 40 20, 50 10" stroke="black" fill="transparent"/>
+        <path/>
       </svg>
     `;
 
@@ -94,7 +103,8 @@ export default class NodeLinkElement extends HTMLElement {
       outY = 0;
     }
 
-    this._path.setAttribute("d", `M${inX + 1} ${inY + 1} C ${inX + (outX - inX) * .5} ${inY}, ${outX + (inX - outX) * .5} ${outY}, ${outX + 1} ${outY + 1}`);
+    this._path.setAttribute("d", `M${inX + 1} ${inY + 1} L ${outX + 1} ${outY + 1}`);
+    // this._path.setAttribute("d", `M${inX + 1} ${inY + 1} C ${inX + (outX - inX) * .5} ${inY}, ${outX + (inX - outX) * .5} ${outY}, ${outX + 1} ${outY + 1}`);
   }
 }
 

@@ -33,9 +33,15 @@ export default class NodeLinkSystemElement extends HTMLElement {
     this._removeEventListeners();
   }
 
+  _onPointerDown(event) {
+    if(event.button === 2) {
+      
+    }
+  }
+
   _onNodeConnect(event) {
     this._currentLink = document.createElement("dgui-node-link");
-    if(event.target.destination) {
+    if (event.target.destination) {
       this._currentLink.out = event.target;
     } else {
       this._currentLink.in = event.target;
@@ -64,6 +70,7 @@ export default class NodeLinkSystemElement extends HTMLElement {
     this._listener.removeEventListener("guinodeconnect", this._onNodeConnectBinded);
     this._listener.removeEventListener("guinodeconnected", this._onNodeConnectedBinded);
     this._listener.removeEventListener("guinodedisconnected", this._onNodeDisconnectedBinded);
+    this._listener.removeEventListener("pointerdown", this._onPointerDownBinded);
   }
 
   get listener() {
@@ -80,6 +87,7 @@ export default class NodeLinkSystemElement extends HTMLElement {
     this._listener.addEventListener("guinodeconnect", this._onNodeConnectBinded = this._onNodeConnectBinded || this._onNodeConnect.bind(this));
     this._listener.addEventListener("guinodeconnected", this._onNodeConnectedBinded = this._onNodeConnectedBinded || this._onNodeConnected.bind(this));
     this._listener.addEventListener("guinodedisconnected", this._onNodeDisconnectedBinded = this._onNodeDisconnectedBinded || this._onNodeDisconnected.bind(this));
+    this._listener.addEventListener("pointerdown", this._onPointerDownBinded = this._onPointerDownBinded || this._onPointerDown.bind(this));
   }
 }
 

@@ -11,6 +11,7 @@ export default class ButtonInputNodeElement extends HTMLElement {
     this.attachShadow({ mode: "open" }).innerHTML = `
       <style>
         :host {
+          width: 250px;
           display: grid;
           grid-template-columns: auto auto 1fr auto;
           grid-gap: 5px;

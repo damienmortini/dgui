@@ -137,7 +137,7 @@ export default class DraggableElement extends HTMLElement {
   }
 
   _onPointerDown(event) {
-    if (draggedElement || event.path[0].tagName === "INPUT" || event.path[0].getAttribute("draggable") === "false") {
+    if (draggedElement || event.button !== 0 || event.path[0].tagName === "INPUT" || event.path[0].getAttribute("draggable") === "false") {
       return;
     }
 

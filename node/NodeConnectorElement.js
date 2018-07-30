@@ -99,6 +99,9 @@ export default class NodeConnectorElement extends HTMLElement {
   }
 
   connect(element) {
+    if(this.connectedElements.has(element)) {
+      return;
+    }
     if (element instanceof NodeConnectorElement) {
       element.connected = true;
     }

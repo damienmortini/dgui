@@ -1,6 +1,8 @@
-let nodeGroup;
+let editor;
 
 const objectDataMap = new Map();
+
+let nodesData = [];
 
 export default class GUI {
   static add(object, key, attributes = {}) {
@@ -18,23 +20,11 @@ export default class GUI {
 
     attributes.name = attributes.name || key;
 
-    if (!nodeGroup) {
-      nodeGroup = document.createElement("dgui-node-group");
-      nodeGroup.name = "GUI";
-      nodeGroup.style.position = "absolute";
-      nodeGroup.style.top = "0";
-      nodeGroup.style.left = "0";
+    nodesData = [...nodesData, attributes];
 
-      nodeGroup.addEventListener("input", (event) => {
-        const objectData = objectDataMap.get(event.target.name);
-        if (objectData) {
-          objectData.object[objectData.key] = event.target.value;
-        }
-      });
-      document.body.appendChild(nodeGroup);
+    if(editor) {
+      editor.nodesData = nodesData;
     }
-
-    nodeGroup.nodes = [...nodeGroup.nodes, attributes];
 
     if (typeof object === "object" && typeof key === "string") {
       object[key] = attributes.value;
@@ -45,7 +35,20 @@ export default class GUI {
     }
   }
 
+  static set editor(value) {
+    editor = value;
+
+    editor.nodesData = nodesData;
+
+    editor.addEventListener("input", (event) => {
+      const objectData = objectDataMap.get(event.target.name);
+      if (objectData) {
+        objectData.object[objectData.key] = event.target.value;
+      }
+    });
+  }
+
   static get style() {
-    return nodeGroup.style;
+    return editor.style;
   }
 }
