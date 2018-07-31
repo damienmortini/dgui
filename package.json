@@ -1,6 +1,6 @@
 {
   "name": "dgui",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "The ultimate GUI to become",
   "main": "index.js",
   "scripts": {
