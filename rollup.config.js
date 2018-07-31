@@ -1,8 +1,8 @@
 export default {
-  input: "index.js",
+  input: "src/index.js",
   output: {
     file: "build/index.js",
-    format: "iife",
+    format: "es",
     sourcemap: true
   }
 };

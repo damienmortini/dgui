@@ -65,7 +65,7 @@
 
 
   <script type="module">
-    import "./index.js";
+    import(`./${/\bdev\b/.test(window.location.search) ? "src" : "build"}/index.js`);
 
     // const node = document.createElement("dgui-node-group");
     // node.style.width = "300px";
