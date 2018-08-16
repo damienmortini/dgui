@@ -2,35 +2,18 @@ let draggedElement;
 
 export default class ZoomableElement extends HTMLElement {
   static get observedAttributes() {
-    return ["data-listener", "min", "max", "zoom"];
+    return ["data-handle", "data-target", "min", "max", "zoom", "disabled"];
   }
 
   constructor() {
     super();
 
     this.attachShadow({ mode: "open" }).innerHTML = `
-      <style>
-        :host {
-          display: inline-block;
-          position: relative;
-          width: 20px;
-          height: 20px;
-        }
-        
-        slot {
-          display: block;
-          width: 100%;
-          height: 100%;
-        }
-
-        slot svg {
-          width: 100%;
-          height: 100%;
-          pointer-events: none;
-        }
-      </style>
       <slot></slot>
     `;
+
+    this.target = this;
+    this._handle = this;
 
     this._min = 0;
     this._max = Infinity;
@@ -42,8 +25,14 @@ export default class ZoomableElement extends HTMLElement {
       return;
     }
     switch (name) {
-      case "data-listener":
-        this.listener = new Function(`return ${newValue}`).apply(this);
+      case "data-handle":
+        this.handle = new Function(`return ${newValue}`).apply(this);
+        break;
+      case "data-target":
+        this.target = new Function(`return ${newValue}`).apply(this);
+        break;
+      case "disabled":
+        this.disabled = newValue !== null;
         break;
       default:
         this[name] = parseFloat(newValue);
@@ -52,11 +41,13 @@ export default class ZoomableElement extends HTMLElement {
   }
 
   connectedCallback() {
-    this.listener = this.listener || this;
+    this.disabled = this.disabled;
   }
 
   disconnectedCallback() {
-    this.removeEventListener("wheel", this._onWheelBinded);
+    if (this.handle) {
+      this.handle.removeEventListener("wheel", this._onWheelBinded);
+    }
   }
 
   _onWheel(event) {
@@ -64,16 +55,28 @@ export default class ZoomableElement extends HTMLElement {
     this.zoom += event.wheelDeltaY * .0004;
   }
 
-  get listener() {
-    return this._listener;
+  get handle() {
+    return this._handle;
   }
 
-  set listener(value) {
-    if (this._listener) {
-      this._listener.removeEventListener("wheel", this._onWheelBinded);
+  set handle(value) {
+    this.disconnectedCallback();
+    this._handle = value;
+    this.disabled = this.disabled;
+  }
+
+  get disabled() {
+    return this._disabled;
+  }
+
+  set disabled(value) {
+    this._disabled = value;
+
+    this.disconnectedCallback();
+
+    if(!this._disabled) {
+      this._handle.addEventListener("wheel", this._onWheelBinded = this._onWheelBinded || this._onWheel.bind(this));
     }
-    this._listener = value;
-    this._listener.addEventListener("wheel", this._onWheelBinded = this._onWheelBinded || this._onWheel.bind(this));
   }
 
   get zoom() {
@@ -81,7 +84,6 @@ export default class ZoomableElement extends HTMLElement {
   }
 
   set zoom(value) {
-
     if (value === this._zoom) {
       return;
     }
@@ -90,7 +92,7 @@ export default class ZoomableElement extends HTMLElement {
 
     this._zoom = Math.min(this.max, Math.max(this.min, this._zoom));
 
-    this.style.transform = `scale(${this._zoom})`;
+    this.target.style.transform = `scale(${this._zoom})`;
 
     this.dispatchEvent(new Event("zoom"));
   }

@@ -11,27 +11,23 @@ export default class NodeEditor extends HTMLElement {
       <style>
         :host {
           display: block;
+          width: 100%;
+          height: 100%;
         }
 
-        dgui-zoomable, dgui-draggable {
+        dgui-zoomable {
           position: absolute;
-          left: 0;
-          top: 0;
-          will-change: transform;
+          width: 100%;
+          height: 100%;
         }
 
         dgui-draggable:hover {
           outline: none;
         }
-        
-        dgui-zoomable {
-          width: 100%;
-          height: 100%;
-        }
       </style>
       <dgui-node-link-system data-listener="this.getRootNode().host"></dgui-node-link-system>
-      <dgui-zoomable data-listener="this.getRootNode().host" min=".1" max="3">
-        <dgui-draggable draggable="true" data-deep-drag-factor="true" data-handle="this.getRootNode().host">
+      <dgui-zoomable data-handle="this.getRootNode().host" min=".1" max="3">
+        <dgui-draggable data-handle="this.getRootNode().host">
           <slot></slot>
         </dgui-draggable>
       </dgui-zoomable>

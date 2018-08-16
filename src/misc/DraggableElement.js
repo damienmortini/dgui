@@ -2,7 +2,7 @@ let draggedElement;
 
 export default class DraggableElement extends HTMLElement {
   static get observedAttributes() {
-    return ["draggable", "data-target", "data-handle", "data-deep-drag-factor"];
+    return ["data-target", "data-handle", "disabled"];
   }
 
   constructor() {
@@ -45,11 +45,9 @@ export default class DraggableElement extends HTMLElement {
 
     this.dragFactor = 1;
 
-    this.deepDragFactor = false;
-
     this._currentDragFactor = 0;
 
-    this._draggable = true;
+    this._disabled = false;
 
     this._handle = this;
     this._target = this;
@@ -66,27 +64,33 @@ export default class DraggableElement extends HTMLElement {
     this._onPointerUpBinded = this._onPointerUp.bind(this);
   }
 
-  connectedCallback() {
-    this.draggable = this.draggable;
-  }
-
   attributeChangedCallback(name, oldValue, newValue) {
     if (oldValue === newValue) {
       return;
     }
     switch (name) {
-      case "draggable":
-        this.draggable = newValue === "true";
-        break;
       case "data-target":
-        this.target = eval(newValue);
+        this.target = new Function(`return ${newValue}`).apply(this);
         break;
       case "data-handle":
-        this.handle = eval(newValue);
+        this.handle = new Function(`return ${newValue}`).apply(this);
         break;
-      case "data-deep-drag-factor":
-        this.deepDragFactor = newValue === "true";
+      case "disabled":
+        this.disabled = newValue !== null;
         break;
+    }
+  }
+
+  connectedCallback() {
+    this.disabled = this.disabled;
+  }
+
+  disconnectedCallback() {
+    if (this.handle) {
+      this.handle.removeEventListener("pointerdown", this._onPointerDownBinded);
+    }
+    if (this.target) {
+      this.target.removeEventListener("dragstart", this._preventDefaultBinded);
     }
   }
 
@@ -95,8 +99,9 @@ export default class DraggableElement extends HTMLElement {
   }
 
   set target(value) {
+    this.disconnectedCallback();
     this._target = value;
-    this.draggable = this.draggable;
+    this.disabled = this.disabled;
   }
 
   get handle() {
@@ -104,29 +109,21 @@ export default class DraggableElement extends HTMLElement {
   }
 
   set handle(value) {
-    this.handle.removeEventListener("pointerdown", this._onPointerDownBinded);
+    this.disconnectedCallback();
     this._handle = value;
-    this.draggable = this.draggable;
+    this.disabled = this.disabled;
   }
 
-  get draggable() {
-    return this._draggable;
+  get disabled() {
+    return this._disabled;
   }
 
-  set draggable(value) {
-    this._draggable = value;
+  set disabled(value) {
+    this._disabled = value;
 
-    super.draggable = value;
+    this.disconnectedCallback();
 
-    this.handle.removeEventListener("pointerdown", this._onPointerDownBinded);
-
-    if (!this.target) {
-      return;
-    }
-
-    this.target.removeEventListener("dragstart", this._preventDefaultBinded);
-
-    if (this.draggable) {
+    if (!this._disabled) {
       this.handle.addEventListener("pointerdown", this._onPointerDownBinded);
       this.target.addEventListener("dragstart", this._preventDefaultBinded);
     }
@@ -137,14 +134,14 @@ export default class DraggableElement extends HTMLElement {
   }
 
   _onPointerDown(event) {
-    if (draggedElement || event.button !== 0 || event.path[0].tagName === "INPUT" || event.path[0].getAttribute("draggable") === "false") {
+    if (draggedElement || event.button !== 0 || event.path[0].tagName === "INPUT") {
       return;
     }
 
     this._currentDragFactor = this.dragFactor;
 
     for (const element of event.path) {
-      if (element instanceof DraggableElement && element.deepDragFactor) {
+      if (element instanceof DraggableElement) {
         this._currentDragFactor *= element.dragFactor;
       }
     }
