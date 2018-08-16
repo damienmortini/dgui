@@ -51,7 +51,6 @@ export default class ZoomableElement extends HTMLElement {
   }
 
   _onWheel(event) {
-    this.style.transformOrigin = "50% 50%";
     this.zoom += event.wheelDeltaY * .0004;
   }
 

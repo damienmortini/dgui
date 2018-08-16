@@ -153,7 +153,6 @@ export default class DraggableElement extends HTMLElement {
     this._offsetX = this._target.offsetLeft;
     this._offsetY = this._target.offsetTop;
 
-    this._target.style.willChange = "transform";
     window.addEventListener("pointermove", this._onPointerMoveBinded, { passive: false });
     window.addEventListener("pointerup", this._onPointerUpBinded);
     window.addEventListener("touchmove", this._preventDefaultBinded, { passive: false });
@@ -164,7 +163,6 @@ export default class DraggableElement extends HTMLElement {
   }
 
   _onPointerUp(event) {
-    this._target.style.willChange = "";
     window.removeEventListener("pointermove", this._onPointerMoveBinded);
     window.removeEventListener("pointerup", this._onPointerUpBinded);
     window.removeEventListener("touchmove", this._preventDefaultBinded);
