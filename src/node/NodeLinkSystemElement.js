@@ -46,7 +46,7 @@ export default class NodeLinkSystemElement extends HTMLElement {
     } else {
       this._currentLink.in = event.target;
     }
-    this._linkMap.set(this._currentLink.in, this._currentLink);
+    this._linkMap.set(event.target, this._currentLink);
     this.appendChild(this._currentLink);
   }
 
@@ -67,9 +67,9 @@ export default class NodeLinkSystemElement extends HTMLElement {
   }
 
   _removeEventListeners() {
-    this._listener.removeEventListener("guinodeconnect", this._onNodeConnectBinded);
-    this._listener.removeEventListener("guinodeconnected", this._onNodeConnectedBinded);
-    this._listener.removeEventListener("guinodedisconnected", this._onNodeDisconnectedBinded);
+    this._listener.removeEventListener("nodeconnectorconnect", this._onNodeConnectBinded);
+    this._listener.removeEventListener("nodeconnectorconnected", this._onNodeConnectedBinded);
+    this._listener.removeEventListener("nodeconnectordisconnected", this._onNodeDisconnectedBinded);
     this._listener.removeEventListener("pointerdown", this._onPointerDownBinded);
   }
 
@@ -84,9 +84,9 @@ export default class NodeLinkSystemElement extends HTMLElement {
 
     this._listener = value;
 
-    this._listener.addEventListener("guinodeconnect", this._onNodeConnectBinded = this._onNodeConnectBinded || this._onNodeConnect.bind(this));
-    this._listener.addEventListener("guinodeconnected", this._onNodeConnectedBinded = this._onNodeConnectedBinded || this._onNodeConnected.bind(this));
-    this._listener.addEventListener("guinodedisconnected", this._onNodeDisconnectedBinded = this._onNodeDisconnectedBinded || this._onNodeDisconnected.bind(this));
+    this._listener.addEventListener("nodeconnectorconnect", this._onNodeConnectBinded = this._onNodeConnectBinded || this._onNodeConnect.bind(this));
+    this._listener.addEventListener("nodeconnectorconnected", this._onNodeConnectedBinded = this._onNodeConnectedBinded || this._onNodeConnected.bind(this));
+    this._listener.addEventListener("nodeconnectordisconnected", this._onNodeDisconnectedBinded = this._onNodeDisconnectedBinded || this._onNodeDisconnected.bind(this));
     this._listener.addEventListener("pointerdown", this._onPointerDownBinded = this._onPointerDownBinded || this._onPointerDown.bind(this));
   }
 }

@@ -2,7 +2,7 @@
 
 # dnod
 
-Node based GUI acting as a bridge to share data between any app using Web Sockets.
+Node Editor acting as a bridge to share data between any app using Web Sockets.
 
 Goals:
 

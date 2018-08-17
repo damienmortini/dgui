@@ -39,26 +39,18 @@ export default class NodeConnectorElement extends HTMLElement {
       this.destination = this.destination;
     }
     this.addEventListener("pointerdown", this._onPointerDown);
-    this.addEventListener("pointerup", this._onPointerUp);
   }
 
   disconnectedCallback() {
     this.removeEventListener("pointerdown", this._onPointerDown);
-    this.removeEventListener("pointerup", this._onPointerUp);
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
     if (oldValue === newValue) {
       return;
     }
-    switch (name) {
-      case "data-source":
-        this.source = eval(newValue);
-        break;
-      case "data-destination":
-        this.destination = eval(newValue);
-        break;
-    }
+
+    this[name.replace("data-", "")] = new Function(`return ${newValue}`).apply(this);
   }
 
   _onPointerDown() {
@@ -66,36 +58,33 @@ export default class NodeConnectorElement extends HTMLElement {
       return;
     }
     activeConnector = this;
-    this.dispatchEvent(new Event("guinodeconnect", {
+    this.dispatchEvent(new Event("nodeconnectorconnect", {
       bubbles: true,
       composed: true,
     }));
     window.addEventListener("pointerup", this._onWindowPointerUpBinded = this._onWindowPointerUpBinded || this._onWindowPointerUp.bind(this));
   }
 
-  _onPointerUp(event) {
-    if (!activeConnector || activeConnector === this) {
-      return;
-    }
-    if(activeConnector.destination) {
-      this.connect(activeConnector);
-    } else {
-      activeConnector.connect(this);
-    }
-    activeConnector = null;
-  }
-
   _onWindowPointerUp(event) {
+    window.removeEventListener("pointerup", this._onWindowPointerUpBinded);
+
+    let connector;
     for (const element of event.path) {
       if (element instanceof NodeConnectorElement) {
-        return;
+        connector = element;
+        break;
       }
     }
-    window.removeEventListener("pointerup", this._onWindowPointerUpBinded);
-    if (activeConnector) {
+
+    if (connector && activeConnector !== connector && activeConnector.source && connector.destination && activeConnector.source !== connector.destination) {
+      activeConnector.connect(connector);
+    } else if(connector && activeConnector !== connector && connector.source && activeConnector.destination && connector.source !== activeConnector.destination) {
+      connector.connect(activeConnector);
+    } else {
       activeConnector.disconnect();
-      activeConnector = null;
     }
+
+    activeConnector = null;
   }
 
   connect(element) {
@@ -110,11 +99,11 @@ export default class NodeConnectorElement extends HTMLElement {
       element.value = this.value;
     }
     this.connected = true;
-    this.dispatchEvent(new Event("guinodeconnected", {
+    this.dispatchEvent(new Event("nodeconnectorconnected", {
       bubbles: true,
       composed: true,
     }));
-    element.dispatchEvent(new Event("guinodeconnected", {
+    element.dispatchEvent(new Event("nodeconnectorconnected", {
       bubbles: true,
       composed: true,
     }));
@@ -123,20 +112,19 @@ export default class NodeConnectorElement extends HTMLElement {
   disconnect(element) {
     if (element) {
       this.connectedElements.delete(element);
-      element.connected = false;
-      element.dispatchEvent(new Event("guinodedisconnected", {
-        bubbles: true,
-        composed: true,
-      }));
-    }
-    this.connected = !!this.connectedElements.size;
+      this.connected = !!this.connectedElements.size;
 
-    if (!this.connected) {
-      this.dispatchEvent(new Event("guinodedisconnected", {
+      element.connected = false;
+      element.dispatchEvent(new Event("nodeconnectordisconnected", {
         bubbles: true,
         composed: true,
       }));
     }
+
+    this.dispatchEvent(new Event("nodeconnectordisconnected", {
+      bubbles: true,
+      composed: true,
+    }));
   }
 
   _onSourceChange(event) {

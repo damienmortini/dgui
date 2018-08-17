@@ -1,5 +1,5 @@
 import "../misc/DraggableElement.js";
-import GUIConfig from "../gui.config.js";
+import Config from "../dnod.config.js";
 
 export default class NodeGroupElement extends HTMLElement {
   static get observedAttributes() {
@@ -54,8 +54,8 @@ export default class NodeGroupElement extends HTMLElement {
     this.innerHTML = "";
     for (let node of value) {
       if (!node.type) {
-        for (const typeResolverKey in GUIConfig.typeResolvers) {
-          node.type = GUIConfig.typeResolvers[typeResolverKey](node) ? typeResolverKey : node.type;
+        for (const typeResolverKey in Config.typeResolvers) {
+          node.type = Config.typeResolvers[typeResolverKey](node) ? typeResolverKey : node.type;
         }
       }
 
@@ -63,7 +63,7 @@ export default class NodeGroupElement extends HTMLElement {
         node.type = "dnod-node-group";
       }
 
-      let nodeElement = this._nodes.get(node.name) || document.createElement(GUIConfig.inputTypeMap[node.type] || node.type);
+      let nodeElement = this._nodes.get(node.name) || document.createElement(Config.inputTypeMap[node.type] || node.type);
       this._nodes.set(node.name, nodeElement);
       Object.assign(nodeElement, node);
       this.appendChild(nodeElement);
