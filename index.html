@@ -28,19 +28,18 @@
   <script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
 
   <dgui-node-editor>
-    <dgui-node name="Input node" x="50" y="100" width="250">
+    <dgui-node data-name="Input node" data-x="50" data-y="100" data-width="250">
       <input type="text">
       <dgui-node-connector data-source="this.previousElementSibling"></dgui-node-connector>
     </dgui-node>
 
-    <dgui-node name="Output node" oninput="this.querySelector('#result').value = this.querySelector('#source').value + ' World!'"
-      x="350" y="200" width="250">
+    <dgui-node data-name="Output node" oninput="this.querySelector('#result').value = this.querySelector('#source').value + ' World!'" data-x="350" data-y="200" data-width="250">
       <dgui-node-connector data-destination="this.nextElementSibling"></dgui-node-connector>
       <input type="text" id="source">
       <input type="text" id="result" disabled style="width: 100%; box-sizing: border-box;">
     </dgui-node>
 
-    <dgui-node name="Third node" x="300" y="400" width="250">
+    <dgui-node data-name="Third node" data-x="300" data-y="400" data-width="250">
       <section>
         <dgui-node-connector data-destination="this.nextElementSibling"></dgui-node-connector>
         <input type="text">
@@ -48,8 +47,7 @@
       </section>
     </dgui-node>
 
-    <dgui-node name="Fourth node" oninput="this.querySelector('#tata').value = this.querySelector('#toto').value + '_yoyo'" x="200"
-      y="500" width="250">
+    <dgui-node data-name="Fourth node" oninput="this.querySelector('#tata').value = this.querySelector('#toto').value + '_yoyo'" data-x="200" data-y="500" data-width="250">
       <section>
         <dgui-node-connector data-destination="this.nextElementSibling"></dgui-node-connector>
         <input type="text" id="toto">

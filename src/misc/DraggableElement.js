@@ -2,7 +2,7 @@ let draggedElement;
 
 export default class DraggableElement extends HTMLElement {
   static get observedAttributes() {
-    return ["data-target", "data-handle", "disabled"];
+    return ["data-target", "data-handle", "data-disabled"];
   }
 
   constructor() {
@@ -11,14 +11,8 @@ export default class DraggableElement extends HTMLElement {
     this.attachShadow({ mode: "open" }).innerHTML = `
       <style>
         :host {
-          display: inline-block;
+          display: block;
           position: relative;
-          width: 20px;
-          height: 20px;
-        }
-        
-        :host(:hover) {
-          outline: 1px dotted;
         }
 
         :host(:active) {
@@ -27,11 +21,16 @@ export default class DraggableElement extends HTMLElement {
         }
         
         slot {
-          display: block;
+          width: 20px;
+          height: 20px;
           cursor: grab;
           cursor: -webkit-grab;
           width: 100%;
           height: 100%;
+        }
+
+        slot:hover {
+          outline: 1px dotted;
         }
 
         slot svg {
@@ -75,8 +74,8 @@ export default class DraggableElement extends HTMLElement {
       case "data-handle":
         this.handle = new Function(`return ${newValue}`).apply(this);
         break;
-      case "disabled":
-        this.disabled = newValue !== null;
+      case "data-disabled":
+        this.disabled = newValue === "true";
         break;
     }
   }
@@ -127,6 +126,8 @@ export default class DraggableElement extends HTMLElement {
       this.handle.addEventListener("pointerdown", this._onPointerDownBinded);
       this.target.addEventListener("dragstart", this._preventDefaultBinded);
     }
+
+    this.setAttribute("data-disabled", this._disabled);
   }
 
   _preventDefault(event) {

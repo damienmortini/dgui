@@ -1,6 +1,8 @@
+import "../misc/DraggableElement.js";
+
 export default class NodeElement extends HTMLElement {
   static get observedAttributes() {
-    return ["name", "enabled", "draggable", "x", "y", "width", "height"];
+    return ["data-name", "data-draggable", "data-open", "data-x", "data-y", "data-width", "data-height"];
   }
 
   constructor() {
@@ -12,19 +14,20 @@ export default class NodeElement extends HTMLElement {
           display: block;
           overflow: auto;
           resize: both;
+          width: 200px;
         }
         
-        :host([draggable]) {
+        :host(.draggable) {
           border: 1px dotted;
           position: absolute;
           background: rgba(255, 255, 255, .9);
         }
 
-        :host([draggable]:hover) {
+        :host(.draggable:hover) {
           border: 1px dashed;
         }
 
-        :host([draggable]:focus-within) {
+        :host(.draggable:focus-within) {
           border: 1px solid;
           z-index: 1;
         }
@@ -38,12 +41,8 @@ export default class NodeElement extends HTMLElement {
           padding: 5px;
           outline: none;
         }
-
-        dgui-draggable {
-          display: contents;
-        }
       </style>
-      <dgui-draggable draggable="false" data-target="this.getRootNode().host">
+      <dgui-draggable data-target="this.getRootNode().host">
         <slot name="content">
           <details>
             <summary></summary>
@@ -53,12 +52,7 @@ export default class NodeElement extends HTMLElement {
       </dgui-draggable>
     `;
 
-    this._details = this.shadowRoot.querySelector("details");
-
     this.open = true;
-  }
-
-  connectedCallback() {
     this.draggable = true;
   }
 
@@ -66,12 +60,19 @@ export default class NodeElement extends HTMLElement {
     if (oldValue === newValue) {
       return;
     }
+
+    name = name.replace("data-", "");
+
     switch (name) {
-      case "disabled":
-        this.enabled = this[name] = newValue !== null;
-        break;
       case "draggable":
-        this.shadowRoot.querySelector("dgui-draggable").setAttribute(name, newValue);
+      case "open":
+        this[name] = newValue !== "true";
+        break;
+      case "x":
+      case "y":
+      case "width":
+      case "height":
+        this[name] = parseFloat(newValue);
         break;
       default:
         this[name] = newValue;
@@ -81,19 +82,30 @@ export default class NodeElement extends HTMLElement {
 
   set name(value) {
     this._name = value;
-    this._details.querySelector("summary").textContent = this._name;
+    this.shadowRoot.querySelector("details").querySelector("summary").textContent = this._name;
   }
 
   get name() {
     return this._name;
   }
 
-  set open(value) {
-    this._details.open = value;
+  get open() {
+    return this.shadowRoot.querySelector("details").open;
   }
 
-  get open() {
-    return this._details.open;
+  set open(value) {
+    this.shadowRoot.querySelector("details").open = value;
+  }
+
+  get draggable() {
+    return this._draggable;
+  }
+  
+  set draggable(value) {
+    this._draggable = value;
+    super.draggable = this._draggable;
+    this.shadowRoot.querySelector("dgui-draggable").disabled = !this._draggable;
+    this.classList.toggle("draggable", this._draggable);
   }
 
   get x() {

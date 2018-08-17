@@ -20,10 +20,6 @@ export default class NodeEditor extends HTMLElement {
           width: 100%;
           height: 100%;
         }
-
-        dgui-draggable:hover {
-          outline: none;
-        }
       </style>
       <dgui-node-link-system data-listener="this.getRootNode().host"></dgui-node-link-system>
       <dgui-zoomable data-handle="this.getRootNode().host" min=".1" max="3">
