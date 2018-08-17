@@ -19,7 +19,7 @@ export default class NodeGroupElement extends HTMLElement {
           box-sizing: border-box;
         }
 
-        dgui-draggable {
+        dnod-draggable {
           position: absolute;
           width: calc(100% - 2px);
           left: 1px;
@@ -32,7 +32,7 @@ export default class NodeGroupElement extends HTMLElement {
         }
       </style>
       <details>
-        <summary><span></span><dgui-draggable data-target="this.getRootNode().host"></dgui-draggable></summary>
+        <summary><span></span><dnod-draggable data-target="this.getRootNode().host"></dnod-draggable></summary>
         <slot></slot>
       </details>
     `;
@@ -60,7 +60,7 @@ export default class NodeGroupElement extends HTMLElement {
       }
 
       if (!node.type && node.nodes) {
-        node.type = "dgui-node-group";
+        node.type = "dnod-node-group";
       }
 
       let nodeElement = this._nodes.get(node.name) || document.createElement(GUIConfig.inputTypeMap[node.type] || node.type);
@@ -99,4 +99,4 @@ export default class NodeGroupElement extends HTMLElement {
   }
 }
 
-window.customElements.define("dgui-node-group", NodeGroupElement);
+window.customElements.define("dnod-node-group", NodeGroupElement);

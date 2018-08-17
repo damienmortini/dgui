@@ -27,43 +27,43 @@
 <body>
   <script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
 
-  <dgui-node-editor>
-    <dgui-node data-name="Input node" data-x="50" data-y="100" data-width="250">
+  <dnod-node-editor>
+    <dnod-node data-name="Input node" data-x="50" data-y="100" data-width="250">
       <input type="text">
-      <dgui-node-connector data-source="this.previousElementSibling"></dgui-node-connector>
-    </dgui-node>
+      <dnod-node-connector data-source="this.previousElementSibling"></dnod-node-connector>
+    </dnod-node>
 
-    <dgui-node data-name="Output node" oninput="this.querySelector('#result').value = this.querySelector('#source').value + ' World!'" data-x="350" data-y="200" data-width="250">
-      <dgui-node-connector data-destination="this.nextElementSibling"></dgui-node-connector>
+    <dnod-node data-name="Output node" oninput="this.querySelector('#result').value = this.querySelector('#source').value + ' World!'" data-x="350" data-y="200" data-width="250">
+      <dnod-node-connector data-destination="this.nextElementSibling"></dnod-node-connector>
       <input type="text" id="source">
       <input type="text" id="result" disabled style="width: 100%; box-sizing: border-box;">
-    </dgui-node>
+    </dnod-node>
 
-    <dgui-node data-name="Third node" data-x="300" data-y="400" data-width="250">
+    <dnod-node data-name="Third node" data-x="300" data-y="400" data-width="250">
       <section>
-        <dgui-node-connector data-destination="this.nextElementSibling"></dgui-node-connector>
+        <dnod-node-connector data-destination="this.nextElementSibling"></dnod-node-connector>
         <input type="text">
-        <dgui-node-connector data-source="this.previousElementSibling"></dgui-node-connector>
+        <dnod-node-connector data-source="this.previousElementSibling"></dnod-node-connector>
       </section>
-    </dgui-node>
+    </dnod-node>
 
-    <dgui-node data-name="Fourth node" oninput="this.querySelector('#tata').value = this.querySelector('#toto').value + '_yoyo'" data-x="200" data-y="500" data-width="250">
+    <dnod-node data-name="Fourth node" oninput="this.querySelector('#tata').value = this.querySelector('#toto').value + '_yoyo'" data-x="200" data-y="500" data-width="250">
       <section>
-        <dgui-node-connector data-destination="this.nextElementSibling"></dgui-node-connector>
+        <dnod-node-connector data-destination="this.nextElementSibling"></dnod-node-connector>
         <input type="text" id="toto">
-        <dgui-node-connector data-source="this.previousElementSibling"></dgui-node-connector>
+        <dnod-node-connector data-source="this.previousElementSibling"></dnod-node-connector>
       </section>
       <section>
         <input type="text" id="tata" disabled style="width: 100%; box-sizing: border-box;">
       </section>
-    </dgui-node>
-  </dgui-node-editor>
+    </dnod-node>
+  </dnod-node-editor>
 
 
   <script type="module">
     import(`./${/\bdev\b/.test(window.location.search) ? "src" : "build"}/index.js`);
 
-    // const node = document.createElement("dgui-node-group");
+    // const node = document.createElement("dnod-node-group");
     // node.style.width = "300px";
     // document.body.appendChild(node);
 

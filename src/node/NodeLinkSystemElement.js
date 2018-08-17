@@ -40,7 +40,7 @@ export default class NodeLinkSystemElement extends HTMLElement {
   }
 
   _onNodeConnect(event) {
-    this._currentLink = document.createElement("dgui-node-link");
+    this._currentLink = document.createElement("dnod-node-link");
     if (event.target.destination) {
       this._currentLink.out = event.target;
     } else {
@@ -91,4 +91,4 @@ export default class NodeLinkSystemElement extends HTMLElement {
   }
 }
 
-window.customElements.define("dgui-node-link-system", NodeLinkSystemElement);
+window.customElements.define("dnod-node-link-system", NodeLinkSystemElement);

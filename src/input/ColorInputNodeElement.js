@@ -23,12 +23,12 @@ export default class ColorInputNodeElement extends HTMLElement {
           box-sizing: border-box;
         }
       </style>
-      <dgui-node-connector data-destination="this.getRootNode().host"></dgui-node-connector>
-      <dgui-draggable-handle data-target="this.getRootNode().host"></dgui-draggable-handle>
+      <dnod-node-connector data-destination="this.getRootNode().host"></dnod-node-connector>
+      <dnod-draggable-handle data-target="this.getRootNode().host"></dnod-draggable-handle>
       <label></label>
       <input type="text">
       <input type="color">
-      <dgui-node-connector data-source="this.getRootNode().host"></dgui-node-connector>
+      <dnod-node-connector data-source="this.getRootNode().host"></dnod-node-connector>
     `;
 
     this._label = this.shadowRoot.querySelector("label");
@@ -129,4 +129,4 @@ export default class ColorInputNodeElement extends HTMLElement {
   }
 }
 
-window.customElements.define("dgui-node-input-color", ColorInputNodeElement);
+window.customElements.define("dnod-node-input-color", ColorInputNodeElement);

@@ -22,12 +22,12 @@ export default class ButtonInputNodeElement extends HTMLElement {
           height: 100%;
         }
       </style>
-      <dgui-node-connector data-destination="this.getRootNode().host"></dgui-node-connector>
-      <dgui-draggable-handle data-target="this.getRootNode().host"></dgui-draggable-handle>
+      <dnod-node-connector data-destination="this.getRootNode().host"></dnod-node-connector>
+      <dnod-draggable-handle data-target="this.getRootNode().host"></dnod-draggable-handle>
       <button>
         <slot></slot>
       </button>
-      <dgui-node-connector data-source="this.getRootNode().host"></dgui-node-connector>
+      <dnod-node-connector data-source="this.getRootNode().host"></dnod-node-connector>
     `;
 
     this._slot = this.shadowRoot.querySelector("slot");
@@ -86,4 +86,4 @@ export default class ButtonInputNodeElement extends HTMLElement {
   }
 }
 
-window.customElements.define("dgui-node-input-button", ButtonInputNodeElement);
+window.customElements.define("dnod-node-input-button", ButtonInputNodeElement);

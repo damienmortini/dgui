@@ -21,11 +21,11 @@ export default class CheckboxInputNodeElement extends HTMLElement {
           margin : 0;
         }
       </style>
-      <dgui-node-connector data-destination="this.getRootNode().host"></dgui-node-connector>
-      <dgui-draggable-handle data-target="this.getRootNode().host"></dgui-draggable-handle>
+      <dnod-node-connector data-destination="this.getRootNode().host"></dnod-node-connector>
+      <dnod-draggable-handle data-target="this.getRootNode().host"></dnod-draggable-handle>
       <label></label>
       <input type="checkbox"></input>
-      <dgui-node-connector data-source="this.getRootNode().host"></dgui-node-connector>
+      <dnod-node-connector data-source="this.getRootNode().host"></dnod-node-connector>
     `;
 
     this._input = this.shadowRoot.querySelector("input");
@@ -84,4 +84,4 @@ export default class CheckboxInputNodeElement extends HTMLElement {
   }
 }
 
-window.customElements.define("dgui-node-input-checkbox", CheckboxInputNodeElement);
+window.customElements.define("dnod-node-input-checkbox", CheckboxInputNodeElement);

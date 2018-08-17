@@ -1,12 +1,12 @@
 export default {
     inputTypeMap: {
-        "button": "dgui-node-input-button",
-        "checkbox": "dgui-node-input-checkbox",
-        "color": "dgui-node-input-color",
-        "number": "dgui-node-input-number",
-        "range": "dgui-node-input-range",
-        "select": "dgui-node-input-select",
-        "text": "dgui-node-input-text",
+        "button": "dnod-node-input-button",
+        "checkbox": "dnod-node-input-checkbox",
+        "color": "dnod-node-input-color",
+        "number": "dnod-node-input-number",
+        "range": "dnod-node-input-range",
+        "select": "dnod-node-input-select",
+        "text": "dnod-node-input-text",
     },
     typeResolvers: {
         "text": (attributes) => typeof attributes.value === "string",

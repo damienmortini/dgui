@@ -108,4 +108,4 @@ export default class NodeLinkElement extends HTMLElement {
   }
 }
 
-window.customElements.define("dgui-node-link", NodeLinkElement);
+window.customElements.define("dnod-node-link", NodeLinkElement);

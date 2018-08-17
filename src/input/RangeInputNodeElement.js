@@ -29,11 +29,11 @@ export default class RangeInputNodeElement extends NodeElement {
           margin: 0;
         }
       </style>
-      <dgui-node-connector data-destination="this.getRootNode().host"></dgui-node-connector>
+      <dnod-node-connector data-destination="this.getRootNode().host"></dnod-node-connector>
       <label></label>
       <input type="range">
       <input type="number">
-      <dgui-node-connector data-source="this.getRootNode().host"></dgui-node-connector>
+      <dnod-node-connector data-source="this.getRootNode().host"></dnod-node-connector>
     `;
 
     this._label = this.shadowRoot.querySelector("label");
@@ -131,4 +131,4 @@ export default class RangeInputNodeElement extends NodeElement {
   }
 }
 
-window.customElements.define("dgui-node-input-range", RangeInputNodeElement);
+window.customElements.define("dnod-node-input-range", RangeInputNodeElement);

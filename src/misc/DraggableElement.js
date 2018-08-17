@@ -175,4 +175,4 @@ export default class DraggableElement extends HTMLElement {
   }
 }
 
-window.customElements.define("dgui-draggable", DraggableElement);
+window.customElements.define("dnod-draggable", DraggableElement);

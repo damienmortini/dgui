@@ -115,4 +115,4 @@ export default class ZoomableElement extends HTMLElement {
   }
 }
 
-window.customElements.define("dgui-zoomable", ZoomableElement);
+window.customElements.define("dnod-zoomable", ZoomableElement);

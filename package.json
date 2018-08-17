@@ -1,7 +1,7 @@
 {
-  "name": "dgui",
+  "name": "dnod",
   "version": "0.0.6",
-  "description": "The ultimate GUI to become",
+  "description": "The ultimate node editor to become",
   "main": "index.js",
   "scripts": {
     "start": "node server.js",

@@ -15,22 +15,22 @@ export default class NodeEditor extends HTMLElement {
           height: 100%;
         }
 
-        dgui-zoomable {
+        dnod-zoomable {
           position: absolute;
           width: 100%;
           height: 100%;
         }
       </style>
-      <dgui-node-link-system data-listener="this.getRootNode().host"></dgui-node-link-system>
-      <dgui-zoomable data-handle="this.getRootNode().host" min=".1" max="3">
-        <dgui-draggable data-handle="this.getRootNode().host">
+      <dnod-node-link-system data-listener="this.getRootNode().host"></dnod-node-link-system>
+      <dnod-zoomable data-handle="this.getRootNode().host" min=".1" max="3">
+        <dnod-draggable data-handle="this.getRootNode().host">
           <slot></slot>
-        </dgui-draggable>
-      </dgui-zoomable>
+        </dnod-draggable>
+      </dnod-zoomable>
     `;
 
-    const zoomable = this.shadowRoot.querySelector("dgui-zoomable");
-    const draggable = this.shadowRoot.querySelector("dgui-draggable");
+    const zoomable = this.shadowRoot.querySelector("dnod-zoomable");
+    const draggable = this.shadowRoot.querySelector("dnod-draggable");
 
     zoomable.addEventListener("zoom", () => {
       draggable.dragFactor = 1 / zoomable.zoom;
@@ -53,7 +53,7 @@ export default class NodeEditor extends HTMLElement {
       }
 
       if (!node.type && node.nodes) {
-        node.type = "dgui-node-group";
+        node.type = "dnod-node-group";
       }
 
       let nodeElement = this._nodesDataMap.get(node.name) || document.createElement(GUIConfig.inputTypeMap[node.type] || node.type);
@@ -64,4 +64,4 @@ export default class NodeEditor extends HTMLElement {
   }
 }
 
-window.customElements.define("dgui-node-editor", NodeEditor);
+window.customElements.define("dnod-node-editor", NodeEditor);

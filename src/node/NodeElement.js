@@ -42,14 +42,14 @@ export default class NodeElement extends HTMLElement {
           outline: none;
         }
       </style>
-      <dgui-draggable data-target="this.getRootNode().host">
+      <dnod-draggable data-target="this.getRootNode().host">
         <slot name="content">
           <details>
             <summary></summary>
             <slot></slot>
           </details>
         </slot>
-      </dgui-draggable>
+      </dnod-draggable>
     `;
 
     this.open = true;
@@ -104,7 +104,7 @@ export default class NodeElement extends HTMLElement {
   set draggable(value) {
     this._draggable = value;
     super.draggable = this._draggable;
-    this.shadowRoot.querySelector("dgui-draggable").disabled = !this._draggable;
+    this.shadowRoot.querySelector("dnod-draggable").disabled = !this._draggable;
     this.classList.toggle("draggable", this._draggable);
   }
 
@@ -158,4 +158,4 @@ export default class NodeElement extends HTMLElement {
   }
 }
 
-window.customElements.define("dgui-node", NodeElement);
+window.customElements.define("dnod-node", NodeElement);

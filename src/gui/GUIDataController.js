@@ -14,14 +14,14 @@ export default class GUIDataController {
   }
 
   _getURLGUIData() {
-    return JSON.parse(new URLSearchParams(location.hash).get('dgui'));
+    return JSON.parse(new URLSearchParams(location.hash).get('dnod'));
   }
 
   onGUIChange() {
     clearTimeout(this._setTimeout);
     this._setTimeout = setTimeout(() => {
       const urlSearchParams = new URLSearchParams(location.hash);
-      urlSearchParams.set('dgui', JSON.stringify(this._gui));
+      urlSearchParams.set('dnod', JSON.stringify(this._gui));
       // location.hash = urlSearchParams.toString();
     }, 100);
   }

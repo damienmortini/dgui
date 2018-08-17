@@ -22,11 +22,11 @@ export default class NumberInputElement extends HTMLElement {
           height: 100%;
         }
       </style>
-      <dgui-node-connector data-destination="this.getRootNode().host"></dgui-node-connector>
-      <dgui-draggable-handle data-target="this.getRootNode().host"></dgui-draggable-handle>
+      <dnod-node-connector data-destination="this.getRootNode().host"></dnod-node-connector>
+      <dnod-draggable-handle data-target="this.getRootNode().host"></dnod-draggable-handle>
       <label></label>
       <input type="number">
-      <dgui-node-connector data-source="this.getRootNode().host"></dgui-node-connector>
+      <dnod-node-connector data-source="this.getRootNode().host"></dnod-node-connector>
     `;
     this._input = this.shadowRoot.querySelector("input");
     this._label = this.shadowRoot.querySelector("label");
@@ -118,4 +118,4 @@ export default class NumberInputElement extends HTMLElement {
   }
 }
 
-window.customElements.define("dgui-node-input-number", NumberInputElement);
+window.customElements.define("dnod-node-input-number", NumberInputElement);

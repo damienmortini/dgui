@@ -39,18 +39,18 @@ class NodeElement extends HTMLElement {
           outline: none;
         }
 
-        dgui-draggable {
+        dnod-draggable {
           display: contents;
         }
       </style>
-      <dgui-draggable draggable="false" data-target="this.getRootNode().host">
+      <dnod-draggable draggable="false" data-target="this.getRootNode().host">
         <slot name="content">
           <details>
             <summary></summary>
             <slot></slot>
           </details>
         </slot>
-      </dgui-draggable>
+      </dnod-draggable>
     `;
 
     this._details = this.shadowRoot.querySelector("details");
@@ -71,7 +71,7 @@ class NodeElement extends HTMLElement {
         this.enabled = this[name] = newValue !== null;
         break;
       case "draggable":
-        this.shadowRoot.querySelector("dgui-draggable").setAttribute(name, newValue);
+        this.shadowRoot.querySelector("dnod-draggable").setAttribute(name, newValue);
         break;
       default:
         this[name] = newValue;
@@ -146,17 +146,17 @@ class NodeElement extends HTMLElement {
   }
 }
 
-window.customElements.define("dgui-node", NodeElement);
+window.customElements.define("dnod-node", NodeElement);
 
 var GUIConfig = {
     inputTypeMap: {
-        "button": "dgui-node-input-button",
-        "checkbox": "dgui-node-input-checkbox",
-        "color": "dgui-node-input-color",
-        "number": "dgui-node-input-number",
-        "range": "dgui-node-input-range",
-        "select": "dgui-node-input-select",
-        "text": "dgui-node-input-text",
+        "button": "dnod-node-input-button",
+        "checkbox": "dnod-node-input-checkbox",
+        "color": "dnod-node-input-color",
+        "number": "dnod-node-input-number",
+        "range": "dnod-node-input-range",
+        "select": "dnod-node-input-select",
+        "text": "dnod-node-input-text",
     },
     typeResolvers: {
         "text": (attributes) => typeof attributes.value === "string",
@@ -351,7 +351,7 @@ class DraggableElement extends HTMLElement {
   }
 }
 
-window.customElements.define("dgui-draggable", DraggableElement);
+window.customElements.define("dnod-draggable", DraggableElement);
 
 class ZoomableElement extends HTMLElement {
   static get observedAttributes() {
@@ -467,7 +467,7 @@ class ZoomableElement extends HTMLElement {
   }
 }
 
-window.customElements.define("dgui-zoomable", ZoomableElement);
+window.customElements.define("dnod-zoomable", ZoomableElement);
 
 class NodeEditor extends HTMLElement {
   constructor() {
@@ -479,32 +479,32 @@ class NodeEditor extends HTMLElement {
           display: block;
         }
 
-        dgui-zoomable, dgui-draggable {
+        dnod-zoomable, dnod-draggable {
           position: absolute;
           left: 0;
           top: 0;
           will-change: transform;
         }
 
-        dgui-draggable:hover {
+        dnod-draggable:hover {
           outline: none;
         }
         
-        dgui-zoomable {
+        dnod-zoomable {
           width: 100%;
           height: 100%;
         }
       </style>
-      <dgui-node-link-system data-listener="this.getRootNode().host"></dgui-node-link-system>
-      <dgui-zoomable data-listener="this.getRootNode().host" min=".1" max="3">
-        <dgui-draggable draggable="true" data-deep-drag-factor="true" data-handle="this.getRootNode().host">
+      <dnod-node-link-system data-listener="this.getRootNode().host"></dnod-node-link-system>
+      <dnod-zoomable data-listener="this.getRootNode().host" min=".1" max="3">
+        <dnod-draggable draggable="true" data-deep-drag-factor="true" data-handle="this.getRootNode().host">
           <slot></slot>
-        </dgui-draggable>
-      </dgui-zoomable>
+        </dnod-draggable>
+      </dnod-zoomable>
     `;
 
-    const zoomable = this.shadowRoot.querySelector("dgui-zoomable");
-    const draggable = this.shadowRoot.querySelector("dgui-draggable");
+    const zoomable = this.shadowRoot.querySelector("dnod-zoomable");
+    const draggable = this.shadowRoot.querySelector("dnod-draggable");
 
     zoomable.addEventListener("zoom", () => {
       draggable.dragFactor = 1 / zoomable.zoom;
@@ -527,7 +527,7 @@ class NodeEditor extends HTMLElement {
       }
 
       if (!node.type && node.nodes) {
-        node.type = "dgui-node-group";
+        node.type = "dnod-node-group";
       }
 
       let nodeElement = this._nodesDataMap.get(node.name) || document.createElement(GUIConfig.inputTypeMap[node.type] || node.type);
@@ -538,7 +538,7 @@ class NodeEditor extends HTMLElement {
   }
 }
 
-window.customElements.define("dgui-node-editor", NodeEditor);
+window.customElements.define("dnod-node-editor", NodeEditor);
 
 class Signal extends Set {
   constructor() {
@@ -1302,7 +1302,7 @@ class NodeLinkElement extends HTMLElement {
   }
 }
 
-window.customElements.define("dgui-node-link", NodeLinkElement);
+window.customElements.define("dnod-node-link", NodeLinkElement);
 
 class NodeLinkSystemElement extends HTMLElement {
   static get observedAttributes() {
@@ -1344,7 +1344,7 @@ class NodeLinkSystemElement extends HTMLElement {
   }
 
   _onNodeConnect(event) {
-    this._currentLink = document.createElement("dgui-node-link");
+    this._currentLink = document.createElement("dnod-node-link");
     if (event.target.destination) {
       this._currentLink.out = event.target;
     } else {
@@ -1395,7 +1395,7 @@ class NodeLinkSystemElement extends HTMLElement {
   }
 }
 
-window.customElements.define("dgui-node-link-system", NodeLinkSystemElement);
+window.customElements.define("dnod-node-link-system", NodeLinkSystemElement);
 
 let activeConnector = null;
 
@@ -1612,7 +1612,7 @@ class NodeConnectorElement extends HTMLElement {
   }
 }
 
-window.customElements.define("dgui-node-connector", NodeConnectorElement);
+window.customElements.define("dnod-node-connector", NodeConnectorElement);
 
 class SelectInputNodeElement extends HTMLElement {
   static get observedAttributes() {
@@ -1638,11 +1638,11 @@ class SelectInputNodeElement extends HTMLElement {
           height: 100%;
         }
       </style>
-      <dgui-node-connector data-destination="this.getRootNode().host"></dgui-node-connector>
-      <dgui-draggable-handle data-target="this.getRootNode().host"></dgui-draggable-handle>
+      <dnod-node-connector data-destination="this.getRootNode().host"></dnod-node-connector>
+      <dnod-draggable-handle data-target="this.getRootNode().host"></dnod-draggable-handle>
       <label></label>
       <select></select>
-      <dgui-node-connector data-source="this.getRootNode().host"></dgui-node-connector>
+      <dnod-node-connector data-source="this.getRootNode().host"></dnod-node-connector>
     `;
 
     this._optionsMap = new Map();
@@ -1726,7 +1726,7 @@ class SelectInputNodeElement extends HTMLElement {
   }
 }
 
-window.customElements.define("dgui-node-input-select", SelectInputNodeElement);
+window.customElements.define("dnod-node-input-select", SelectInputNodeElement);
 
 class ButtonInputNodeElement extends HTMLElement {
   static get observedAttributes() {
@@ -1752,12 +1752,12 @@ class ButtonInputNodeElement extends HTMLElement {
           height: 100%;
         }
       </style>
-      <dgui-node-connector data-destination="this.getRootNode().host"></dgui-node-connector>
-      <dgui-draggable-handle data-target="this.getRootNode().host"></dgui-draggable-handle>
+      <dnod-node-connector data-destination="this.getRootNode().host"></dnod-node-connector>
+      <dnod-draggable-handle data-target="this.getRootNode().host"></dnod-draggable-handle>
       <button>
         <slot></slot>
       </button>
-      <dgui-node-connector data-source="this.getRootNode().host"></dgui-node-connector>
+      <dnod-node-connector data-source="this.getRootNode().host"></dnod-node-connector>
     `;
 
     this._slot = this.shadowRoot.querySelector("slot");
@@ -1816,5 +1816,5 @@ class ButtonInputNodeElement extends HTMLElement {
   }
 }
 
-window.customElements.define("dgui-node-input-button", ButtonInputNodeElement);
+window.customElements.define("dnod-node-input-button", ButtonInputNodeElement);
 //# sourceMappingURL=index.js.map

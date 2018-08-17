@@ -23,11 +23,11 @@ export default class TextInputNodeElement extends HTMLElement {
           vertical-align: middle;
         }
       </style>
-      <dgui-node-connector data-destination="this.getRootNode().host"></dgui-node-connector>
-      <dgui-draggable-handle data-target="this.getRootNode().host"></dgui-draggable-handle>
+      <dnod-node-connector data-destination="this.getRootNode().host"></dnod-node-connector>
+      <dnod-draggable-handle data-target="this.getRootNode().host"></dnod-draggable-handle>
       <label></label>
       <textarea rows="1"></textarea>
-      <dgui-node-connector data-source="this.getRootNode().host"></dgui-node-connector>
+      <dnod-node-connector data-source="this.getRootNode().host"></dnod-node-connector>
     `;
 
     this._textarea = this.shadowRoot.querySelector("textarea");
@@ -76,4 +76,4 @@ export default class TextInputNodeElement extends HTMLElement {
   }
 }
 
-window.customElements.define("dgui-node-input-text", TextInputNodeElement);
+window.customElements.define("dnod-node-input-text", TextInputNodeElement);

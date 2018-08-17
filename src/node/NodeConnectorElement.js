@@ -213,4 +213,4 @@ export default class NodeConnectorElement extends HTMLElement {
   }
 }
 
-window.customElements.define("dgui-node-connector", NodeConnectorElement);
+window.customElements.define("dnod-node-connector", NodeConnectorElement);
