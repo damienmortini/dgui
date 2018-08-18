@@ -37,7 +37,7 @@ export default class NodeLinkElement extends HTMLElement {
           stroke-linecap: round;
         }
         path.hit-test {
-          stroke: green;
+          stroke: transparent;
           stroke-width: 20px;
           pointer-events: auto;
         }
