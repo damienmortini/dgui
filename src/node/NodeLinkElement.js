@@ -44,17 +44,15 @@ export default class NodeLinkElement extends HTMLElement {
         path.hit-test.hidden {
           visibility: hidden;
         }
-        g:hover path.main {
+        svg:hover path.main {
           stroke: red;
         }
       </style>
       <div id="scale-marker"></div>
       <slot>
         <svg>
-          <g>
-            <path class="hit-test hidden"></path>
-            <path class="main"></path>
-          </g>
+          <path class="hit-test hidden"></path>
+          <path class="main"></path>
         </svg>
       </slot>
     `;
