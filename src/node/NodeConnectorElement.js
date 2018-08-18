@@ -58,6 +58,7 @@ export default class NodeConnectorElement extends HTMLElement {
       return;
     }
     activeConnector = this;
+    this.connected = true;
     this.dispatchEvent(new Event("nodeconnectorconnect", {
       bubbles: true,
       composed: true,
@@ -66,8 +67,6 @@ export default class NodeConnectorElement extends HTMLElement {
   }
 
   _onWindowPointerUp(event) {
-    window.removeEventListener("pointerup", this._onWindowPointerUpBinded);
-
     let connector;
     for (const element of event.path) {
       if (element instanceof NodeConnectorElement) {
@@ -75,10 +74,16 @@ export default class NodeConnectorElement extends HTMLElement {
         break;
       }
     }
+    
+    if (connector === activeConnector) {
+      return;
+    }
 
-    if (connector && activeConnector !== connector && activeConnector.source && connector.destination && activeConnector.source !== connector.destination) {
+    window.removeEventListener("pointerup", this._onWindowPointerUpBinded);
+
+    if (connector && activeConnector.source && connector.destination && activeConnector.source !== connector.destination) {
       activeConnector.connect(connector);
-    } else if(connector && activeConnector !== connector && connector.source && activeConnector.destination && connector.source !== activeConnector.destination) {
+    } else if (connector && activeConnector !== connector && connector.source && activeConnector.destination && connector.source !== activeConnector.destination) {
       connector.connect(activeConnector);
     } else {
       activeConnector.disconnect();
@@ -88,7 +93,7 @@ export default class NodeConnectorElement extends HTMLElement {
   }
 
   connect(element) {
-    if(this.connectedElements.has(element)) {
+    if (this.connectedElements.has(element)) {
       return;
     }
     if (element instanceof NodeConnectorElement) {
@@ -112,7 +117,6 @@ export default class NodeConnectorElement extends HTMLElement {
   disconnect(element) {
     if (element) {
       this.connectedElements.delete(element);
-      this.connected = !!this.connectedElements.size;
 
       element.connected = false;
       element.dispatchEvent(new Event("nodeconnectordisconnected", {
@@ -120,6 +124,8 @@ export default class NodeConnectorElement extends HTMLElement {
         composed: true,
       }));
     }
+
+    this.connected = !!this.connectedElements.size;
 
     this.dispatchEvent(new Event("nodeconnectordisconnected", {
       bubbles: true,

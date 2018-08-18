@@ -17,8 +17,6 @@ export default class NodeEditor extends HTMLElement {
 
         dnod-zoomable {
           position: absolute;
-          width: 100%;
-          height: 100%;
         }
       </style>
       <dnod-node-link-system data-listener="this.getRootNode().host"></dnod-node-link-system>

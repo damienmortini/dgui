@@ -40,14 +40,20 @@ export default class NodeLinkSystemElement extends HTMLElement {
   }
 
   _onNodeConnect(event) {
-    this._currentLink = document.createElement("dnod-node-link");
+    const link = document.createElement("dnod-node-link");
+    link.addEventListener("click", () => {
+      link.in.disconnect(link.out);
+      link.remove();
+    });
     if (event.target.destination) {
-      this._currentLink.out = event.target;
+      link.out = event.target;
     } else {
-      this._currentLink.in = event.target;
+      link.in = event.target;
     }
-    this._linkMap.set(event.target, this._currentLink);
-    this.appendChild(this._currentLink);
+    this._linkMap.set(event.target, link);
+    this.appendChild(link);
+
+    this._currentLink = link;
   }
 
   _onNodeConnected(event) {
