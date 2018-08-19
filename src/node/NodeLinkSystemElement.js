@@ -10,7 +10,7 @@ export default class NodeLinkSystemElement extends HTMLElement {
       <slot></slot>
     `;
 
-    this._currentLink = null;
+    this._activeLink = null;
     this._linkMap = new Map();
   }
 
@@ -40,35 +40,44 @@ export default class NodeLinkSystemElement extends HTMLElement {
   }
 
   _onNodeConnect(event) {
-    const link = document.createElement("dnod-node-link");
-    link.addEventListener("click", () => {
-      link.in.disconnect(link.out);
-      link.remove();
-    });
-    if (event.target.destination) {
-      link.out = event.target;
-    } else {
-      link.in = event.target;
-    }
-    this._linkMap.set(event.target, link);
-    this.appendChild(link);
+    this._activeLink = document.createElement("dnod-node-link");
 
-    this._currentLink = link;
+    if (event.detail.destination) {
+      this._activeLink.out = event.target;
+    } else {
+      this._activeLink.in = event.target;
+    }
+    
+    this.appendChild(this._activeLink);
   }
 
   _onNodeConnected(event) {
-    if (this._currentLink.out && this._currentLink.out !== event.target) {
-      this._currentLink.in = event.target;
+    if(!this._activeLink) {
+      return;
     }
-    if (this._currentLink.in && this._currentLink.in !== event.target) {
-      this._currentLink.out = event.target;
-    }
+
+    this._activeLink.in = event.detail.source;
+    this._activeLink.out = event.detail.destination;
+
+    this._linkMap.set(event.detail, this._activeLink);
+
+    const link = this._activeLink;
+    link.addEventListener("click", () => {
+      link.in.disconnect(link.out);
+    });
+
+    this._activeLink = null;
   }
 
   _onNodeDisconnected(event) {
-    const link = this._linkMap.get(event.target);
-    if (link) {
-      link.remove();
+    if(this._activeLink) {
+      this._activeLink.remove();
+    }
+    for (const [key, link] of this._linkMap.entries()) {
+      if(key.source === event.detail.source && key.destination === event.detail.destination) {
+        this._linkMap.delete(key);
+        link.remove();
+      }
     }
   }
 

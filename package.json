@@ -7,6 +7,7 @@
     "start": "node server.js",
     "server": "nodemon --watch server server/index.js",
     "build": "rollup -c",
+    "docs": "jsdoc src -r -d docs",
     "release": "npm run build && terser build/index.js --compress --mangle --module --output build/index.js",
     "bump": "npm version patch && npm publish",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -23,7 +24,8 @@
     "babel-minify": "^0.4.3",
     "browser-sync": "^2.24.5",
     "http2": "^3.3.7",
-    "terser": "^3.8.1",
-    "rollup": "^0.62.0"
+    "jsdoc": "^3.5.5",
+    "rollup": "^0.62.0",
+    "terser": "^3.8.1"
   }
 }
