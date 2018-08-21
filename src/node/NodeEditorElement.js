@@ -1,5 +1,7 @@
 import Config from "../dnod.config.js";
 
+import "./NodeLinkSystemElement.js";
+import "../connector/ConnectorSystemElement.js";
 import "../misc/DraggableElement.js";
 import "../misc/ZoomableElement.js";
 
@@ -22,7 +24,9 @@ export default class NodeEditor extends HTMLElement {
       <dnod-node-link-system data-listener="this.getRootNode().host"></dnod-node-link-system>
       <dnod-zoomable data-handle="this.getRootNode().host" min=".1" max="3">
         <dnod-draggable data-handle="this.getRootNode().host">
-          <slot></slot>
+          <dnod-connector-system>
+            <slot></slot>
+          </dnod-connector-system>
         </dnod-draggable>
       </dnod-zoomable>
     `;

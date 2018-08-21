@@ -1,3 +1,5 @@
+import "./NodeLinkElement.js";
+
 export default class NodeLinkSystemElement extends HTMLElement {
   static get observedAttributes() {
     return ["data-listener"];
@@ -39,32 +41,41 @@ export default class NodeLinkSystemElement extends HTMLElement {
     }
   }
 
+  _createLink() {
+    const link = document.createElement("dnod-node-link");
+    this.appendChild(link);
+    link.addEventListener("click", () => {
+      link.in.disconnect(link.out);
+    });
+    return link;
+  }
+
   _onNodeConnect(event) {
-    this._activeLink = document.createElement("dnod-node-link");
+    this._activeLink = this._createLink();
+    this.appendChild(this._activeLink);
 
     if (event.detail.destination) {
       this._activeLink.out = event.target;
     } else {
       this._activeLink.in = event.target;
     }
-    
-    this.appendChild(this._activeLink);
   }
 
   _onNodeConnected(event) {
+    for (const key of this._linkMap) {
+      if(key.source === event.detail.source && key.destination === event.detail.destination) {
+        return;
+      }
+    }
+
     if(!this._activeLink) {
-      return;
+      this._activeLink = this._createLink();
     }
 
     this._activeLink.in = event.detail.source;
     this._activeLink.out = event.detail.destination;
 
     this._linkMap.set(event.detail, this._activeLink);
-
-    const link = this._activeLink;
-    link.addEventListener("click", () => {
-      link.in.disconnect(link.out);
-    });
 
     this._activeLink = null;
   }

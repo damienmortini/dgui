@@ -93,7 +93,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="NodeConnectorElement.js.html">NodeConnectorElement.js</a>, <a href="NodeConnectorElement.js.html#line14">line 14</a>
+        <a href="NodeConnectorElement.js.html">NodeConnectorElement.js</a>, <a href="NodeConnectorElement.js.html#line10">line 10</a>
     </li></ul></dd>
     
 
@@ -122,7 +122,7 @@
 
     <h5>Example</h5>
     
-    <pre class="prettyprint"><code>&lt;dnod-node-connector    data-source="document.getElementById('source')"   data-destination="document.getElementById('destination')"   data-name="connector-1"   data-connect="connector-2 connector-3">&lt;/dnod-node-connector></code></pre>
+    <pre class="prettyprint"><code>&lt;dnod-node-connector   data-inputs="[document.getElementById('input1'), document.getElementById('input2')]"   data-outputs="[document.getElementById('output1'), document.getElementById('output2')]">&lt;/dnod-node-connector></code></pre>
 
 
 
@@ -146,10 +146,14 @@
 
         
             
-<h4 class="name" id="connected"><span class="type-signature">(readonly) </span>connected<span class="type-signature"> :boolean</span></h4>
+<h4 class="name" id="inputs"><span class="type-signature"></span>inputs<span class="type-signature"> :Array.&lt;HTMLInputElement></span></h4>
 
 
 
+
+<div class="description">
+    Inputs array
+</div>
 
 
 
@@ -157,7 +161,7 @@
     <ul>
         <li>
             
-<span class="param-type">boolean</span>
+<span class="param-type">Array.&lt;HTMLInputElement></span>
 
 
         </li>
@@ -196,7 +200,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="NodeConnectorElement.js.html">NodeConnectorElement.js</a>, <a href="NodeConnectorElement.js.html#line274">line 274</a>
+        <a href="NodeConnectorElement.js.html">NodeConnectorElement.js</a>, <a href="NodeConnectorElement.js.html#line152">line 152</a>
     </li></ul></dd>
     
 
@@ -214,13 +218,13 @@
 
         
             
-<h4 class="name" id="destination"><span class="type-signature"></span>destination<span class="type-signature"> :HTMLInputElement</span></h4>
+<h4 class="name" id="outputs"><span class="type-signature"></span>outputs<span class="type-signature"> :Array.&lt;(HTMLInputElement|<a href="NodeConnectorElement.html">NodeConnectorElement</a>)></span></h4>
 
 
 
 
 <div class="description">
-    Destination input
+    Destination inputs and connectors
 </div>
 
 
@@ -229,7 +233,7 @@
     <ul>
         <li>
             
-<span class="param-type">HTMLInputElement</span>
+<span class="param-type">Array.&lt;(HTMLInputElement|<a href="NodeConnectorElement.html">NodeConnectorElement</a>)></span>
 
 
         </li>
@@ -268,219 +272,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="NodeConnectorElement.js.html">NodeConnectorElement.js</a>, <a href="NodeConnectorElement.js.html#line313">line 313</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="name"><span class="type-signature"></span>name<span class="type-signature"> :string</span></h4>
-
-
-
-
-<div class="description">
-    Unique name of the connector
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">string</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="NodeConnectorElement.js.html">NodeConnectorElement.js</a>, <a href="NodeConnectorElement.js.html#line331">line 331</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="source"><span class="type-signature"></span>source<span class="type-signature"> :HTMLInputElement</span></h4>
-
-
-
-
-<div class="description">
-    Source input
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">HTMLInputElement</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="NodeConnectorElement.js.html">NodeConnectorElement.js</a>, <a href="NodeConnectorElement.js.html#line289">line 289</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="value"><span class="type-signature"></span>value<span class="type-signature"> :any</span></h4>
-
-
-
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">any</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="NodeConnectorElement.js.html">NodeConnectorElement.js</a>, <a href="NodeConnectorElement.js.html#line246">line 246</a>
+        <a href="NodeConnectorElement.js.html">NodeConnectorElement.js</a>, <a href="NodeConnectorElement.js.html#line160">line 160</a>
     </li></ul></dd>
     
 
@@ -499,280 +291,6 @@
         
     
 
-    
-        <h3 class="subsection-title">Methods</h3>
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="connect"><span class="type-signature"></span>connect<span class="signature">(element)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Connect to another connector
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>element</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="NodeConnectorElement.html">NodeConnectorElement</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="NodeConnectorElement.js.html">NodeConnectorElement.js</a>, <a href="NodeConnectorElement.js.html#line179">line 179</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-            
-
-    
-
-    
-    <h4 class="name" id="disconnect"><span class="type-signature"></span>disconnect<span class="signature">(element)</span><span class="type-signature"></span></h4>
-    
-
-    
-
-
-
-<div class="description">
-    Disconnect from another connector
-</div>
-
-
-
-
-
-
-
-
-
-    <h5>Parameters:</h5>
-    
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>element</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="NodeConnectorElement.html">NodeConnectorElement</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last"></td>
-        </tr>
-
-    
-    </tbody>
-</table>
-
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="NodeConnectorElement.js.html">NodeConnectorElement.js</a>, <a href="NodeConnectorElement.js.html#line215">line 215</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
     
 
     
@@ -794,7 +312,7 @@
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Sun Aug 19 2018 18:26:36 GMT+1000 (Australian Eastern Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Aug 21 2018 17:27:47 GMT+1000 (Australian Eastern Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>
