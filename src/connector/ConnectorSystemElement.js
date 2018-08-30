@@ -1,6 +1,9 @@
 import ConnectorElement from "./ConnectorElement.js";
 
-export default class ConnectorSystemElement extends HTMLElement {
+/**
+ * Handle connector elements linking
+ */
+class ConnectorSystemElement extends HTMLElement {
   constructor() {
     super();
 
@@ -28,6 +31,10 @@ export default class ConnectorSystemElement extends HTMLElement {
   }
 
   _onWindowPointerUp(event) {
+    if (!this._activeConnector) {
+      return;
+    }
+
     let connector;
     for (const element of event.path) {
       if (element instanceof ConnectorElement) {
@@ -42,18 +49,20 @@ export default class ConnectorSystemElement extends HTMLElement {
 
     window.removeEventListener("pointerup", this._onWindowPointerUpBinded);
 
-    if (!connector) {
+    if (!connector || (this._activeConnector.type === connector.type && connector.type !== ConnectorElement.TYPE_BOTH) ) {
       this._activeConnector = null;
       return;
     }
 
-    const connectorSource = this._activeConnector.inputs.size ? this._activeConnector : connector;
-    const connectorDestination = this._activeConnector.inputs.size ? connector : this._activeConnector;
+    const outputConnector = this._activeConnector.type & ConnectorElement.TYPE_OUTPUT ? this._activeConnector : connector;
+    const inputConnector = connector.type & ConnectorElement.TYPE_INPUT ? connector : this._activeConnector;
 
-    connectorSource.outputs.add(connectorDestination);
+    outputConnector.outputs.add(inputConnector);
 
     this._activeConnector = null;
   }
 }
 
 window.customElements.define("dnod-connector-system", ConnectorSystemElement);
+
+export default ConnectorSystemElement;

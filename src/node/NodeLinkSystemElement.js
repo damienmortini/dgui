@@ -14,6 +14,10 @@ export default class NodeLinkSystemElement extends HTMLElement {
 
     this._activeLink = null;
     this._linkMap = new Map();
+
+    this._onNodeConnectBinded = this._onNodeConnect.bind(this);
+    this._onNodeConnectedBinded = this._onNodeConnected.bind(this);
+    this._onNodeDisconnectedBinded = this._onNodeDisconnected.bind(this);
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
@@ -33,12 +37,6 @@ export default class NodeLinkSystemElement extends HTMLElement {
 
   disconnectedCallback() {
     this._removeEventListeners();
-  }
-
-  _onPointerDown(event) {
-    if(event.button === 2) {
-      
-    }
   }
 
   _createLink() {
@@ -63,12 +61,12 @@ export default class NodeLinkSystemElement extends HTMLElement {
 
   _onNodeConnected(event) {
     for (const key of this._linkMap) {
-      if(key.source === event.detail.source && key.destination === event.detail.destination) {
+      if (key.source === event.detail.source && key.destination === event.detail.destination) {
         return;
       }
     }
 
-    if(!this._activeLink) {
+    if (!this._activeLink) {
       this._activeLink = this._createLink();
     }
 
@@ -81,11 +79,11 @@ export default class NodeLinkSystemElement extends HTMLElement {
   }
 
   _onNodeDisconnected(event) {
-    if(this._activeLink) {
+    if (this._activeLink) {
       this._activeLink.remove();
     }
     for (const [key, link] of this._linkMap.entries()) {
-      if(key.source === event.detail.source && key.destination === event.detail.destination) {
+      if (key.source === event.detail.source && key.destination === event.detail.destination) {
         this._linkMap.delete(key);
         link.remove();
       }
@@ -96,7 +94,6 @@ export default class NodeLinkSystemElement extends HTMLElement {
     this._listener.removeEventListener("nodeconnectorconnect", this._onNodeConnectBinded);
     this._listener.removeEventListener("nodeconnectorconnected", this._onNodeConnectedBinded);
     this._listener.removeEventListener("nodeconnectordisconnected", this._onNodeDisconnectedBinded);
-    this._listener.removeEventListener("pointerdown", this._onPointerDownBinded);
   }
 
   get listener() {
@@ -110,10 +107,9 @@ export default class NodeLinkSystemElement extends HTMLElement {
 
     this._listener = value;
 
-    this._listener.addEventListener("nodeconnectorconnect", this._onNodeConnectBinded = this._onNodeConnectBinded || this._onNodeConnect.bind(this));
-    this._listener.addEventListener("nodeconnectorconnected", this._onNodeConnectedBinded = this._onNodeConnectedBinded || this._onNodeConnected.bind(this));
-    this._listener.addEventListener("nodeconnectordisconnected", this._onNodeDisconnectedBinded = this._onNodeDisconnectedBinded || this._onNodeDisconnected.bind(this));
-    this._listener.addEventListener("pointerdown", this._onPointerDownBinded = this._onPointerDownBinded || this._onPointerDown.bind(this));
+    this._listener.addEventListener("nodeconnectorconnect", this._onNodeConnectBinded);
+    this._listener.addEventListener("nodeconnectorconnected", this._onNodeConnectedBinded);
+    this._listener.addEventListener("nodeconnectordisconnected", this._onNodeDisconnectedBinded);
   }
 }
 
