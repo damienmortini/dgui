@@ -97,13 +97,14 @@ class ConnectorElement extends HTMLElement {
           return this;
         }
         super.add(value);
+        if (self._value !== undefined) {
+          value.value = self._value;
+        }
         if (value instanceof ConnectorElement) {
           self._connectorElementInputs.add(value);
           value.outputs.add(self);
-          self._value = value._value;
         } else {
           self._inputElementInputs.add(value);
-          self._value = value.value;
           value.addEventListener("input", self._onInputChangeBinded);
         }
         self._updateConnectedStatus();
@@ -129,9 +130,11 @@ class ConnectorElement extends HTMLElement {
           return this;
         }
         super.add(value);
+        if (self._value !== undefined) {
+          value.value = self._value;
+        }
         if (value instanceof ConnectorElement) {
           self._connectorElementOutputs.add(value);
-          value._value = self._value;
           value.inputs.add(self);
           self.dispatchEvent(new CustomEvent("connected", {
             bubbles: true,
@@ -143,9 +146,6 @@ class ConnectorElement extends HTMLElement {
           }));
         } else {
           self._inputElementOutputs.add(value);
-          if (self._value !== undefined) {
-            value.value = self._value;
-          }
           value.dispatchEvent(new Event("input", {
             bubbles: true,
           }));
@@ -191,7 +191,7 @@ class ConnectorElement extends HTMLElement {
   }
 
   _onInputChange(event) {
-    this._value = event.target.value;
+    this.value = event.target.value;
   }
 
   _updateConnectedStatus() {
@@ -202,20 +202,14 @@ class ConnectorElement extends HTMLElement {
   }
 
   /**
-   * Value setter
-   * @private
+   * Value inputted in connector, automatically set on input change but can be set manually
+   * @param {any} value
    */
-  get _value() {
-    return this.__value;
-  }
-
-  set _value(value) {
-    this.__value = value;
+  set value(value) {
+    this._value = value;
     for (const output of this.outputs) {
-      if (output instanceof ConnectorElement) {
-        output._value = value;
-      } else {
-        output.value = value;
+      output.value = value;
+      if (!(output instanceof ConnectorElement)) {
         output.dispatchEvent(new Event("input", {
           bubbles: true,
         }));
@@ -238,7 +232,7 @@ class ConnectorElement extends HTMLElement {
   /**
    * Set of inputs
    * @readonly
-   * @type {HTMLInputElement[]}
+   * @type {Set.<HTMLInputElement|ConnectorElement>}
    */
   get inputs() {
     return this._inputs;
@@ -247,7 +241,7 @@ class ConnectorElement extends HTMLElement {
   /**
    * Set of outputs
    * @readonly
-   * @type {Array.<(HTMLInputElement|ConnectorElement)>}
+   * @type {Set.<(HTMLInputElement|ConnectorElement)>}
    */
   get outputs() {
     return this._outputs;
