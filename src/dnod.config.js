@@ -1,4 +1,17 @@
+import LinkableConnectorElement from "./connector/LinkableConnectorElement.js";
+import EditorElement from "./editor/EditorElement.js";
+import NodeElement from "./node/NodeElement.js";
+import ZoomableElement from "./misc/ZoomableElement.js";
+import DraggableElement from "./misc/DraggableElement.js";
+
 export default {
+    customElementsMap: {
+        "dnod-editor": EditorElement,
+        "dnod-connector": LinkableConnectorElement,
+        "dnod-draggable": DraggableElement,
+        "dnod-zoomable": ZoomableElement,
+        "dnod-node": NodeElement,
+    },
     inputTypeMap: {
         "button": "dnod-node-input-button",
         "checkbox": "dnod-node-input-checkbox",

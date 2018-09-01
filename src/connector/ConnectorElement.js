@@ -112,6 +112,9 @@ class ConnectorElement extends HTMLElement {
       }
       delete(value) {
         const returnValue = super.delete(value);
+        if (!returnValue) {
+          return;
+        }
         value.removeEventListener("input", self._onInputChangeBinded);
         if (value instanceof ConnectorElement) {
           self._connectorElementInputs.delete(value);
@@ -140,7 +143,6 @@ class ConnectorElement extends HTMLElement {
             bubbles: true,
             composed: true,
             detail: {
-              input: this,
               output: value,
             },
           }));
@@ -158,6 +160,9 @@ class ConnectorElement extends HTMLElement {
       }
       delete(value) {
         const returnValue = super.delete(value);
+        if (!returnValue) {
+          return;
+        }
         self._connectorElementOutputs.delete(value);
         self._inputElementOutputs.delete(value);
         value.inputs.delete(self);
@@ -167,7 +172,6 @@ class ConnectorElement extends HTMLElement {
             bubbles: true,
             composed: true,
             detail: {
-              input: this,
               output: value,
             },
           }));
@@ -202,7 +206,7 @@ class ConnectorElement extends HTMLElement {
   }
 
   /**
-   * Value inputted in connector, automatically set on input change but can be set manually
+   * Value inputted, automatically set on input change but can be set manually
    * @param {any} value
    */
   set value(value) {
@@ -256,7 +260,5 @@ class ConnectorElement extends HTMLElement {
     return +!!this._inputElementInputs.size << 1 | +!!this._inputElementOutputs.size;
   }
 }
-
-window.customElements.define("dnod-connector", ConnectorElement);
 
 export default ConnectorElement;

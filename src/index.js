@@ -1,8 +1,7 @@
-import "./node/NodeElement.js";
-import "./node/NodeEditorElement.js";
-import "./node/NodeLinkElement.js";
-import "./node/NodeLinkSystemElement.js";
-import "./connector/ConnectorElement.js";
+import Config from "./dnod.config.js";
 
-import "./input/SelectInputNodeElement.js";
-import "./input/ButtonInputNodeElement.js";
+for (const customElementName in Config.customElementsMap) {
+  if (customElements.get(customElementName) === undefined) {
+    customElements.define(customElementName, Config.customElementsMap[customElementName]);
+  }
+}

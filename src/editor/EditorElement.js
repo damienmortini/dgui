@@ -1,11 +1,6 @@
 import Config from "../dnod.config.js";
 
-import "./NodeLinkSystemElement.js";
-import "../connector/ConnectorSystemElement.js";
-import "../misc/DraggableElement.js";
-import "../misc/ZoomableElement.js";
-
-export default class NodeEditor extends HTMLElement {
+export default class EditorElement extends HTMLElement {
   constructor() {
     super();
 
@@ -21,12 +16,11 @@ export default class NodeEditor extends HTMLElement {
           position: absolute;
         }
       </style>
-      <dnod-node-link-system data-listener="this.getRootNode().host"></dnod-node-link-system>
+      <dnod-connector-linksystem data-target="this.parentNode.host"></dnod-connector-linksystem>
+      <dnod-connector-pointersystem data-target="this.parentNode.host"></dnod-connector-pointersystem>
       <dnod-zoomable data-handle="this.getRootNode().host" min=".1" max="3">
         <dnod-draggable data-handle="this.getRootNode().host">
-          <dnod-connector-system>
             <slot></slot>
-          </dnod-connector-system>
         </dnod-draggable>
       </dnod-zoomable>
     `;
@@ -65,5 +59,3 @@ export default class NodeEditor extends HTMLElement {
     }
   }
 }
-
-window.customElements.define("dnod-node-editor", NodeEditor);
