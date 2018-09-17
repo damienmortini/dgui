@@ -3,10 +3,12 @@ import EditorElement from "./editor/EditorElement.js";
 import NodeElement from "./node/NodeElement.js";
 import ZoomableElement from "./misc/ZoomableElement.js";
 import DraggableElement from "./misc/DraggableElement.js";
+import LinkElement from "./link/LinkElement.js";
 
 export default {
     customElementsMap: {
         "dnod-editor": EditorElement,
+        "dnod-link": LinkElement,
         "dnod-connector": LinkableConnectorElement,
         "dnod-draggable": DraggableElement,
         "dnod-zoomable": ZoomableElement,

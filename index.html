@@ -27,7 +27,7 @@
 <body>
   <!-- <script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script> -->
 
-  <dnod-node-editor>
+  <dnod-editor>
     <dnod-node data-name="Output node" oninput="this.querySelector('#result').value = this.querySelector('#source').value + ' World!'"
       data-x="350" data-y="200" data-width="250">
       <dnod-connector id="connector2" data-outputs="[this.nextElementSibling]"></dnod-connector>
@@ -58,7 +58,7 @@
         <input type="text" id="tata" disabled style="width: 100%; box-sizing: border-box;">
       </section>
     </dnod-node>
-  </dnod-node-editor>
+  </dnod-editor>
 
 
   <script type="module">

@@ -16,8 +16,6 @@ export default class EditorElement extends HTMLElement {
           position: absolute;
         }
       </style>
-      <dnod-connector-linksystem data-target="this.parentNode.host"></dnod-connector-linksystem>
-      <dnod-connector-pointersystem data-target="this.parentNode.host"></dnod-connector-pointersystem>
       <dnod-zoomable data-handle="this.getRootNode().host" min=".1" max="3">
         <dnod-draggable data-handle="this.getRootNode().host">
             <slot></slot>

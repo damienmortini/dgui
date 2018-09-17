@@ -11,7 +11,38 @@ class LinkableConnectorElement extends ConnectorElement {
 
     this.addEventListener("pointerdown", this._onPointerDown);
 
+    this._outputLinkMap = new Map();
+
     this._onWindowPointerUpBinded = this._onWindowPointerUp.bind(this);
+    this.addEventListener("connected", this._onConnected);
+    this.addEventListener("disconnected", this._onDisconnected);
+  }
+
+  _onConnected(event) {
+    let root = this;
+    let element = this.parentElement;
+    while (element.parentElement) {
+      if (element.tagName === "DNOD-EDITOR") {
+        root = element;
+        break;
+      }
+      element = element.parentElement;
+    }
+
+    const link = document.createElement("dnod-link");
+    root.prepend(link);
+    link.addEventListener("click", () => {
+      link.input.outputs.delete(link.output);
+    });
+    link.input = event.target;
+    link.output = event.detail.output;
+
+    this._outputLinkMap.set(event.detail.output, link);
+  }
+
+  _onDisconnected(event) {
+    this._outputLinkMap.get(event.detail.output).remove();
+    this._outputLinkMap.delete(event.detail.output);
   }
 
   _onPointerDown(event) {

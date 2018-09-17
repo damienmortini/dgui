@@ -97,8 +97,8 @@ class ConnectorElement extends HTMLElement {
           return this;
         }
         super.add(value);
-        if (self._value !== undefined) {
-          value.value = self._value;
+        if (value.value !== undefined) {
+          self._value = value.value;
         }
         if (value instanceof ConnectorElement) {
           self._connectorElementInputs.add(value);
@@ -133,9 +133,6 @@ class ConnectorElement extends HTMLElement {
           return this;
         }
         super.add(value);
-        if (self._value !== undefined) {
-          value.value = self._value;
-        }
         if (value instanceof ConnectorElement) {
           self._connectorElementOutputs.add(value);
           value.inputs.add(self);
@@ -148,14 +145,11 @@ class ConnectorElement extends HTMLElement {
           }));
         } else {
           self._inputElementOutputs.add(value);
-          value.dispatchEvent(new Event("input", {
-            bubbles: true,
-          }));
-          value.dispatchEvent(new Event("change", {
-            bubbles: true,
-          }));
         }
         self._updateConnectedStatus();
+        if (self._value !== undefined) {
+          value.value = self._value;
+        }
         return this;
       }
       delete(value) {
@@ -167,7 +161,7 @@ class ConnectorElement extends HTMLElement {
         self._inputElementOutputs.delete(value);
         value.inputs.delete(self);
         self._updateConnectedStatus();
-        if (value instanceof ConnectorElement && !self.connected) {
+        if (value instanceof ConnectorElement) {
           self.dispatchEvent(new CustomEvent("disconnected", {
             bubbles: true,
             composed: true,
@@ -212,8 +206,9 @@ class ConnectorElement extends HTMLElement {
   set value(value) {
     this._value = value;
     for (const output of this.outputs) {
+      const oldValue = output.value;
       output.value = value;
-      if (!(output instanceof ConnectorElement)) {
+      if (!(output instanceof ConnectorElement) && oldValue !== value) {
         output.dispatchEvent(new Event("input", {
           bubbles: true,
         }));
