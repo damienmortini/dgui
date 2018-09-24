@@ -18,7 +18,7 @@ class LinkableConnectorElement extends ConnectorElement {
     this.addEventListener("disconnected", this._onDisconnected);
   }
 
-  _onConnected(event) {
+  _addLink() {
     let root = this;
     let element = this.parentElement;
     while (element.parentElement) {
@@ -31,6 +31,11 @@ class LinkableConnectorElement extends ConnectorElement {
 
     const link = document.createElement("dnod-link");
     root.prepend(link);
+    return link;
+  }
+
+  _onConnected(event) {
+    const link = this._outputLinkMap.get(undefined) || this._addLink();
     link.addEventListener("click", () => {
       link.input.outputs.delete(link.output);
     });
@@ -51,6 +56,11 @@ class LinkableConnectorElement extends ConnectorElement {
     }
     activeConnector = this;
 
+    const link = this._addLink();
+    link.input = this;
+
+    this._outputLinkMap.set(undefined, link);
+
     window.addEventListener("pointerup", this._onWindowPointerUpBinded);
   }
 
@@ -61,7 +71,7 @@ class LinkableConnectorElement extends ConnectorElement {
 
     let connector;
     for (const element of event.path) {
-      if (element instanceof ConnectorElement) {
+      if (element instanceof LinkableConnectorElement) {
         connector = element;
         break;
       }
@@ -70,6 +80,9 @@ class LinkableConnectorElement extends ConnectorElement {
     if (connector === activeConnector) {
       return;
     }
+
+    this._outputLinkMap.get(undefined).remove();
+    this._outputLinkMap.delete(undefined);
 
     window.removeEventListener("pointerup", this._onWindowPointerUpBinded);
 
