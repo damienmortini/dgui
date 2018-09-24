@@ -36,6 +36,7 @@ export default class LinkElement extends HTMLElement {
           stroke: transparent;
           stroke-width: 20px;
           pointer-events: auto;
+          cursor: pointer;
         }
         path.hit-test.hidden {
           visibility: hidden;
@@ -100,16 +101,30 @@ export default class LinkElement extends HTMLElement {
     let inputX = pointerX;
     let inputY = pointerY;
     if (this.input) {
-      const inBoundingRect = this.input.getBoundingClientRect();
-      inputX = (inBoundingRect.x + inBoundingRect.width * .5 - rootBoundingRect.x) / scaleMarkerBoundingRect.width;
+      let inBoundingRect;
+      let input = this.input;
+      let isNode = false;
+      do {
+        inBoundingRect = input.getBoundingClientRect();
+        isNode = input.nodeName === "DNOD-NODE";
+        input = input.parentElement;
+      } while (inBoundingRect.x + inBoundingRect.y + inBoundingRect.width + inBoundingRect.height === 0);
+      inputX = (inBoundingRect.x + inBoundingRect.width * (isNode ? 1 : .5) - rootBoundingRect.x) / scaleMarkerBoundingRect.width;
       inputY = (inBoundingRect.y + inBoundingRect.height * .5 - rootBoundingRect.y) / scaleMarkerBoundingRect.height;
     }
 
     let outputX = pointerX;
     let outputY = pointerY;
     if (this.output) {
-      const outBoundingRect = this.output.getBoundingClientRect();
-      outputX = (outBoundingRect.x + outBoundingRect.width * .5 - rootBoundingRect.x) / scaleMarkerBoundingRect.width;
+      let outBoundingRect;
+      let output = this.output;
+      let isNode = false;
+      do {
+        outBoundingRect = output.getBoundingClientRect();
+        isNode = output.nodeName === "DNOD-NODE";
+        output = output.parentElement;
+      } while (outBoundingRect.x + outBoundingRect.y + outBoundingRect.width + outBoundingRect.height === 0);
+      outputX = (outBoundingRect.x + outBoundingRect.width * (isNode ? 0 : .5) - rootBoundingRect.x) / scaleMarkerBoundingRect.width;
       outputY = (outBoundingRect.y + outBoundingRect.height * .5 - rootBoundingRect.y) / scaleMarkerBoundingRect.height;
     }
 
@@ -141,7 +156,8 @@ export default class LinkElement extends HTMLElement {
 
     this._path.setAttribute("d", `M${inputX + padding} ${inputY + padding} L ${outputX + padding} ${outputY + padding}`);
     this._hitTestPath.setAttribute("d", `M${inputX + padding} ${inputY + padding} L ${outputX + padding} ${outputY + padding}`);
-    // this._path.setAttribute("d", `M${inputX + 1} ${inputY + 1} C ${inputX + (outputX - inputX) * .5} ${inputY}, ${outputX + (inputX - outputX) * .5} ${outputY}, ${outputX + 1} ${outputY + 1}`);
+    // this._path.setAttribute("d", `M${inputX + padding} ${inputY + padding} C ${inputX + (outputX - inputX) * .5} ${inputY}, ${outputX + (inputX - outputX) * .5} ${outputY}, ${outputX + padding} ${outputY + padding}`);
+    // this._hitTestPath.setAttribute("d", `M${inputX + padding} ${inputY + padding} C ${inputX + (outputX - inputX) * .5} ${inputY}, ${outputX + (inputX - outputX) * .5} ${outputY}, ${outputX + padding} ${outputY + padding}`);
   }
 
   get linked() {
