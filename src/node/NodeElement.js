@@ -69,7 +69,7 @@ class NodeElement extends HTMLElement {
     switch (name) {
       case "draggable":
       case "open":
-        this[name] = newValue !== "true";
+        this[name] = newValue !== "false";
         break;
       case "x":
       case "y":
@@ -103,7 +103,7 @@ class NodeElement extends HTMLElement {
   get draggable() {
     return this._draggable;
   }
-  
+
   set draggable(value) {
     this._draggable = value;
     super.draggable = this._draggable;

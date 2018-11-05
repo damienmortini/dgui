@@ -4,6 +4,8 @@ import NodeElement from "./node/NodeElement.js";
 import ZoomableElement from "./misc/ZoomableElement.js";
 import DraggableElement from "./misc/DraggableElement.js";
 import LinkElement from "./link/LinkElement.js";
+import ColorInputNodeElement from "./input/ColorInputElement.js";
+import InputElement from "./input/InputElement.js";
 
 export default {
     customElementsMap: {
@@ -13,6 +15,8 @@ export default {
         "dnod-draggable": DraggableElement,
         "dnod-zoomable": ZoomableElement,
         "dnod-node": NodeElement,
+        "dnod-input": InputElement,
+        "dnod-input-color": ColorInputNodeElement,
     },
     inputTypeMap: {
         "button": "dnod-node-input-button",

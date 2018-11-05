@@ -20,13 +20,13 @@ class LinkableConnectorElement extends ConnectorElement {
 
   _addLink() {
     let root = this;
-    let element = this.parentElement;
-    while (element.parentElement) {
+    let element = this;
+    while (element) {
+      element = element.parentElement || element.getRootNode().host;
       if (element.tagName === "DNOD-EDITOR") {
         root = element;
         break;
       }
-      element = element.parentElement;
     }
 
     const link = document.createElement("dnod-link");

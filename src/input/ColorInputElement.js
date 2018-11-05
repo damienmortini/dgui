@@ -1,54 +1,34 @@
-import Color from "../node_modules/dlib/math/Color.js";
+import InputElement from "./InputElement.js";
+import Color from "../../node_modules/dlib/math/Color.js";
 
-export default class ColorInputNodeElement extends HTMLElement {
-  static get observedAttributes() {
-    return ["name", "value", "disabled"];
-  }
-
+export default class ColorInputElement extends InputElement {
   constructor() {
     super();
 
-    this.type = "color";
-
-    this.attachShadow({ mode: "open" }).innerHTML = `
+    this.shadowRoot.querySelector("slot").innerHTML = `
       <style>
-        :host {
-          display: grid;
-          grid-template-columns: auto auto auto 3fr 1fr auto;
-          grid-gap: 5px;
-          align-items: center;
-        }
         input {
-          width: 100%;
+          flex: .5;
           box-sizing: border-box;
         }
       </style>
-      <dnod-node-connector data-destination="this.getRootNode().host"></dnod-node-connector>
-      <dnod-draggable-handle data-target="this.getRootNode().host"></dnod-draggable-handle>
-      <label></label>
       <input type="text">
       <input type="color">
-      <dnod-node-connector data-source="this.getRootNode().host"></dnod-node-connector>
     `;
 
-    this._label = this.shadowRoot.querySelector("label");
     this._textInput = this.shadowRoot.querySelector("input[type=\"text\"]");
     this._colorInput = this.shadowRoot.querySelector("input[type=\"color\"]");
 
-    this.shadowRoot.addEventListener("change", (event) => {
-      event.stopImmediatePropagation();
-      this.dispatchEvent(new event.constructor(event.type, event));
-    });
+    this.disabled = this.disabled;
 
-    this.shadowRoot.addEventListener("input", (event) => {
-      event.stopImmediatePropagation();
+    const onInput = (event) => {
       this.value = event.target.value;
+    };
+    this._textInput.addEventListener("input", onInput);
+    this._colorInput.addEventListener("input", (event) => {
+      onInput(event);
       this.dispatchEvent(new event.constructor(event.type, event));
     });
-  }
-
-  attributeChangedCallback(name, oldValue, newValue) {
-    this[name] = name === "disabled" ? newValue !== null : newValue;
   }
 
   get value() {
@@ -79,29 +59,21 @@ export default class ColorInputNodeElement extends HTMLElement {
       this._value = value;
     }
 
-    if (this.shadowRoot.activeElement !== this._textInput) {
-      this._textInput.value = hexValue;
-    }
+    this._textInput.value = typeof value === "string" ? value : hexValue;
     this._colorInput.value = hexValue;
   }
 
-  get name() {
-    return this._textInput.name;
-  }
-
-  set name(value) {
-    this._label.textContent = value;
-    this._textInput.name = value;
-    this._colorInput.name = value;
+  get disabled() {
+    return this._disabled;
   }
 
   set disabled(value) {
+    this._disabled = value;
+    if (!this._textInput) {
+      return;
+    }
     this._textInput.disabled = value;
     this._colorInput.disabled = value;
-  }
-
-  get disabled() {
-    return this._textInput.disable;
   }
 
   _valueToHexadecimal(value) {
@@ -128,5 +100,3 @@ export default class ColorInputNodeElement extends HTMLElement {
     };
   }
 }
-
-window.customElements.define("dnod-node-input-color", ColorInputNodeElement);

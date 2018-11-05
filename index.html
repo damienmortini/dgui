@@ -28,6 +28,11 @@
   <!-- <script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script> -->
 
   <dnod-editor>
+    <dnod-node data-name="Test">
+      <dnod-input name="Base"></dnod-input>
+      <dnod-input-color name="Color"></dnod-input-color>
+    </dnod-node>
+
     <dnod-node data-name="Output node" oninput="this.querySelector('#result').value = this.querySelector('#source').value + ' World!'"
       data-x="350" data-y="200" data-width="250">
       <dnod-connector id="connector2" data-outputs="[this.nextElementSibling]"></dnod-connector>
@@ -48,7 +53,8 @@
       </section>
     </dnod-node>
 
-    <dnod-node data-name="Fourth node" oninput="this.querySelector('#tata').value = this.querySelector('#toto').value + '_yoyo'" data-x="200" data-y="500" data-width="250">
+    <dnod-node data-name="Fourth node" oninput="this.querySelector('#tata').value = this.querySelector('#toto').value + '_yoyo'"
+      data-x="200" data-y="500" data-width="250">
       <section>
         <dnod-connector data-outputs="[this.nextElementSibling]"></dnod-connector>
         <input type="text" id="toto">
