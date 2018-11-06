@@ -72,10 +72,15 @@ export default class InputElement extends HTMLElement {
   }
 
   set value(value) {
-    if (this.defaultValue === undefined) {
-      this.defaultValue = value;
-    }
     this.shadowRoot.querySelector("input").value = value;
+  }
+
+  get defaultValue() {
+    return this.shadowRoot.querySelector("input").defaultValue;
+  }
+
+  set defaultValue(value) {
+    this.shadowRoot.querySelector("input").defaultValue = value;
   }
 
   get disabled() {

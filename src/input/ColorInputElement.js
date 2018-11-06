@@ -29,6 +29,7 @@ export default class ColorInputElement extends InputElement {
       <style>
         input[type=color] {
           box-sizing: border-box;
+          height: 20px;
         }
       </style>
     `);

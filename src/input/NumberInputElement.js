@@ -23,6 +23,14 @@ export default class NumberInputElement extends InputElement {
     this._input.valueAsNumber = value;
   }
 
+  get defaultValue() {
+    return parseFloat(this._input.defaultValue);
+  }
+
+  set defaultValue(value) {
+    this._input.defaultValue = value.toString();
+  }
+
   get step() {
     return parseFloat(this._input.step);
   }

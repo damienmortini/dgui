@@ -33,9 +33,12 @@
       <dnod-connector data-inputs="[this.getRootNode().host]"></dnod-connector> -->
   
       <dnod-input name="Base"></dnod-input>
+      <dnod-input-button name="Button" onclick="this.value = Math.random()"></dnod-input-button>
+      <dnod-input-checkbox name="Checkbox"></dnod-input-checkbox>
       <dnod-input-color name="Color"></dnod-input-color>
       <dnod-input-number name="Number"></dnod-input-number>
       <dnod-input-range name="Range"></dnod-input-range>
+      <dnod-input-text name="Text"></dnod-input-text>
     </dnod-node>
 
     <!-- <dnod-node data-name="Output node" oninput="this.querySelector('#result').value = this.querySelector('#source').value + ' World!'"
