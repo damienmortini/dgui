@@ -29,11 +29,16 @@
 
   <dnod-editor>
     <dnod-node data-name="Test">
+      <!-- <dnod-connector data-outputs="[this.getRootNode().host]"></dnod-connector>
+      <dnod-connector data-inputs="[this.getRootNode().host]"></dnod-connector> -->
+  
       <dnod-input name="Base"></dnod-input>
       <dnod-input-color name="Color"></dnod-input-color>
+      <dnod-input-number name="Number"></dnod-input-number>
+      <dnod-input-range name="Range"></dnod-input-range>
     </dnod-node>
 
-    <dnod-node data-name="Output node" oninput="this.querySelector('#result').value = this.querySelector('#source').value + ' World!'"
+    <!-- <dnod-node data-name="Output node" oninput="this.querySelector('#result').value = this.querySelector('#source').value + ' World!'"
       data-x="350" data-y="200" data-width="250">
       <dnod-connector id="connector2" data-outputs="[this.nextElementSibling]"></dnod-connector>
       <input type="text" id="source" name="output">
@@ -63,7 +68,7 @@
       <section>
         <input type="text" id="tata" disabled style="width: 100%; box-sizing: border-box;">
       </section>
-    </dnod-node>
+    </dnod-node> -->
   </dnod-editor>
 
 

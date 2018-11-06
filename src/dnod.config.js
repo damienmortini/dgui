@@ -4,8 +4,10 @@ import NodeElement from "./node/NodeElement.js";
 import ZoomableElement from "./misc/ZoomableElement.js";
 import DraggableElement from "./misc/DraggableElement.js";
 import LinkElement from "./link/LinkElement.js";
-import ColorInputNodeElement from "./input/ColorInputElement.js";
 import InputElement from "./input/InputElement.js";
+import ColorInputElement from "./input/ColorInputElement.js";
+import NumberInputElement from "./input/NumberInputElement.js";
+import RangeInputElement from "./input/RangeInputElement.js";
 
 export default {
     customElementsMap: {
@@ -16,7 +18,9 @@ export default {
         "dnod-zoomable": ZoomableElement,
         "dnod-node": NodeElement,
         "dnod-input": InputElement,
-        "dnod-input-color": ColorInputNodeElement,
+        "dnod-input-color": ColorInputElement,
+        "dnod-input-number": NumberInputElement,
+        "dnod-input-range": RangeInputElement,
     },
     inputTypeMap: {
         "button": "dnod-node-input-button",

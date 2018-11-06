@@ -5,30 +5,38 @@ export default class ColorInputElement extends InputElement {
   constructor() {
     super();
 
-    this.shadowRoot.querySelector("slot").innerHTML = `
+    this.type = "color";
+
+    // this.shadowRoot.querySelector("slot").innerHTML = `
+    //   <style>
+    //     input {
+    //       flex: .5;
+    //       box-sizing: border-box;
+    //     }
+    //   </style>
+    //   <input type="text">
+    //   <input type="color">
+    // `;
+
+    this._input = this.shadowRoot.querySelector("input");
+
+    this._colorInput = this._input.cloneNode();
+    this._colorInput.type = "color";
+
+    this._input.insertAdjacentElement("beforebegin", this._colorInput);
+
+    this._colorInput.insertAdjacentHTML("beforebegin", `
       <style>
-        input {
-          flex: .5;
+        input[type=color] {
           box-sizing: border-box;
         }
       </style>
-      <input type="text">
-      <input type="color">
-    `;
-
-    this._textInput = this.shadowRoot.querySelector("input[type=\"text\"]");
-    this._colorInput = this.shadowRoot.querySelector("input[type=\"color\"]");
-
-    this.disabled = this.disabled;
+    `);
 
     const onInput = (event) => {
       this.value = event.target.value;
     };
-    this._textInput.addEventListener("input", onInput);
-    this._colorInput.addEventListener("input", (event) => {
-      onInput(event);
-      this.dispatchEvent(new event.constructor(event.type, event));
-    });
+    this.shadowRoot.addEventListener("input", onInput);
   }
 
   get value() {
@@ -59,20 +67,16 @@ export default class ColorInputElement extends InputElement {
       this._value = value;
     }
 
-    this._textInput.value = typeof value === "string" ? value : hexValue;
+    this._input.value = typeof value === "string" ? value : hexValue;
     this._colorInput.value = hexValue;
   }
 
   get disabled() {
-    return this._disabled;
+    return this._input.disabled;
   }
 
   set disabled(value) {
-    this._disabled = value;
-    if (!this._textInput) {
-      return;
-    }
-    this._textInput.disabled = value;
+    this._input.disabled = value;
     this._colorInput.disabled = value;
   }
 
@@ -93,10 +97,8 @@ export default class ColorInputElement extends InputElement {
   }
 
   toJSON() {
-    return {
-      name: this.name,
-      type: this.type,
+    return Object.assign(super.toJSON(), {
       value: this._valueToHexadecimal(this.value),
-    };
+    });
   }
 }

@@ -6,7 +6,7 @@ export default class InputElement extends HTMLElement {
   constructor() {
     super();
 
-    this.type = "text";
+    this.type = undefined;
 
     this.attachShadow({ mode: "open" }).innerHTML = `
       <style>
@@ -18,7 +18,7 @@ export default class InputElement extends HTMLElement {
           overflow: hidden;
           text-overflow: ellipsis;
           margin: 0 5px;
-          flex: .5;
+          width: 25%;
         }
         label:empty {
           display: none;
@@ -28,15 +28,15 @@ export default class InputElement extends HTMLElement {
           width: 100%;
         }
       </style>
-      <dnod-connector data-outputs="[this.getRootNode().host]"></dnod-connector>
       <label></label>
       <slot><input></slot>
-      <dnod-connector data-inputs="[this.getRootNode().host]"></dnod-connector>
     `;
 
     const dispatchEvent = (event) => {
+      event.stopPropagation();
       this.dispatchEvent(new event.constructor(event.type, event));
     };
+    this.shadowRoot.addEventListener("input", dispatchEvent);
     this.shadowRoot.addEventListener("change", dispatchEvent);
   }
 

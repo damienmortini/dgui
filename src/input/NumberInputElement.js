@@ -1,6 +1,8 @@
-export default class NumberInputElement extends HTMLElement {
+import InputElement from "./InputElement.js";
+
+export default class NumberInputElement extends InputElement {
   static get observedAttributes() {
-    return ["name", "value", "step", "min", "max", "disabled"];
+    return [...InputElement.observedAttributes, "step", "min", "max"];
   }
 
   constructor() {
@@ -8,114 +10,48 @@ export default class NumberInputElement extends HTMLElement {
 
     this.type = "number";
 
-    this.attachShadow({ mode: "open" }).innerHTML = `
-      <style>
-        :host {
-          display: grid;
-          grid-template-columns: auto auto auto 1fr auto;
-          grid-gap: 5px;
-          align-items: center;
-        }
-        input {
-          box-sizing: border-box;
-          width: 100%;
-          height: 100%;
-        }
-      </style>
-      <dnod-node-connector data-destination="this.getRootNode().host"></dnod-node-connector>
-      <dnod-draggable-handle data-target="this.getRootNode().host"></dnod-draggable-handle>
-      <label></label>
-      <input type="number">
-      <dnod-node-connector data-source="this.getRootNode().host"></dnod-node-connector>
-    `;
     this._input = this.shadowRoot.querySelector("input");
-    this._label = this.shadowRoot.querySelector("label");
-
-    const dispatchEvent = (event) => {
-      this.dispatchEvent(new event.constructor(event.type, event));
-    };
-    this.shadowRoot.addEventListener("change", dispatchEvent);
-    this.shadowRoot.addEventListener("input", dispatchEvent);
-  }
-
-  attributeChangedCallback(name, oldValue, newValue) {
-    this[name] = name === "disabled" ? newValue !== null : newValue;
-  }
-
-  set value(value) {
-    if (this.defaultValue === undefined) {
-      this.defaultValue = value;
-    }
-    this._input.valueAsNumber = value;
+    this._input.type = "number";
+    this._input.step = ".01";
   }
 
   get value() {
     return this._input.valueAsNumber;
   }
 
-  get name() {
-    return this._input.name;
-  }
-
-  set name(value) {
-    this._label.textContent = value;
-    this._input.name = value;
-  }
-
-  set defaultValue(value) {
-    this._defaultValue = value;
-    const results = this._defaultValue.toString().replace("-", "").split(".");
-    this.step = !isNaN(this.step) ? this.step : results[1] ? 1 / Math.pow(10, results[1].length + 1) : Math.pow(10, results[0].length - 3);
-    this.max = !isNaN(this.max) ? this.max : (results[0] !== "0" ? Math.pow(10, results[0].length) : this.step * 1000);
-    this.min = !isNaN(this.min) ? this.min : (this._defaultValue >= 0 ? 0 : -this.max);
-  }
-
-  get defaultValue() {
-    return this._defaultValue;
-  }
-
-  set step(value) {
-    this._input.step = value;
+  set value(value) {
+    this._input.valueAsNumber = value;
   }
 
   get step() {
     return parseFloat(this._input.step);
   }
 
-  set min(value) {
-    this._input.min = value;
+  set step(value) {
+    this._input.step = value.toString();
   }
 
   get min() {
     return parseFloat(this._input.min);
   }
 
-  set max(value) {
-    this._input.max = value;
+  set min(value) {
+    this._input.min = value.toString();
   }
 
   get max() {
     return parseFloat(this._input.max);
   }
 
-  set disabled(value) {
-    this._input.disabled = value;
-  }
-
-  get disabled() {
-    return this._input.disabled;
+  set max(value) {
+    this._input.max = value.toString();
   }
 
   toJSON() {
-    return {
-      name: this.name,
-      type: this.type,
-      value: this.value,
+    return Object.assign(super.toJSON(), {
       step: this.step,
       min: this.min,
       max: this.max,
-    };
+    });
   }
 }
-
-window.customElements.define("dnod-node-input-number", NumberInputElement);
