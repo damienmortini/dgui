@@ -10,6 +10,7 @@ import CheckboxInputElement from "./input/CheckboxInputElement.js";
 import ColorInputElement from "./input/ColorInputElement.js";
 import NumberInputElement from "./input/NumberInputElement.js";
 import RangeInputElement from "./input/RangeInputElement.js";
+import SelectInputElement from "./input/SelectInputElement.js";
 import TextInputElement from "./input/TextInputElement.js";
 
 export default {
@@ -26,6 +27,7 @@ export default {
         "dnod-input-color": ColorInputElement,
         "dnod-input-number": NumberInputElement,
         "dnod-input-range": RangeInputElement,
+        "dnod-input-select": SelectInputElement,
         "dnod-input-text": TextInputElement,
     },
     inputTypeMap: {

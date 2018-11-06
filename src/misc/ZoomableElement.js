@@ -2,7 +2,7 @@ let draggedElement;
 
 export default class ZoomableElement extends HTMLElement {
   static get observedAttributes() {
-    return ["data-handle", "data-target", "min", "max", "zoom", "disabled"];
+    return ["handle", "target", "min", "max", "zoom", "disabled"];
   }
 
   constructor() {
@@ -25,14 +25,12 @@ export default class ZoomableElement extends HTMLElement {
       return;
     }
     switch (name) {
-      case "data-handle":
-        this.handle = new Function(`return ${newValue}`).apply(this);
-        break;
-      case "data-target":
-        this.target = new Function(`return ${newValue}`).apply(this);
+      case "handle":
+      case "target":
+        this[name] = new Function(`return ${newValue}`).apply(this);
         break;
       case "disabled":
-        this.disabled = newValue !== null;
+        this[name] = newValue !== null;
         break;
       default:
         this[name] = parseFloat(newValue);

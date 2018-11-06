@@ -1,10 +1,10 @@
 /**
  * Connector element used to link inputs and other connectors together
- * @attribute data-inputs
- * @attribute data-outputs
+ * @attribute inputs
+ * @attribute outputs
  * @example <dnod-connector
- *    data-inputs="[document.getElementById('input1'), document.getElementById('input2')]"
- *    data-outputs="[document.getElementById('output1'), document.getElementById('output2')]"
+ *    inputs="[document.getElementById('input1'), document.getElementById('input2')]"
+ *    outputs="[document.getElementById('output1'), document.getElementById('output2')]"
  * ></dnod-connector>
  */
 class ConnectorElement extends HTMLElement {
@@ -14,7 +14,7 @@ class ConnectorElement extends HTMLElement {
    * @constant {Array.<String>}
    */
   static get observedAttributes() {
-    return ["data-inputs", "data-outputs"];
+    return ["inputs", "outputs"];
   }
 
   /**

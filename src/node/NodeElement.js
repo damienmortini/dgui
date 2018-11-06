@@ -5,7 +5,7 @@ import "../misc/DraggableElement.js";
  */
 class NodeElement extends HTMLElement {
   static get observedAttributes() {
-    return ["data-name", "data-draggable", "data-open", "data-x", "data-y", "data-width", "data-height"];
+    return ["name", "draggable", "open", "x", "y", "width", "height"];
   }
 
   constructor() {
@@ -45,7 +45,7 @@ class NodeElement extends HTMLElement {
           outline: none;
         }
       </style>
-      <dnod-draggable data-target="this.getRootNode().host">
+      <dnod-draggable target="this.getRootNode().host">
         <slot name="content">
           <details>
             <summary></summary>
@@ -63,8 +63,6 @@ class NodeElement extends HTMLElement {
     if (oldValue === newValue) {
       return;
     }
-
-    name = name.replace("data-", "");
 
     switch (name) {
       case "draggable":

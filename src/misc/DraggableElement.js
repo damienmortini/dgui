@@ -2,7 +2,7 @@ let draggedElement;
 
 export default class DraggableElement extends HTMLElement {
   static get observedAttributes() {
-    return ["data-target", "data-handle", "data-disabled"];
+    return ["target", "handle", "disabled"];
   }
 
   constructor() {
@@ -68,14 +68,12 @@ export default class DraggableElement extends HTMLElement {
       return;
     }
     switch (name) {
-      case "data-target":
-        this.target = new Function(`return ${newValue}`).apply(this);
+      case "target":
+      case "handle":
+        this[name] = new Function(`return ${newValue}`).apply(this);
         break;
-      case "data-handle":
-        this.handle = new Function(`return ${newValue}`).apply(this);
-        break;
-      case "data-disabled":
-        this.disabled = newValue === "true";
+      case "disabled":
+        this[name] = newValue === "true";
         break;
     }
   }
@@ -127,7 +125,7 @@ export default class DraggableElement extends HTMLElement {
       this.target.addEventListener("dragstart", this._preventDefaultBinded);
     }
 
-    this.setAttribute("data-disabled", this._disabled);
+    this.setAttribute("disabled", this._disabled);
   }
 
   _preventDefault(event) {
