@@ -22,7 +22,7 @@ export default class GUI {
 
     nodesData = [...nodesData, attributes];
 
-    if(editor) {
+    if (editor) {
       editor.nodesData = nodesData;
     }
 

@@ -32,7 +32,7 @@
       <!-- <dnod-connector outputs="[this.getRootNode().host]"></dnod-connector>
       <dnod-connector inputs="[this.getRootNode().host]"></dnod-connector> -->
   
-      <dnod-input name="Base"></dnod-input>
+      <dnod-connectors><dnod-input name="Base"></dnod-input></dnod-connectors>
       <dnod-input-button name="Button" onclick="this.value = Math.random()"></dnod-input-button>
       <dnod-input-checkbox name="Checkbox"></dnod-input-checkbox>
       <dnod-input-color name="Color"></dnod-input-color>
@@ -42,7 +42,7 @@
       <dnod-input-text name="Text"></dnod-input-text>
     </dnod-node>
 
-    <!-- <dnod-node name="Output node" oninput="this.querySelector('#result').value = this.querySelector('#source').value + ' World!'"
+    <dnod-node name="Output node" oninput="this.querySelector('#result').value = this.querySelector('#source').value + ' World!'"
       x="350" y="200" width="250">
       <dnod-connector id="connector2" outputs="[this.nextElementSibling]"></dnod-connector>
       <input type="text" id="source" name="output">
@@ -72,7 +72,7 @@
       <section>
         <input type="text" id="tata" disabled style="width: 100%; box-sizing: border-box;">
       </section>
-    </dnod-node> -->
+    </dnod-node>
   </dnod-editor>
 
 

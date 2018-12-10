@@ -12,12 +12,14 @@ import NumberInputElement from "./input/NumberInputElement.js";
 import RangeInputElement from "./input/RangeInputElement.js";
 import SelectInputElement from "./input/SelectInputElement.js";
 import TextInputElement from "./input/TextInputElement.js";
+import ConnectorsElement from "./connectors/ConnectorsElement.js";
 
 export default {
     customElementsMap: {
         "dnod-editor": EditorElement,
         "dnod-link": LinkElement,
         "dnod-connector": LinkableConnectorElement,
+        "dnod-connectors": ConnectorsElement,
         "dnod-draggable": DraggableElement,
         "dnod-zoomable": ZoomableElement,
         "dnod-node": NodeElement,
