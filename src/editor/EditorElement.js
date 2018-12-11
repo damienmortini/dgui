@@ -1,6 +1,10 @@
 import Config from "../dnod.config.js";
 
 export default class EditorElement extends HTMLElement {
+  static get observedAttributes() {
+    return ["draggable", "zoomable"];
+  }
+
   constructor() {
     super();
 
@@ -8,29 +12,52 @@ export default class EditorElement extends HTMLElement {
       <style>
         :host {
           display: block;
+        }
+
+        dnod-zoomable, dnod-draggable {
+          position: absolute;
           width: 100%;
           height: 100%;
         }
-
-        dnod-zoomable {
-          position: absolute;
-        }
       </style>
-      <dnod-zoomable data-handle="this.getRootNode().host" min=".1" max="3">
-        <dnod-draggable data-handle="this.getRootNode().host">
+      <dnod-zoomable handle="this.getRootNode().host" min=".1" max="3">
+        <dnod-draggable handle="this.getRootNode().host">
             <slot></slot>
         </dnod-draggable>
       </dnod-zoomable>
     `;
 
-    const zoomable = this.shadowRoot.querySelector("dnod-zoomable");
-    const draggable = this.shadowRoot.querySelector("dnod-draggable");
+    this._zoomable = this.shadowRoot.querySelector("dnod-zoomable");
+    this._draggable = this.shadowRoot.querySelector("dnod-draggable");
 
-    zoomable.addEventListener("zoom", () => {
-      draggable.dragFactor = 1 / zoomable.zoom;
+    this._zoomable.addEventListener("zoom", () => {
+      this._draggable.dragFactor = 1 / this._zoomable.zoom;
     });
 
     this._nodesDataMap = new Map();
+  }
+
+  attributeChangedCallback(name, oldValue, newValue) {
+    if (oldValue === newValue) {
+      return;
+    }
+    this[name] = newValue === "true";
+  }
+
+  get zoomable() {
+    return this._zoomable.disabled;
+  }
+
+  set zoomable(value) {
+    this._zoomable.disabled = !value;
+  }
+
+  get draggable() {
+    return this._draggable.disabled;
+  }
+
+  set draggable(value) {
+    this._draggable.disabled = !value;
   }
 
   get nodesData() {

@@ -71,7 +71,7 @@ export default class ZoomableElement extends HTMLElement {
 
     this.disconnectedCallback();
 
-    if(!this._disabled) {
+    if (!this._disabled) {
       this._handle.addEventListener("wheel", this._onWheelBinded = this._onWheelBinded || this._onWheel.bind(this));
     }
   }

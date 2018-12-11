@@ -21,6 +21,11 @@
       margin: 0;
       overflow: hidden;
     }
+
+    dnod-editor {
+      width: 100%;
+      height: 100%;
+    }
   </style>
 </head>
 
@@ -31,8 +36,10 @@
     <dnod-node name="Test">
       <!-- <dnod-connector outputs="[this.getRootNode().host]"></dnod-connector>
       <dnod-connector inputs="[this.getRootNode().host]"></dnod-connector> -->
-  
-      <dnod-connectors><dnod-input name="Base"></dnod-input></dnod-connectors>
+
+      <dnod-connectors>
+        <dnod-input name="Base"></dnod-input>
+      </dnod-connectors>
       <dnod-input-button name="Button" onclick="this.value = Math.random()"></dnod-input-button>
       <dnod-input-checkbox name="Checkbox"></dnod-input-checkbox>
       <dnod-input-color name="Color"></dnod-input-color>

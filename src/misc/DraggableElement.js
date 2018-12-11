@@ -32,14 +32,8 @@ export default class DraggableElement extends HTMLElement {
         slot:hover {
           outline: 1px dotted;
         }
-
-        slot svg {
-          width: 100%;
-          height: 100%;
-          pointer-events: none;
-        }
       </style>
-      <slot><svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><path d='M7 4a1 1 0 1 1-1-1 1 1 0 0 1 1 1zm3 1a1 1 0 1 0-1-1 1 1 0 0 0 1 1zM6 7a1 1 0 1 0 1 1 1 1 0 0 0-1-1zm4 0a1 1 0 1 0 1 1 1 1 0 0 0-1-1zm-4 4a1 1 0 1 0 1 1 1 1 0 0 0-1-1zm4 0a1 1 0 1 0 1 1 1 1 0 0 0-1-1z'/></svg></slot>
+      <slot></slot>
     `;
 
     this.dragFactor = 1;
