@@ -13,7 +13,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Damien Mortini",
-  "license": "MIT",
+  "license": "ISC",
   "dependencies": {
     "@webcomponents/webcomponentsjs": "^2.0.2",
     "dlib": "0.0.81",

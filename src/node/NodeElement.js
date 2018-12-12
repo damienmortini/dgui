@@ -1,5 +1,3 @@
-import "../misc/DraggableElement.js";
-
 /**
  * Node Element
  */

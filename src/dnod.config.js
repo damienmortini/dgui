@@ -1,17 +1,17 @@
 import LinkableConnectorElement from "./connector/LinkableConnectorElement.js";
 import EditorElement from "./editor/EditorElement.js";
 import NodeElement from "./node/NodeElement.js";
-import ZoomableElement from "./misc/ZoomableElement.js";
-import DraggableElement from "./misc/DraggableElement.js";
+import ZoomableElement from "../node_modules/dlmn/utils/ZoomableElement.js";
+import DraggableElement from "../node_modules/dlmn/utils/DraggableElement.js";
 import LinkElement from "./link/LinkElement.js";
-import InputElement from "./input/InputElement.js";
-import ButtonInputElement from "./input/ButtonInputElement.js";
-import CheckboxInputElement from "./input/CheckboxInputElement.js";
-import ColorInputElement from "./input/ColorInputElement.js";
-import NumberInputElement from "./input/NumberInputElement.js";
-import RangeInputElement from "./input/RangeInputElement.js";
-import SelectInputElement from "./input/SelectInputElement.js";
-import TextInputElement from "./input/TextInputElement.js";
+import InputElement from "../node_modules/dlmn/input/InputElement.js";
+import ButtonInputElement from "../node_modules/dlmn/input/ButtonInputElement.js";
+import CheckboxInputElement from "../node_modules/dlmn/input/CheckboxInputElement.js";
+import ColorInputElement from "../node_modules/dlmn/input/ColorInputElement.js";
+import NumberInputElement from "../node_modules/dlmn/input/NumberInputElement.js";
+import RangeInputElement from "../node_modules/dlmn/input/RangeInputElement.js";
+import SelectInputElement from "../node_modules/dlmn/input/SelectInputElement.js";
+import TextInputElement from "../node_modules/dlmn/input/TextInputElement.js";
 import ConnectorsElement from "./connectors/ConnectorsElement.js";
 
 export default {
