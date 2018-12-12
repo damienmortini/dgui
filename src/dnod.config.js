@@ -1,8 +1,8 @@
+import ZoomableElement from "../node_modules/dlmn/utils/ZoomableElement.js";
+import DraggableElement from "../node_modules/dlmn/utils/DraggableElement.js";
 import LinkableConnectorElement from "./connector/LinkableConnectorElement.js";
 import EditorElement from "./editor/EditorElement.js";
 import NodeElement from "./node/NodeElement.js";
-import ZoomableElement from "../node_modules/dlmn/utils/ZoomableElement.js";
-import DraggableElement from "../node_modules/dlmn/utils/DraggableElement.js";
 import LinkElement from "./link/LinkElement.js";
 import InputElement from "../node_modules/dlmn/input/InputElement.js";
 import ButtonInputElement from "../node_modules/dlmn/input/ButtonInputElement.js";
@@ -16,12 +16,12 @@ import ConnectorsElement from "./connectors/ConnectorsElement.js";
 
 export default {
     customElementsMap: {
+        "dnod-draggable": DraggableElement,
+        "dnod-zoomable": ZoomableElement,
         "dnod-editor": EditorElement,
         "dnod-link": LinkElement,
         "dnod-connector": LinkableConnectorElement,
         "dnod-connectors": ConnectorsElement,
-        "dnod-draggable": DraggableElement,
-        "dnod-zoomable": ZoomableElement,
         "dnod-node": NodeElement,
         "dnod-input": InputElement,
         "dnod-input-button": ButtonInputElement,

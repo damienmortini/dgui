@@ -1,7 +1,7 @@
 /**
  * Node Element
  */
-class NodeElement extends HTMLElement {
+export default class NodeElement extends HTMLElement {
   static get observedAttributes() {
     return ["name", "draggable", "open", "x", "y", "width", "height"];
   }
@@ -14,21 +14,18 @@ class NodeElement extends HTMLElement {
         :host {
           display: block;
           overflow: auto;
-          resize: both;
+          resize: horizontal;
           width: 200px;
-        }
-        
-        :host(.draggable) {
           border: 1px dotted;
           position: absolute;
           background: rgba(255, 255, 255, .9);
         }
 
-        :host(.draggable:hover) {
+        :host(:hover) {
           border: 1px dashed;
         }
 
-        :host(.draggable:focus-within) {
+        :host(:focus-within) {
           border: 1px solid;
           z-index: 1;
         }
@@ -43,15 +40,15 @@ class NodeElement extends HTMLElement {
           outline: none;
         }
       </style>
-      <dnod-draggable target="this.getRootNode().host">
-        <slot name="content">
-          <details>
-            <summary></summary>
-            <slot></slot>
-          </details>
-        </slot>
-      </dnod-draggable>
+      <details>
+        <summary></summary>
+        <slot></slot>
+      </details>
+      <dnod-draggable targets="[this.getRootNode().host]"></dnod-draggable>
     `;
+
+    this._draggable = this.shadowRoot.querySelector("dnod-draggable");
+    this._draggable.handles = [this.shadowRoot.querySelector("summary"), this.shadowRoot.querySelector("details")];
 
     this.open = true;
     this.draggable = true;
@@ -97,14 +94,12 @@ class NodeElement extends HTMLElement {
   }
 
   get draggable() {
-    return this._draggable;
+    return !this._draggable.disabled;
   }
 
   set draggable(value) {
-    this._draggable = value;
-    super.draggable = this._draggable;
-    this.shadowRoot.querySelector("dnod-draggable").disabled = !this._draggable;
-    this.classList.toggle("draggable", this._draggable);
+    this._draggable.disabled = !value;
+    super.draggable = value;
   }
 
   get x() {
@@ -156,7 +151,3 @@ class NodeElement extends HTMLElement {
     };
   }
 }
-
-window.customElements.define("dnod-node", NodeElement);
-
-export default NodeElement;
