@@ -30,8 +30,6 @@
 </head>
 
 <body>
-  <!-- <script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script> -->
-
   <dnod-editor>
     <dnod-node name="Test">
       <!-- <dnod-connector outputs="[this.getRootNode().host]"></dnod-connector>
@@ -85,6 +83,10 @@
 
   <script type="module">
     import(`./${/\bdev\b/.test(window.location.search) ? "src" : "build"}/index.js`);
+
+    // import DraggableElement from "../node_modules/dlmn/util/DraggableElement.js";
+
+    // customElements.define("dlmn-draggable", DraggableElement);
 
     // const node = document.createElement("dnod-node-group");
     // node.style.width = "300px";

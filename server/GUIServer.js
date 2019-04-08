@@ -1,5 +1,5 @@
 const fs = require("fs");
-const WebSocket = require("../../../AppData/Local/Microsoft/TypeScript/2.9/node_modules/@types/ws/index");
+const WebSocket = require("ws");
 const WebSocketServer = WebSocket.Server;
 const https = require("https");
 
@@ -9,7 +9,7 @@ const server = new https.createServer({
 }, (req, res) => {
   res.writeHead(200);
   res.end("WebSocket server running");
-}).listen(8000);
+}).listen(6251);
 
 module.exports = class GUIServer {
   constructor(options = { server }) {
@@ -53,7 +53,7 @@ module.exports = class GUIServer {
           console.log(`GUI - Data File URL: "${data.data}"`);
           dataFileURL = data.data;
         } else {
-          for (let client of this.webSocketServer.clients) {
+          for (const client of this.webSocketServer.clients) {
             if (webSocket === client) {
               continue;
             }

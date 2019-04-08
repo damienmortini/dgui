@@ -4,7 +4,7 @@
   "description": "The ultimate node editor to become",
   "main": "index.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "dsrv --path=?dev",
     "server": "nodemon --watch server server/index.js",
     "build": "rollup -c",
     "docs": "jsdoc src -r -d docs",
@@ -15,17 +15,14 @@
   "author": "Damien Mortini",
   "license": "ISC",
   "dependencies": {
-    "@webcomponents/webcomponentsjs": "^2.0.2",
-    "dlib": "0.0.81",
-    "nodemon": "^1.17.5",
-    "ws": "^5.2.1"
+    "dlib": "0.0.97",
+    "dlmn": "0.0.7",
+    "ws": "^6.2.1"
   },
   "devDependencies": {
-    "babel-minify": "^0.4.3",
-    "browser-sync": "^2.24.5",
-    "http2": "^3.3.7",
+    "dsrv": "0.0.3",
     "jsdoc": "^3.5.5",
-    "rollup": "^0.62.0",
-    "terser": "^3.8.1"
+    "rollup": "^1.9.0",
+    "terser": "^3.17.0"
   }
 }

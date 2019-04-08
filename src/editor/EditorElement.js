@@ -66,7 +66,7 @@ export default class EditorElement extends HTMLElement {
 
   set nodesData(value) {
     this.innerHTML = "";
-    for (let node of value) {
+    for (const node of value) {
       if (!node.type) {
         for (const typeResolverKey in Config.typeResolvers) {
           node.type = Config.typeResolvers[typeResolverKey](node) ? typeResolverKey : node.type;
@@ -77,7 +77,7 @@ export default class EditorElement extends HTMLElement {
         node.type = "dnod-node-group";
       }
 
-      let nodeElement = this._nodesDataMap.get(node.name) || document.createElement(Config.inputTypeMap[node.type] || node.type);
+      const nodeElement = this._nodesDataMap.get(node.name) || document.createElement(Config.inputTypeMap[node.type] || node.type);
       this._nodesDataMap.set(node.name, nodeElement);
       Object.assign(nodeElement, node);
       this.appendChild(nodeElement);
