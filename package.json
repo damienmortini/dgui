@@ -1,5 +1,5 @@
 {
-  "name": "dnod",
+  "name": "@damienmortini/graph",
   "version": "0.0.7",
   "description": "The ultimate node editor to become",
   "main": "index.js",
@@ -15,12 +15,12 @@
   "author": "Damien Mortini",
   "license": "ISC",
   "dependencies": {
-    "dlib": "0.0.97",
-    "dlmn": "0.0.7",
+    "@damienmortini/elements": "0.0.9",
+    "@damienmortini/lib": "0.0.102",
     "ws": "^6.2.1"
   },
   "devDependencies": {
-    "dsrv": "0.0.3",
+    "@damienmortini/server": "0.0.6",
     "jsdoc": "^3.5.5",
     "rollup": "^1.9.0",
     "terser": "^3.17.0"

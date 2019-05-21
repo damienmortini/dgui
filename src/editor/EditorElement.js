@@ -1,4 +1,4 @@
-import Config from "../dnod.config.js";
+import Config from "../graph.config.js";
 
 export default class EditorElement extends HTMLElement {
   static get observedAttributes() {
@@ -14,21 +14,21 @@ export default class EditorElement extends HTMLElement {
           display: block;
         }
 
-        dnod-zoomable, dnod-draggable {
+        graph-zoomable, graph-draggable {
           position: absolute;
           width: 100%;
           height: 100%;
         }
       </style>
-      <dnod-zoomable handle="this.getRootNode().host" min=".1" max="3">
-        <dnod-draggable handle="this.getRootNode().host">
+      <graph-zoomable handle="this.getRootNode().host" min=".1" max="3">
+        <graph-draggable handle="this.getRootNode().host">
             <slot></slot>
-        </dnod-draggable>
-      </dnod-zoomable>
+        </graph-draggable>
+      </graph-zoomable>
     `;
 
-    this._zoomable = this.shadowRoot.querySelector("dnod-zoomable");
-    this._draggable = this.shadowRoot.querySelector("dnod-draggable");
+    this._zoomable = this.shadowRoot.querySelector("graph-zoomable");
+    this._draggable = this.shadowRoot.querySelector("graph-draggable");
 
     this._zoomable.addEventListener("zoom", () => {
       this._draggable.dragFactor = 1 / this._zoomable.zoom;
@@ -74,7 +74,7 @@ export default class EditorElement extends HTMLElement {
       }
 
       if (!node.type && node.nodes) {
-        node.type = "dnod-node-group";
+        node.type = "graph-node-group";
       }
 
       const nodeElement = this._nodesDataMap.get(node.name) || document.createElement(Config.inputTypeMap[node.type] || node.type);

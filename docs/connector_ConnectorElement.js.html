@@ -30,10 +30,10 @@
  * Connector element used to link inputs and other connectors together
  * @attribute data-inputs
  * @attribute data-outputs
- * @example &lt;dnod-connector
+ * @example &lt;graph-connector
  *    data-inputs="[document.getElementById('input1'), document.getElementById('input2')]"
  *    data-outputs="[document.getElementById('output1'), document.getElementById('output2')]"
- * >&lt;/dnod-connector>
+ * >&lt;/graph-connector>
  */
 class ConnectorElement extends HTMLElement {
   /**
@@ -285,7 +285,7 @@ class ConnectorElement extends HTMLElement {
   }
 }
 
-window.customElements.define("dnod-connector", ConnectorElement);
+window.customElements.define("graph-connector", ConnectorElement);
 
 export default ConnectorElement;
 </code></pre>

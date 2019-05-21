@@ -44,10 +44,10 @@ export default class NodeElement extends HTMLElement {
         <summary></summary>
         <slot></slot>
       </details>
-      <dnod-draggable targets="[this.getRootNode().host]"></dnod-draggable>
+      <graph-draggable targets="[this.getRootNode().host]"></graph-draggable>
     `;
 
-    this._draggable = this.shadowRoot.querySelector("dnod-draggable");
+    this._draggable = this.shadowRoot.querySelector("graph-draggable");
     this._draggable.handles = [this.shadowRoot.querySelector("summary"), this.shadowRoot.querySelector("details")];
 
     this.open = true;

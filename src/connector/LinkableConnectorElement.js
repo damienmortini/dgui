@@ -23,13 +23,13 @@ class LinkableConnectorElement extends ConnectorElement {
     let element = this;
     while (element) {
       element = element.parentElement || element.getRootNode().host;
-      if (element.tagName === "DNOD-EDITOR") {
+      if (element && element.tagName === "graph-EDITOR") {
         root = element;
         break;
       }
     }
 
-    const link = document.createElement("dnod-link");
+    const link = document.createElement("graph-link");
     root.prepend(link);
     return link;
   }

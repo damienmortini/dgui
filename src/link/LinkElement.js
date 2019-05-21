@@ -1,5 +1,5 @@
-import Ticker from "../../node_modules/dlib/util/Ticker.js";
-import Pointer from "../../node_modules/dlib/input/Pointer.js";
+import Ticker from "../../node_modules/@damienmortini/lib/util/Ticker.js";
+import Pointer from "../../node_modules/@damienmortini/lib/input/Pointer.js";
 
 const POINTER = Pointer.get();
 
@@ -106,7 +106,7 @@ export default class LinkElement extends HTMLElement {
       let isNode = false;
       do {
         inBoundingRect = input.getBoundingClientRect();
-        isNode = input.nodeName === "DNOD-NODE";
+        isNode = input.nodeName === "graph-NODE";
         input = input.parentElement;
       } while (inBoundingRect.x + inBoundingRect.y + inBoundingRect.width + inBoundingRect.height === 0);
       inputX = (inBoundingRect.x + inBoundingRect.width * (isNode ? 1 : .5) - rootBoundingRect.x) / scaleMarkerBoundingRect.width;
@@ -121,7 +121,7 @@ export default class LinkElement extends HTMLElement {
       let isNode = false;
       do {
         outBoundingRect = output.getBoundingClientRect();
-        isNode = output.nodeName === "DNOD-NODE";
+        isNode = output.nodeName === "graph-NODE";
         output = output.parentElement;
       } while (outBoundingRect.x + outBoundingRect.y + outBoundingRect.width + outBoundingRect.height === 0);
       outputX = (outBoundingRect.x + outBoundingRect.width * (isNode ? 0 : .5) - rootBoundingRect.x) / scaleMarkerBoundingRect.width;
@@ -173,4 +173,4 @@ export default class LinkElement extends HTMLElement {
   }
 }
 
-window.customElements.define("dnod-link", LinkElement);
+window.customElements.define("graph-link", LinkElement);

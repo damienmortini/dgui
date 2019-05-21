@@ -2,10 +2,10 @@
  * Connector element used to link inputs and other connectors together
  * @attribute inputs
  * @attribute outputs
- * @example <dnod-connector
+ * @example <graph-connector
  *    inputs="[document.getElementById('input1'), document.getElementById('input2')]"
  *    outputs="[document.getElementById('output1'), document.getElementById('output2')]"
- * ></dnod-connector>
+ * ></graph-connector>
  */
 class ConnectorElement extends HTMLElement {
   /**

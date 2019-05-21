@@ -1,4 +1,4 @@
-import WebSocket from '../node_modules/dlib/utils/WebSocket.js';
+import WebSocket from '../node_modules/@damienmortini/lib/utils/WebSocket.js';
 
 export default class GUIDataController {
   constructor(gui) {
@@ -14,14 +14,14 @@ export default class GUIDataController {
   }
 
   _getURLGUIData() {
-    return JSON.parse(new URLSearchParams(location.hash).get('dnod'));
+    return JSON.parse(new URLSearchParams(location.hash).get('graph'));
   }
 
   onGUIChange() {
     clearTimeout(this._setTimeout);
     this._setTimeout = setTimeout(() => {
       const urlSearchParams = new URLSearchParams(location.hash);
-      urlSearchParams.set('dnod', JSON.stringify(this._gui));
+      urlSearchParams.set('graph', JSON.stringify(this._gui));
       // location.hash = urlSearchParams.toString();
     }, 100);
   }

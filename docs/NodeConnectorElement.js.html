@@ -30,10 +30,10 @@
  * Node Connector element used to link input elements together
  * @attribute data-inputs
  * @attribute data-outputs
- * @example &lt;dnod-node-connector
+ * @example &lt;graph-node-connector
  *    data-inputs="[document.getElementById('input1'), document.getElementById('input2')]"
  *    data-outputs="[document.getElementById('output1'), document.getElementById('output2')]"
- * >&lt;/dnod-node-connector>
+ * >&lt;/graph-node-connector>
  */
 class NodeConnectorElement extends HTMLElement {
   /**
@@ -190,7 +190,7 @@ class NodeConnectorElement extends HTMLElement {
   }
 }
 
-window.customElements.define("dnod-node-connector", NodeConnectorElement);
+window.customElements.define("graph-node-connector", NodeConnectorElement);
 
 export default NodeConnectorElement;
 </code></pre>

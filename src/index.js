@@ -1,4 +1,4 @@
-import Config from "./dnod.config.js";
+import Config from "./graph.config.js";
 
 for (const customElementName in Config.customElementsMap) {
   if (customElements.get(customElementName) === undefined) {

@@ -9,13 +9,13 @@ export default class ConnectorsElement extends HTMLElement {
           align-items: center;
         }
       </style>
-      <dnod-connector></dnod-connector>
+      <graph-connector></graph-connector>
       <slot></slot>
-      <dnod-connector inputs="[this.previousElementSibling]"></dnod-connector>
+      <graph-connector inputs="[this.previousElementSibling]"></graph-connector>
     `;
   }
 
   connectedCallback() {
-    this.shadowRoot.querySelector("dnod-connector").outputs.add(this.firstChild);
+    this.shadowRoot.querySelector("graph-connector").outputs.add(this.firstChild);
   }
 }

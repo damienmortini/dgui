@@ -39,18 +39,18 @@ class NodeElement extends HTMLElement {
           outline: none;
         }
 
-        dnod-draggable {
+        graph-draggable {
           display: contents;
         }
       </style>
-      <dnod-draggable draggable="false" data-target="this.getRootNode().host">
+      <graph-draggable draggable="false" data-target="this.getRootNode().host">
         <slot name="content">
           <details>
             <summary></summary>
             <slot></slot>
           </details>
         </slot>
-      </dnod-draggable>
+      </graph-draggable>
     `;
 
     this._details = this.shadowRoot.querySelector("details");
@@ -71,7 +71,7 @@ class NodeElement extends HTMLElement {
         this.enabled = this[name] = newValue !== null;
         break;
       case "draggable":
-        this.shadowRoot.querySelector("dnod-draggable").setAttribute(name, newValue);
+        this.shadowRoot.querySelector("graph-draggable").setAttribute(name, newValue);
         break;
       default:
         this[name] = newValue;
@@ -146,17 +146,17 @@ class NodeElement extends HTMLElement {
   }
 }
 
-window.customElements.define("dnod-node", NodeElement);
+window.customElements.define("graph-node", NodeElement);
 
 var GUIConfig = {
     inputTypeMap: {
-        "button": "dnod-node-input-button",
-        "checkbox": "dnod-node-input-checkbox",
-        "color": "dnod-node-input-color",
-        "number": "dnod-node-input-number",
-        "range": "dnod-node-input-range",
-        "select": "dnod-node-input-select",
-        "text": "dnod-node-input-text",
+        "button": "graph-node-input-button",
+        "checkbox": "graph-node-input-checkbox",
+        "color": "graph-node-input-color",
+        "number": "graph-node-input-number",
+        "range": "graph-node-input-range",
+        "select": "graph-node-input-select",
+        "text": "graph-node-input-text",
     },
     typeResolvers: {
         "text": (attributes) => typeof attributes.value === "string",
@@ -351,7 +351,7 @@ class DraggableElement extends HTMLElement {
   }
 }
 
-window.customElements.define("dnod-draggable", DraggableElement);
+window.customElements.define("graph-draggable", DraggableElement);
 
 class ZoomableElement extends HTMLElement {
   static get observedAttributes() {
@@ -467,7 +467,7 @@ class ZoomableElement extends HTMLElement {
   }
 }
 
-window.customElements.define("dnod-zoomable", ZoomableElement);
+window.customElements.define("graph-zoomable", ZoomableElement);
 
 class NodeEditor extends HTMLElement {
   constructor() {
@@ -479,32 +479,32 @@ class NodeEditor extends HTMLElement {
           display: block;
         }
 
-        dnod-zoomable, dnod-draggable {
+        graph-zoomable, graph-draggable {
           position: absolute;
           left: 0;
           top: 0;
           will-change: transform;
         }
 
-        dnod-draggable:hover {
+        graph-draggable:hover {
           outline: none;
         }
         
-        dnod-zoomable {
+        graph-zoomable {
           width: 100%;
           height: 100%;
         }
       </style>
-      <dnod-node-link-system data-listener="this.getRootNode().host"></dnod-node-link-system>
-      <dnod-zoomable data-listener="this.getRootNode().host" min=".1" max="3">
-        <dnod-draggable draggable="true" data-deep-drag-factor="true" data-handle="this.getRootNode().host">
+      <graph-node-link-system data-listener="this.getRootNode().host"></graph-node-link-system>
+      <graph-zoomable data-listener="this.getRootNode().host" min=".1" max="3">
+        <graph-draggable draggable="true" data-deep-drag-factor="true" data-handle="this.getRootNode().host">
           <slot></slot>
-        </dnod-draggable>
-      </dnod-zoomable>
+        </graph-draggable>
+      </graph-zoomable>
     `;
 
-    const zoomable = this.shadowRoot.querySelector("dnod-zoomable");
-    const draggable = this.shadowRoot.querySelector("dnod-draggable");
+    const zoomable = this.shadowRoot.querySelector("graph-zoomable");
+    const draggable = this.shadowRoot.querySelector("graph-draggable");
 
     zoomable.addEventListener("zoom", () => {
       draggable.dragFactor = 1 / zoomable.zoom;
@@ -527,7 +527,7 @@ class NodeEditor extends HTMLElement {
       }
 
       if (!node.type && node.nodes) {
-        node.type = "dnod-node-group";
+        node.type = "graph-node-group";
       }
 
       let nodeElement = this._nodesDataMap.get(node.name) || document.createElement(GUIConfig.inputTypeMap[node.type] || node.type);
@@ -538,7 +538,7 @@ class NodeEditor extends HTMLElement {
   }
 }
 
-window.customElements.define("dnod-node-editor", NodeEditor);
+window.customElements.define("graph-node-editor", NodeEditor);
 
 class Signal extends Set {
   constructor() {
@@ -1302,7 +1302,7 @@ class NodeLinkElement extends HTMLElement {
   }
 }
 
-window.customElements.define("dnod-node-link", NodeLinkElement);
+window.customElements.define("graph-node-link", NodeLinkElement);
 
 class NodeLinkSystemElement extends HTMLElement {
   static get observedAttributes() {
@@ -1344,7 +1344,7 @@ class NodeLinkSystemElement extends HTMLElement {
   }
 
   _onNodeConnect(event) {
-    this._currentLink = document.createElement("dnod-node-link");
+    this._currentLink = document.createElement("graph-node-link");
     if (event.target.destination) {
       this._currentLink.out = event.target;
     } else {
@@ -1395,7 +1395,7 @@ class NodeLinkSystemElement extends HTMLElement {
   }
 }
 
-window.customElements.define("dnod-node-link-system", NodeLinkSystemElement);
+window.customElements.define("graph-node-link-system", NodeLinkSystemElement);
 
 let activeConnector = null;
 
@@ -1612,7 +1612,7 @@ class NodeConnectorElement extends HTMLElement {
   }
 }
 
-window.customElements.define("dnod-node-connector", NodeConnectorElement);
+window.customElements.define("graph-node-connector", NodeConnectorElement);
 
 class SelectInputNodeElement extends HTMLElement {
   static get observedAttributes() {
@@ -1638,11 +1638,11 @@ class SelectInputNodeElement extends HTMLElement {
           height: 100%;
         }
       </style>
-      <dnod-node-connector data-destination="this.getRootNode().host"></dnod-node-connector>
-      <dnod-draggable-handle data-target="this.getRootNode().host"></dnod-draggable-handle>
+      <graph-node-connector data-destination="this.getRootNode().host"></graph-node-connector>
+      <graph-draggable-handle data-target="this.getRootNode().host"></graph-draggable-handle>
       <label></label>
       <select></select>
-      <dnod-node-connector data-source="this.getRootNode().host"></dnod-node-connector>
+      <graph-node-connector data-source="this.getRootNode().host"></graph-node-connector>
     `;
 
     this._optionsMap = new Map();
@@ -1726,7 +1726,7 @@ class SelectInputNodeElement extends HTMLElement {
   }
 }
 
-window.customElements.define("dnod-node-input-select", SelectInputNodeElement);
+window.customElements.define("graph-node-input-select", SelectInputNodeElement);
 
 class ButtonInputNodeElement extends HTMLElement {
   static get observedAttributes() {
@@ -1752,12 +1752,12 @@ class ButtonInputNodeElement extends HTMLElement {
           height: 100%;
         }
       </style>
-      <dnod-node-connector data-destination="this.getRootNode().host"></dnod-node-connector>
-      <dnod-draggable-handle data-target="this.getRootNode().host"></dnod-draggable-handle>
+      <graph-node-connector data-destination="this.getRootNode().host"></graph-node-connector>
+      <graph-draggable-handle data-target="this.getRootNode().host"></graph-draggable-handle>
       <button>
         <slot></slot>
       </button>
-      <dnod-node-connector data-source="this.getRootNode().host"></dnod-node-connector>
+      <graph-node-connector data-source="this.getRootNode().host"></graph-node-connector>
     `;
 
     this._slot = this.shadowRoot.querySelector("slot");
@@ -1816,5 +1816,5 @@ class ButtonInputNodeElement extends HTMLElement {
   }
 }
 
-window.customElements.define("dnod-node-input-button", ButtonInputNodeElement);
+window.customElements.define("graph-node-input-button", ButtonInputNodeElement);
 //# sourceMappingURL=index.js.map

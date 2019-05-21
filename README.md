@@ -1,6 +1,6 @@
 [![experimental](http://badges.github.io/stability-badges/dist/experimental.svg)](http://github.com/badges/stability-badges)
 
-# dnod
+# graph
 
 Node Editor acting as a bridge to share data between any app using Web Sockets.
 

@@ -11,8 +11,8 @@
   </script> -->
 
   <meta charset="UTF-8">
-  <title>dnod</title>
-  <meta name="description" content="dnod">
+  <title>graph</title>
+  <meta name="description" content="graph">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <style>
     html,
@@ -22,7 +22,7 @@
       overflow: hidden;
     }
 
-    dnod-editor {
+    graph-editor {
       width: 100%;
       height: 100%;
     }
@@ -30,55 +30,55 @@
 </head>
 
 <body>
-  <dnod-editor>
-    <dnod-node name="Test">
-      <!-- <dnod-connector outputs="[this.getRootNode().host]"></dnod-connector>
-      <dnod-connector inputs="[this.getRootNode().host]"></dnod-connector> -->
+  <graph-editor>
+    <graph-node name="Test">
+      <!-- <graph-connector outputs="[this.getRootNode().host]"></graph-connector>
+      <graph-connector inputs="[this.getRootNode().host]"></graph-connector> -->
 
-      <dnod-connectors>
-        <dnod-input name="Base"></dnod-input>
-      </dnod-connectors>
-      <dnod-input-button name="Button" onclick="this.value = Math.random()"></dnod-input-button>
-      <dnod-input-checkbox name="Checkbox"></dnod-input-checkbox>
-      <dnod-input-color name="Color"></dnod-input-color>
-      <dnod-input-number name="Number"></dnod-input-number>
-      <dnod-input-range name="Range"></dnod-input-range>
-      <dnod-input-select name="Select" options="[1, 2, 3]"></dnod-input-select>
-      <dnod-input-text name="Text"></dnod-input-text>
-    </dnod-node>
+      <graph-connectors>
+        <graph-input name="Base"></graph-input>
+      </graph-connectors>
+      <graph-input-button name="Button" onclick="this.value = Math.random()"></graph-input-button>
+      <graph-input-checkbox name="Checkbox"></graph-input-checkbox>
+      <graph-input-color name="Color"></graph-input-color>
+      <graph-input-number name="Number"></graph-input-number>
+      <graph-input-range name="Range"></graph-input-range>
+      <graph-input-select name="Select" options="[1, 2, 3]"></graph-input-select>
+      <graph-input-text name="Text"></graph-input-text>
+    </graph-node>
 
-    <dnod-node name="Output node" oninput="this.querySelector('#result').value = this.querySelector('#source').value + ' World!'"
+    <graph-node name="Output node" oninput="this.querySelector('#result').value = this.querySelector('#source').value + ' World!'"
       x="350" y="200" width="250">
-      <dnod-connector id="connector2" outputs="[this.nextElementSibling]"></dnod-connector>
+      <graph-connector id="connector2" outputs="[this.nextElementSibling]"></graph-connector>
       <input type="text" id="source" name="output">
       <input type="text" id="result" disabled style="width: 100%; box-sizing: border-box;">
-    </dnod-node>
+    </graph-node>
 
-    <dnod-node name="Input node" x="50" y="100" width="250">
+    <graph-node name="Input node" x="50" y="100" width="250">
       <input type="text" name="input">
-      <dnod-connector inputs="[this.previousElementSibling]" outputs="[document.querySelector('#connector2')]"></dnod-connector>
-    </dnod-node>
+      <graph-connector inputs="[this.previousElementSibling]" outputs="[document.querySelector('#connector2')]"></graph-connector>
+    </graph-node>
 
-    <dnod-node name="Third node" x="300" y="400" width="250">
+    <graph-node name="Third node" x="300" y="400" width="250">
       <section>
-        <dnod-connector outputs="[this.nextElementSibling]"></dnod-connector>
+        <graph-connector outputs="[this.nextElementSibling]"></graph-connector>
         <input type="text">
-        <dnod-connector inputs="[this.previousElementSibling]"></dnod-connector>
+        <graph-connector inputs="[this.previousElementSibling]"></graph-connector>
       </section>
-    </dnod-node>
+    </graph-node>
 
-    <dnod-node name="Fourth node" oninput="this.querySelector('#tata').value = this.querySelector('#toto').value + '_yoyo'"
+    <graph-node name="Fourth node" oninput="this.querySelector('#tata').value = this.querySelector('#toto').value + '_yoyo'"
       x="200" y="500" width="250">
       <section>
-        <dnod-connector outputs="[this.nextElementSibling]"></dnod-connector>
+        <graph-connector outputs="[this.nextElementSibling]"></graph-connector>
         <input type="text" id="toto">
-        <dnod-connector inputs="[this.previousElementSibling]"></dnod-connector>
+        <graph-connector inputs="[this.previousElementSibling]"></graph-connector>
       </section>
       <section>
         <input type="text" id="tata" disabled style="width: 100%; box-sizing: border-box;">
       </section>
-    </dnod-node>
-  </dnod-editor>
+    </graph-node>
+  </graph-editor>
 
 
   <script type="module">
@@ -88,7 +88,7 @@
 
     // customElements.define("dlmn-draggable", DraggableElement);
 
-    // const node = document.createElement("dnod-node-group");
+    // const node = document.createElement("graph-node-group");
     // node.style.width = "300px";
     // document.body.appendChild(node);
 
@@ -96,7 +96,7 @@
     //   console.log(event);
     // })
 
-    // fetch("dnod-data.json").then(response => response.json()).then(data => {
+    // fetch("graph-data.json").then(response => response.json()).then(data => {
     //   Object.assign(node, data);
     //   console.log(JSON.stringify(node));
     // });

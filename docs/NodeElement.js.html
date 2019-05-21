@@ -73,14 +73,14 @@ class NodeElement extends HTMLElement {
           outline: none;
         }
       &lt;/style>
-      &lt;dnod-draggable data-target="this.getRootNode().host">
+      &lt;graph-draggable data-target="this.getRootNode().host">
         &lt;slot name="content">
           &lt;details>
             &lt;summary>&lt;/summary>
             &lt;slot>&lt;/slot>
           &lt;/details>
         &lt;/slot>
-      &lt;/dnod-draggable>
+      &lt;/graph-draggable>
     `;
 
     this.open = true;
@@ -135,7 +135,7 @@ class NodeElement extends HTMLElement {
   set draggable(value) {
     this._draggable = value;
     super.draggable = this._draggable;
-    this.shadowRoot.querySelector("dnod-draggable").disabled = !this._draggable;
+    this.shadowRoot.querySelector("graph-draggable").disabled = !this._draggable;
     this.classList.toggle("draggable", this._draggable);
   }
 
@@ -189,7 +189,7 @@ class NodeElement extends HTMLElement {
   }
 }
 
-window.customElements.define("dnod-node", NodeElement);
+window.customElements.define("graph-node", NodeElement);
 
 export default NodeElement;</code></pre>
         </article>
