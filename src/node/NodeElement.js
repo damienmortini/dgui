@@ -51,7 +51,7 @@ export default class NodeElement extends HTMLElement {
     this._draggable.handles = [this.shadowRoot.querySelector("summary"), this.shadowRoot.querySelector("details")];
 
     this.open = true;
-    this.draggable = true;
+    // this.draggable = true;
   }
 
   attributeChangedCallback(name, oldValue, newValue) {

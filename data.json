@@ -1,12 +1,14 @@
 {
 	"name": "Root",
-	"nodes": [
+	"children": [
 		{
 			"name": "First node",
-			"nodes": [
+			"type": "graph-node",
+			"width": 250,
+			"children": [
 				{
 					"name": "Select",
-					"type": "select",
+					"type": "graph-input-select",
 					"value": 8,
 					"options": [
 						4,
@@ -17,42 +19,43 @@
 				},
 				{
 					"name": "Checkbox",
-					"type": "checkbox",
+					"type": "graph-input-checkbox",
 					"value": true
 				},
 				{
 					"name": "Color",
-					"type": "color",
+					"type": "graph-input-color",
 					"value": "#ff0000"
 				},
 				{
 					"name": "Number",
-					"type": "number",
+					"type": "graph-input-number",
 					"value": "1.8"
 				},
 				{
 					"name": "Range",
-					"type": "range",
+					"type": "graph-input-range",
 					"value": 1.43
 				},
 				{
 					"name": "Button",
-					"type": "button",
+					"type": "graph-input-button",
 					"value": "Value returned"
 				},
 				{
 					"name": "Text",
-					"type": "text",
+					"type": "graph-input-text",
 					"value": "Lorem ipsum"
 				}
 			]
 		},
 		{
 			"name": "Second node",
-			"nodes": [
+			"type": "graph-node",
+			"children": [
 				{
 					"name": "Select",
-					"type": "select",
+					"type": "graph-input-select",
 					"value": 8,
 					"options": [
 						4,
@@ -63,32 +66,33 @@
 				},
 				{
 					"name": "Checkbox",
-					"type": "checkbox",
+					"type": "graph-input-checkbox",
 					"value": true
 				},
 				{
 					"name": "Color",
-					"type": "color",
+					"type": "graph-input-color",
 					"value": "#ffff00"
 				},
 				{
 					"name": "Number",
-					"type": "number",
+					"type": "graph-input-number",
 					"value": "1.8"
 				},
 				{
 					"name": "Range",
-					"type": "range",
+					"type": "graph-input-range",
+					"max": 2,
 					"value": 1.43
 				},
 				{
 					"name": "Button",
-					"type": "button",
+					"type": "graph-input-button",
 					"value": "Value returned"
 				},
 				{
 					"name": "Text",
-					"type": "text",
+					"type": "graph-input-text",
 					"value": "Lorem ipsum"
 				}
 			]

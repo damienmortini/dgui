@@ -30,11 +30,8 @@
 </head>
 
 <body>
-  <graph-editor>
+  <!-- <graph-editor>
     <graph-node name="Test">
-      <!-- <graph-connector outputs="[this.getRootNode().host]"></graph-connector>
-      <graph-connector inputs="[this.getRootNode().host]"></graph-connector> -->
-
       <graph-connectors>
         <graph-input name="Base"></graph-input>
       </graph-connectors>
@@ -78,11 +75,20 @@
         <input type="text" id="tata" disabled style="width: 100%; box-sizing: border-box;">
       </section>
     </graph-node>
-  </graph-editor>
+  </graph-editor> -->
 
 
   <script type="module">
     import(`./${/\bdev\b/.test(window.location.search) ? "src" : "build"}/index.js`);
+
+    import Graph from "./javascript/index.js";
+
+    const test = {value: .5};
+    Graph.add({
+      object: test,
+      key: "value",
+      path: "test/test"
+    });
 
     // import DraggableElement from "../node_modules/dlmn/util/DraggableElement.js";
 

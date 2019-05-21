@@ -1,7 +1,7 @@
 import ZoomableElement from "../node_modules/@damienmortini/elements/src/util/ZoomableElement.js";
 import DraggableElement from "../node_modules/@damienmortini/elements/src/util/DraggableElement.js";
 import LinkableConnectorElement from "./connector/LinkableConnectorElement.js";
-import EditorElement from "./editor/EditorElement.js";
+import GraphElement from "./graph/GraphElement.js";
 import NodeElement from "./node/NodeElement.js";
 import LinkElement from "./link/LinkElement.js";
 import InputElement from "../node_modules/@damienmortini/elements/src/input/InputElement.js";
@@ -18,7 +18,7 @@ export default {
   customElementsMap: {
     "graph-draggable": DraggableElement,
     "graph-zoomable": ZoomableElement,
-    "graph-editor": EditorElement,
+    "graph-editor": GraphElement,
     "graph-link": LinkElement,
     "graph-connector": LinkableConnectorElement,
     "graph-connectors": ConnectorsElement,

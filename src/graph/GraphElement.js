@@ -1,12 +1,14 @@
 import Config from "../graph.config.js";
 
-export default class EditorElement extends HTMLElement {
+export default class GraphElement extends HTMLElement {
   static get observedAttributes() {
     return ["draggable", "zoomable"];
   }
 
   constructor() {
     super();
+
+    this.childrenMap = new Map();
 
     this.attachShadow({ mode: "open" }).innerHTML = `
       <style>
@@ -81,6 +83,49 @@ export default class EditorElement extends HTMLElement {
       this._nodesDataMap.set(node.name, nodeElement);
       Object.assign(nodeElement, node);
       this.appendChild(nodeElement);
+    }
+  }
+
+  get data() {
+    return JSON.parse(JSON.stringify([...this._nodesDataMap.values()]));
+  }
+
+  set data(value) {
+    this.innerHTML = "";
+
+    const addChildren = (parent, children) => {
+      for (const child of children) {
+        const element = document.createElement(child.type);
+        for (const key in child) {
+          if (key === "children" || key === "type") {
+            continue;
+          }
+          element[key] = child[key];
+        }
+        if (child.children) {
+          addChildren(element, child.children);
+        }
+        parent.appendChild(element);
+      }
+    };
+
+    addChildren(this, value.children);
+
+    for (const child of value.children) {
+      // if (!node.type) {
+      //   for (const typeResolverKey in Config.typeResolvers) {
+      //     node.type = Config.typeResolvers[typeResolverKey](node) ? typeResolverKey : node.type;
+      //   }
+      // }
+
+      // if (!node.type && node.nodes) {
+      //   node.type = "graph-node-group";
+      // }
+
+      // const nodeElement = this._nodesDataMap.get(node.name) || document.createElement(Config.inputTypeMap[node.type] || node.type);
+      // this._nodesDataMap.set(node.name, nodeElement);
+      // Object.assign(nodeElement, node);
+      // this.appendChild(nodeElement);
     }
   }
 }
