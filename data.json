@@ -1,101 +1,98 @@
-{
-	"name": "Root",
-	"children": [
-		{
-			"name": "First node",
-			"type": "graph-node",
-			"width": 250,
-			"children": [
-				{
-					"name": "Select",
-					"type": "graph-input-select",
-					"value": 8,
-					"options": [
-						4,
-						8,
-						16,
-						32
-					]
-				},
-				{
-					"name": "Checkbox",
-					"type": "graph-input-checkbox",
-					"value": true
-				},
-				{
-					"name": "Color",
-					"type": "graph-input-color",
-					"value": "#ff0000"
-				},
-				{
-					"name": "Number",
-					"type": "graph-input-number",
-					"value": "1.8"
-				},
-				{
-					"name": "Range",
-					"type": "graph-input-range",
-					"value": 1.43
-				},
-				{
-					"name": "Button",
-					"type": "graph-input-button",
-					"value": "Value returned"
-				},
-				{
-					"name": "Text",
-					"type": "graph-input-text",
-					"value": "Lorem ipsum"
-				}
-			]
-		},
-		{
-			"name": "Second node",
-			"type": "graph-node",
-			"children": [
-				{
-					"name": "Select",
-					"type": "graph-input-select",
-					"value": 8,
-					"options": [
-						4,
-						8,
-						16,
-						32
-					]
-				},
-				{
-					"name": "Checkbox",
-					"type": "graph-input-checkbox",
-					"value": true
-				},
-				{
-					"name": "Color",
-					"type": "graph-input-color",
-					"value": "#ffff00"
-				},
-				{
-					"name": "Number",
-					"type": "graph-input-number",
-					"value": "1.8"
-				},
-				{
-					"name": "Range",
-					"type": "graph-input-range",
-					"max": 2,
-					"value": 1.43
-				},
-				{
-					"name": "Button",
-					"type": "graph-input-button",
-					"value": "Value returned"
-				},
-				{
-					"name": "Text",
-					"type": "graph-input-text",
-					"value": "Lorem ipsum"
-				}
-			]
-		}
-	]
-}
+[
+	{
+		"name": "First node",
+		"type": "graph-node",
+		"width": 250,
+		"children": [
+			{
+				"name": "Select",
+				"type": "graph-input-select",
+				"value": 8,
+				"options": [
+					4,
+					8,
+					16,
+					32
+				]
+			},
+			{
+				"name": "Checkbox",
+				"type": "graph-input-checkbox",
+				"value": true
+			},
+			{
+				"name": "Color",
+				"type": "graph-input-color",
+				"value": "#ff0000"
+			},
+			{
+				"name": "Number",
+				"type": "graph-input-number",
+				"value": "1.8"
+			},
+			{
+				"name": "Range",
+				"type": "graph-input-range",
+				"value": 1.43
+			},
+			{
+				"name": "Button",
+				"type": "graph-input-button",
+				"value": "Value returned"
+			},
+			{
+				"name": "Text",
+				"type": "graph-input-text",
+				"value": "Lorem ipsum"
+			}
+		]
+	},
+	{
+		"name": "Second node",
+		"type": "graph-node",
+		"children": [
+			{
+				"name": "Select",
+				"type": "graph-input-select",
+				"value": 8,
+				"options": [
+					4,
+					8,
+					16,
+					32
+				]
+			},
+			{
+				"name": "Checkbox",
+				"type": "graph-input-checkbox",
+				"value": true
+			},
+			{
+				"name": "Color",
+				"type": "graph-input-color",
+				"value": "#ffff00"
+			},
+			{
+				"name": "Number",
+				"type": "graph-input-number",
+				"value": "1.8"
+			},
+			{
+				"name": "Range",
+				"type": "graph-input-range",
+				"max": 2,
+				"value": 1.43
+			},
+			{
+				"name": "Button",
+				"type": "graph-input-button",
+				"value": "Value returned"
+			},
+			{
+				"name": "Text",
+				"type": "graph-input-text",
+				"value": "Lorem ipsum"
+			}
+		]
+	}
+]

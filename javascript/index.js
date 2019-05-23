@@ -6,20 +6,16 @@ const nodesData = [];
 
 import "../src/index.js";
 
-const graph = document.createElement("graph-editor");
-document.body.appendChild(graph);
-
-fetch("data.json").then((response) => response.json()).then((data) => {
-  graph.data = data;
-});
-
 export default class JavascriptProxy {
   static add({
     object,
     key,
     id,
   }) {
-    // graph.querySelector(`#${id}`).value = object[key];
+    const input = graph.querySelector(`#${id}`);
+    if (input) {
+      input.value = object[key];
+    }
   }
 }
 

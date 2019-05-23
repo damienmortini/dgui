@@ -40,7 +40,7 @@ export default class NodeElement extends HTMLElement {
           outline: none;
         }
       </style>
-      <details>
+      <details open>
         <summary></summary>
         <slot></slot>
       </details>
@@ -50,99 +50,107 @@ export default class NodeElement extends HTMLElement {
     this._draggable = this.shadowRoot.querySelector("graph-draggable");
     this._draggable.handles = [this.shadowRoot.querySelector("summary"), this.shadowRoot.querySelector("details")];
 
-    this.open = true;
+    // this.open = true;
     // this.draggable = true;
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
-    if (oldValue === newValue) {
-      return;
-    }
-
     switch (name) {
+      case "name":
+        this.shadowRoot.querySelector("details").querySelector("summary").textContent = newValue;
+        break;
       case "draggable":
+        console.log(newValue);
+        break;
       case "open":
-        this[name] = newValue !== "false";
+        this.shadowRoot.querySelector("details").open = newValue;
         break;
       case "x":
-      case "y":
-      case "width":
-      case "height":
-        this[name] = parseFloat(newValue);
+        this.style.left = `${this.x}px`;
         break;
-      default:
-        this[name] = newValue;
+      case "y":
+        this.style.top = `${this.y}px`;
+        break;
+      case "width":
+        this.style.width = `${this.width}px`;
+        break;
+      case "height":
+        this.style.height = `${this.height}px`;
         break;
     }
   }
 
-  set name(value) {
-    this._name = value;
-    this.shadowRoot.querySelector("details").querySelector("summary").textContent = this._name;
-  }
+  // get draggable() {
+  //   return !this._draggable.disabled;
+  // }
 
-  get name() {
-    return this._name;
+  // set draggable(value) {
+  //   this._draggable.disabled = !value;
+  //   super.draggable = value;
+  // }
+
+  // set draggable(value) {
+  //   if (value) {
+  //     this.setAttribute("draggable", "");
+  //   } else {
+  //     this.removeAttribute("draggable");
+  //   }
+  // }
+
+  // get draggable() {
+  //   return this.hasAttribute("draggable");
+  // }
+
+  set open(value) {
+    if (value) {
+      this.shadowRoot.querySelector("details").setAttribute("open", "");
+    } else {
+      this.shadowRoot.querySelector("details").removeAttribute("open");
+    }
   }
 
   get open() {
-    return this.shadowRoot.querySelector("details").open;
+    return this.shadowRoot.querySelector("details").hasAttribute("open");
   }
 
-  set open(value) {
-    this.shadowRoot.querySelector("details").open = value;
+  get name() {
+    return this.getAttribute("name");
   }
 
-  get draggable() {
-    return !this._draggable.disabled;
-  }
-
-  set draggable(value) {
-    this._draggable.disabled = !value;
-    super.draggable = value;
+  set name(value) {
+    this.setAttribute("name", value);
   }
 
   get x() {
-    return this._x;
+    return Number(this.getAttribute("x"));
   }
 
   set x(value) {
-    this._x = parseFloat(value);
-    this._updateBoundingRect();
+    this.setAttribute("x", String(value));
   }
 
   get y() {
-    return this._y;
+    return Number(this.getAttribute("y"));
   }
 
   set y(value) {
-    this._y = parseFloat(value);
-    this._updateBoundingRect();
+    this.setAttribute("y", String(value));
   }
 
   get width() {
-    return this._width;
+    return Number(this.getAttribute("width"));
   }
 
   set width(value) {
-    this._width = parseFloat(value);
-    this._updateBoundingRect();
+    this.setAttribute("width", String(value));
   }
 
   get height() {
-    return this._height;
+    return Number(this.getAttribute("height"));
   }
 
   set height(value) {
-    this._height = parseFloat(value);
-    this._updateBoundingRect();
-  }
-
-  _updateBoundingRect() {
-    this.style.left = `${this.x}px`;
-    this.style.top = `${this.y}px`;
-    this.style.width = `${this.width}px`;
-    this.style.height = `${this.height}px`;
+    this.setAttribute("height", String(value));
   }
 
   toJSON() {

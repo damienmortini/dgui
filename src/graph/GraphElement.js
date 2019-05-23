@@ -86,46 +86,52 @@ export default class GraphElement extends HTMLElement {
     }
   }
 
+  add(data, parent = this) {
+    if (data instanceof Array) {
+      for (const child of data) {
+        this.add(child);
+      }
+      return;
+    }
+
+    const element = document.createElement(data.type);
+    for (const key in data) {
+      if (key === "children" || key === "type") {
+        continue;
+      }
+      element[key] = data[key];
+    }
+    if (data.children) {
+      for (const child of data.children) {
+        this.add(child, element);
+      }
+    }
+    parent.appendChild(element);
+  }
+
   get data() {
     return JSON.parse(JSON.stringify([...this._nodesDataMap.values()]));
   }
 
   set data(value) {
     this.innerHTML = "";
+    this.add(value.children);
 
-    const addChildren = (parent, children) => {
-      for (const child of children) {
-        const element = document.createElement(child.type);
-        for (const key in child) {
-          if (key === "children" || key === "type") {
-            continue;
-          }
-          element[key] = child[key];
-        }
-        if (child.children) {
-          addChildren(element, child.children);
-        }
-        parent.appendChild(element);
-      }
-    };
+    // for (const child of value.children) {
+    // if (!node.type) {
+    //   for (const typeResolverKey in Config.typeResolvers) {
+    //     node.type = Config.typeResolvers[typeResolverKey](node) ? typeResolverKey : node.type;
+    //   }
+    // }
 
-    addChildren(this, value.children);
+    // if (!node.type && node.nodes) {
+    //   node.type = "graph-node-group";
+    // }
 
-    for (const child of value.children) {
-      // if (!node.type) {
-      //   for (const typeResolverKey in Config.typeResolvers) {
-      //     node.type = Config.typeResolvers[typeResolverKey](node) ? typeResolverKey : node.type;
-      //   }
-      // }
-
-      // if (!node.type && node.nodes) {
-      //   node.type = "graph-node-group";
-      // }
-
-      // const nodeElement = this._nodesDataMap.get(node.name) || document.createElement(Config.inputTypeMap[node.type] || node.type);
-      // this._nodesDataMap.set(node.name, nodeElement);
-      // Object.assign(nodeElement, node);
-      // this.appendChild(nodeElement);
-    }
+    // const nodeElement = this._nodesDataMap.get(node.name) || document.createElement(Config.inputTypeMap[node.type] || node.type);
+    // this._nodesDataMap.set(node.name, nodeElement);
+    // Object.assign(nodeElement, node);
+    // this.appendChild(nodeElement);
+    // }
   }
 }

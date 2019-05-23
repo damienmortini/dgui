@@ -81,14 +81,47 @@
   <script type="module">
     import(`./${/\bdev\b/.test(window.location.search) ? "src" : "build"}/index.js`);
 
-    import Graph from "./javascript/index.js";
+    import "./src/index.js";
 
-    const test = {value: .5};
-    Graph.add({
-      object: test,
-      key: "value",
-      path: "test/test"
+    // import Graph from "./javascript/index.js";
+
+    const graph = document.createElement("graph-editor");
+    document.body.appendChild(graph);
+
+    // fetch("data.json").then((response) => response.json()).then((data) => {
+    //   graph.add(data);
+    // });
+
+    graph.add({
+      type: "details",
+      open: true,
+      children: [
+        {
+          type: "summary",
+          textContent: "Graph",
+        },
+        {
+          name: "Main",
+          type: "graph-node",
+          children: [
+            {
+              name: "Number",
+              type: "graph-input-range",
+              value: 1.8,
+              max: 5,
+              id: "test",
+            }
+          ]
+        }
+      ]
     });
+
+    const test = { value: .5 };
+    // Graph.add({
+    //   object: test,
+    //   key: "value",
+    //   id: "test"
+    // });
 
     // import DraggableElement from "../node_modules/dlmn/util/DraggableElement.js";
 
