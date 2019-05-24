@@ -17,9 +17,7 @@ export default class NodeElement extends HTMLElement {
           display: block;
           overflow: auto;
           resize: horizontal;
-          width: 250px;
           border: 1px dotted;
-          position: absolute;
           background: rgba(255, 255, 255, .9);
         }
         :host(:hover) {
@@ -44,11 +42,12 @@ export default class NodeElement extends HTMLElement {
         }
         section.input ::slotted(*) {
           flex: 1;
+          min-width: 50%;
         }
         section.input label {
           overflow: hidden;
           text-overflow: ellipsis;
-          margin: 0 5px;
+          padding: 0 5px;
         }
         section.input label:empty {
           display: none;
@@ -98,7 +97,7 @@ export default class NodeElement extends HTMLElement {
           if (!("value" in node)) {
             continue;
           }
-          const nodeInputSlot = this.shadowRoot.querySelector(`slot[name=${node.slot}]`);
+          const nodeInputSlot = this.shadowRoot.querySelector(`slot[name="${node.slot}"]`);
           nodeInputSlot.parentElement.remove();
         }
       }

@@ -23,7 +23,16 @@ export default class GUI {
     graph = value;
   }
 
-  static add(options) {
+  static addFolder(options, parent = undefined) {
+    const folder = GUI.add({
+      tagName: "graph-node",
+      ...options,
+    }, parent);
+    folder.style.resize = "none";
+    return folder;
+  }
+
+  static add(options, parent = undefined) {
     options = { ...options };
 
     if (!options.tagName) {
@@ -42,16 +51,31 @@ export default class GUI {
     if (!graph) {
       graph = document.createElement("graph-editor");
       document.body.appendChild(graph);
+      graph.insertAdjacentHTML("afterbegin", `
+        <style>
+          graph-node {
+            background: transparent;
+            border: none;
+          }
+        </style>
+      `);
       graph.style.position = "absolute";
       graph.style.top = "0";
       graph.style.left = "0";
+      graph.style.width = "250px";
+      graph.style.color = "white";
+      graph.style.textShadow = "0 0 3px black";
       mainNode = graph.add({
         name: "GUI",
         tagName: "graph-node",
       });
     }
 
-    const input = graph.add(options, mainNode);
+    if (!options.id && key) {
+      options.id = key;
+    }
+
+    const input = graph.add(options, parent || mainNode);
     if (object) {
       input.value = object[key];
       input.addEventListener("input", (event) => {
