@@ -12,9 +12,15 @@ export default class JavascriptProxy {
     key,
     id,
   }) {
+    if (!graph) {
+      
+    }
     const input = graph.querySelector(`#${id}`);
     if (input) {
       input.value = object[key];
+      input.addEventListener("input", () => {
+
+      });
     }
   }
 }

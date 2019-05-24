@@ -44,14 +44,35 @@ export default class NodeElement extends HTMLElement {
         <summary></summary>
         <slot></slot>
       </details>
-      <graph-draggable targets="[this.getRootNode().host]"></graph-draggable>
-    `;
+      `;
 
-    this._draggable = this.shadowRoot.querySelector("graph-draggable");
-    this._draggable.handles = [this.shadowRoot.querySelector("summary"), this.shadowRoot.querySelector("details")];
+    // <graph-draggable targets="[this.getRootNode().host]"></graph-draggable>
+    // this._draggable = this.shadowRoot.querySelector("graph-draggable");
+    // this._draggable.handles = [this.shadowRoot.querySelector("summary"), this.shadowRoot.querySelector("details")];
 
     // this.open = true;
     // this.draggable = true;
+
+    const observer = new MutationObserver((mutationsList, observer) => {
+      for (const mutation of mutationsList) {
+        for (const node of mutation.addedNodes) {
+          if (!("value" in node)) {
+            continue;
+          }
+
+          const nodeInput = document.createElement("graph-node-input");
+          nodeInput.name = node.name;
+          const nodeInputSlots = this.shadowRoot.querySelectorAll("slot.nodeinputslot");
+          const slot = document.createElement("slot");
+          slot.classList.add("nodeinputslot");
+          slot.name = String(nodeInputSlots.length);
+          nodeInput.appendChild(slot);
+          this.shadowRoot.querySelector("details").appendChild(nodeInput);
+          node.slot = slot.name;
+        }
+      }
+    });
+    observer.observe(this, { childList: true, subtree: true });
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
@@ -79,27 +100,6 @@ export default class NodeElement extends HTMLElement {
         break;
     }
   }
-
-  // get draggable() {
-  //   return !this._draggable.disabled;
-  // }
-
-  // set draggable(value) {
-  //   this._draggable.disabled = !value;
-  //   super.draggable = value;
-  // }
-
-  // set draggable(value) {
-  //   if (value) {
-  //     this.setAttribute("draggable", "");
-  //   } else {
-  //     this.removeAttribute("draggable");
-  //   }
-  // }
-
-  // get draggable() {
-  //   return this.hasAttribute("draggable");
-  // }
 
   set open(value) {
     if (value) {

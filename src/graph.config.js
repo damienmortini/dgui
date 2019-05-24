@@ -3,6 +3,7 @@ import DraggableElement from "../node_modules/@damienmortini/elements/src/util/D
 import LinkableConnectorElement from "./connector/LinkableConnectorElement.js";
 import GraphElement from "./graph/GraphElement.js";
 import NodeElement from "./node/NodeElement.js";
+import NodeInputElement from "./node/NodeInputElement.js";
 import LinkElement from "./link/LinkElement.js";
 import InputElement from "../node_modules/@damienmortini/elements/src/input/InputElement.js";
 import ButtonInputElement from "../node_modules/@damienmortini/elements/src/input/ButtonInputElement.js";
@@ -23,6 +24,7 @@ export default {
     "graph-connector": LinkableConnectorElement,
     "graph-connectors": ConnectorsElement,
     "graph-node": NodeElement,
+    "graph-node-input": NodeInputElement,
     "graph-input": InputElement,
     "graph-input-button": ButtonInputElement,
     "graph-input-checkbox": CheckboxInputElement,

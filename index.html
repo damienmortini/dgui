@@ -117,6 +117,18 @@
     });
 
     const test = { value: .5 };
+    graph.map({
+      object: test,
+      key: "value",
+      id: "test",
+    });
+
+    // const loop = () => {
+    //   requestAnimationFrame(loop);
+    //   console.log(test.value);
+    // }
+    // loop();
+
     // Graph.add({
     //   object: test,
     //   key: "value",

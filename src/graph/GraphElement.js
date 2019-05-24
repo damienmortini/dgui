@@ -86,6 +86,16 @@ export default class GraphElement extends HTMLElement {
     }
   }
 
+  map({ object, key, id }) {
+    const input = this.querySelector(`#${id}`);
+    if (input) {
+      input.value = object[key];
+      input.addEventListener("input", (event) => {
+        object[key] = input.value;
+      });
+    }
+  }
+
   add(data, parent = this) {
     if (data instanceof Array) {
       for (const child of data) {
