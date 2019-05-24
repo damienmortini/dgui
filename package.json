@@ -15,14 +15,14 @@
   "author": "Damien Mortini",
   "license": "ISC",
   "dependencies": {
-    "@damienmortini/elements": "0.0.9",
+    "@damienmortini/elements": "0.0.10",
     "@damienmortini/lib": "0.0.102",
-    "ws": "^6.2.1"
+    "ws": "^7.0.0"
   },
   "devDependencies": {
     "@damienmortini/server": "0.0.6",
-    "jsdoc": "^3.5.5",
-    "rollup": "^1.9.0",
-    "terser": "^3.17.0"
+    "jsdoc": "^3.6.2",
+    "rollup": "^1.12.3",
+    "terser": "^4.0.0"
   }
 }
