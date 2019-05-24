@@ -1,6 +1,6 @@
 {
   "name": "@damienmortini/graph",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "The ultimate node editor to become",
   "main": "index.js",
   "scripts": {
