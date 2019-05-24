@@ -1,7 +1,7 @@
+import "../src/index.js";
+
 let graph;
 let mainNode;
-
-import "../src/index.js";
 
 const tagNameResolvers = new Map([
   ["graph-input-button", (attributes) => !!attributes.onclick],
@@ -15,6 +15,14 @@ const tagNameResolvers = new Map([
 ]);
 
 export default class GUI {
+  get graph() {
+    return graph;
+  }
+
+  set graph(value) {
+    graph = value;
+  }
+
   static add(options) {
     options = { ...options };
 
@@ -34,6 +42,9 @@ export default class GUI {
     if (!graph) {
       graph = document.createElement("graph-editor");
       document.body.appendChild(graph);
+      graph.style.position = "absolute";
+      graph.style.top = "0";
+      graph.style.left = "0";
       mainNode = graph.add({
         name: "GUI",
         tagName: "graph-node",
