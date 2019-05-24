@@ -83,52 +83,87 @@
 
     import "./src/index.js";
 
-    // import Graph from "./javascript/index.js";
-
-    const graph = document.createElement("graph-editor");
-    document.body.appendChild(graph);
+    import GUI from "./javascript/GUI.js";
 
     // fetch("data.json").then((response) => response.json()).then((data) => {
     //   graph.add(data);
     // });
 
-    graph.add({
-      type: "details",
-      open: true,
-      children: [
-        {
-          type: "summary",
-          textContent: "Graph",
-        },
-        {
-          name: "Main",
-          type: "graph-node",
-          children: [
-            {
-              name: "Number",
-              type: "graph-input-range",
-              value: 1.8,
-              max: 5,
-              id: "test",
-            },
-            {
-              name: "Number",
-              type: "graph-input-range",
-              value: 1.8,
-              max: 5,
-              id: "test2",
-            }
-          ]
-        }
+    // graph.add({
+    //   name: "GUI",
+    //   type: "graph-node",
+    //   children: [
+    //     {
+    //       name: "Number",
+    //       type: "graph-input-range",
+    //       value: 1.8,
+    //       max: 5,
+    //       id: "test",
+    //     },
+    //     {
+    //       name: "Number",
+    //       type: "graph-input-range",
+    //       value: 1.8,
+    //       max: 5,
+    //       id: "test2",
+    //     }
+    //   ]
+    // });
+
+    GUI.add({
+      name: "Hey",
+      object: { value: .5 },
+      key: "value"
+    });
+
+    GUI.add({
+      name: "Hey",
+      object: { value: "bonjour" },
+      key: "value",
+    });
+
+    GUI.add({
+      name: "Hey",
+      object: { value: false },
+      key: "value",
+    });
+
+    GUI.add({
+      name: "Hey",
+      object: { value: "#ff0000" },
+      key: "value",
+    });
+
+    GUI.add({
+      name: "Hey",
+      object: { value: 4 },
+      key: "value",
+      options: [
+        1,
+        2,
+        4,
+        8
       ]
     });
 
-    const test = { value: .5 };
-    graph.map({
-      object: test,
-      key: "value",
-      id: "test",
+    GUI.add({
+      label: "Hey",
+      onclick: () => {
+        console.log("fkldsfd");
+      }
     });
+
+    // const test = GUI.add({
+    //   name: "Hey",
+    //   object: { value: 4 },
+    //   key: "value",
+    //   options: [
+    //     1,
+    //     2,
+    //     4,
+    //     8
+    //   ]
+    // });
 
     // const loop = () => {
     //   requestAnimationFrame(loop);

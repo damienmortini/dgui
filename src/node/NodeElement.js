@@ -15,7 +15,7 @@ export default class NodeElement extends HTMLElement {
       <style>
         :host {
           display: block;
-          // overflow: auto;
+          overflow: auto;
           resize: horizontal;
           width: 250px;
           border: 1px dotted;
@@ -54,10 +54,10 @@ export default class NodeElement extends HTMLElement {
           display: none;
         }
       </style>
-      <div class="content" open>
+      <details class="content" open>
         <summary></summary>
         <slot></slot>
-      </div>
+      </details>
     `;
 
     // <graph-draggable targets="[this.getRootNode().host]"></graph-draggable>
@@ -78,11 +78,12 @@ export default class NodeElement extends HTMLElement {
           // const slot = document.createElement("slot");
           // slot.name = String(inputSlotUID++);
           // nodeInput.appendChild(slot);
+          const label = node.label || node.name || node.id || "";
           const section = document.createElement("section");
           section.classList.add("input");
           section.innerHTML = `
             <graph-connector></graph-connector>
-            <label title="${node.name}">${node.name}</label>
+            <label title="${label}">${label}</label>
             <slot name="${inputSlotUID}"></slot>
             <graph-connector></graph-connector>
           `;

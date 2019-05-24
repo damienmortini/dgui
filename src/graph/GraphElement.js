@@ -14,6 +14,7 @@ export default class GraphElement extends HTMLElement {
       <style>
         :host {
           display: block;
+          font-family: sans-serif;
         }
 
         graph-zoomable, graph-draggable {
@@ -86,16 +87,6 @@ export default class GraphElement extends HTMLElement {
     }
   }
 
-  map({ object, key, id }) {
-    const input = this.querySelector(`#${id}`);
-    if (input) {
-      input.value = object[key];
-      input.addEventListener("input", (event) => {
-        object[key] = input.value;
-      });
-    }
-  }
-
   add(data, parent = this) {
     if (data instanceof Array) {
       for (const child of data) {
@@ -104,9 +95,9 @@ export default class GraphElement extends HTMLElement {
       return;
     }
 
-    const element = document.createElement(data.type);
+    const element = document.createElement(data.tagName);
     for (const key in data) {
-      if (key === "children" || key === "type") {
+      if (key === "children" || key === "tagName") {
         continue;
       }
       element[key] = data[key];
@@ -117,6 +108,7 @@ export default class GraphElement extends HTMLElement {
       }
     }
     parent.appendChild(element);
+    return element;
   }
 
   get data() {
