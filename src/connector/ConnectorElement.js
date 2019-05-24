@@ -188,6 +188,11 @@ class ConnectorElement extends HTMLElement {
     }
   }
 
+  disconnectedCallback() {
+    this.inputs.clear();
+    this.outputs.clear();
+  }
+
   _onInputChange(event) {
     this.value = event.target.value;
   }

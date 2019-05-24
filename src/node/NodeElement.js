@@ -1,3 +1,5 @@
+let inputSlotUID = 0;
+
 /**
  * Node Element
  */
@@ -13,42 +15,54 @@ export default class NodeElement extends HTMLElement {
       <style>
         :host {
           display: block;
-          overflow: auto;
+          // overflow: auto;
           resize: horizontal;
-          width: 200px;
+          width: 250px;
           border: 1px dotted;
           position: absolute;
           background: rgba(255, 255, 255, .9);
         }
-
         :host(:hover) {
           border: 1px dashed;
         }
-
         :host(:focus-within) {
           border: 1px solid;
           z-index: 1;
         }
-
-        details, slot {
+        .content, slot {
           padding: 5px;
         }
-
-        details summary {
+        datails summary {
           position: relative;
           padding: 5px;
           outline: none;
         }
+        section.input {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+        section.input ::slotted(*) {
+          flex: 1;
+        }
+        section.input label {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          margin: 0 5px;
+        }
+        section.input label:empty {
+          display: none;
+        }
       </style>
-      <details open>
+      <div class="content" open>
         <summary></summary>
         <slot></slot>
-      </details>
-      `;
+      </div>
+    `;
 
     // <graph-draggable targets="[this.getRootNode().host]"></graph-draggable>
     // this._draggable = this.shadowRoot.querySelector("graph-draggable");
-    // this._draggable.handles = [this.shadowRoot.querySelector("summary"), this.shadowRoot.querySelector("details")];
+    // this._draggable.handles = [this.shadowRoot.querySelector("summary"), this.shadowRoot.querySelector(".content")];
 
     // this.open = true;
     // this.draggable = true;
@@ -59,32 +73,48 @@ export default class NodeElement extends HTMLElement {
           if (!("value" in node)) {
             continue;
           }
-
-          const nodeInput = document.createElement("graph-node-input");
-          nodeInput.name = node.name;
-          const nodeInputSlots = this.shadowRoot.querySelectorAll("slot.nodeinputslot");
-          const slot = document.createElement("slot");
-          slot.classList.add("nodeinputslot");
-          slot.name = String(nodeInputSlots.length);
-          nodeInput.appendChild(slot);
-          this.shadowRoot.querySelector("details").appendChild(nodeInput);
-          node.slot = slot.name;
+          // const nodeInput = document.createElement("graph-node-input");
+          // nodeInput.name = node.name;
+          // const slot = document.createElement("slot");
+          // slot.name = String(inputSlotUID++);
+          // nodeInput.appendChild(slot);
+          const section = document.createElement("section");
+          section.classList.add("input");
+          section.innerHTML = `
+            <graph-connector></graph-connector>
+            <label title="${node.name}">${node.name}</label>
+            <slot name="${inputSlotUID}"></slot>
+            <graph-connector></graph-connector>
+          `;
+          const connectors = section.querySelectorAll("graph-connector");
+          connectors[0].outputs.add(node);
+          connectors[1].inputs.add(node);
+          this.shadowRoot.querySelector(".content").appendChild(section);
+          node.slot = inputSlotUID;
+          inputSlotUID++;
+        }
+        for (const node of mutation.removedNodes) {
+          if (!("value" in node)) {
+            continue;
+          }
+          const nodeInputSlot = this.shadowRoot.querySelector(`slot[name=${node.slot}]`);
+          nodeInputSlot.parentElement.remove();
         }
       }
     });
-    observer.observe(this, { childList: true, subtree: true });
+    observer.observe(this, { childList: true });
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
     switch (name) {
       case "name":
-        this.shadowRoot.querySelector("details").querySelector("summary").textContent = newValue;
+        this.shadowRoot.querySelector(".content").querySelector("summary").textContent = newValue;
         break;
       case "draggable":
         console.log(newValue);
         break;
       case "open":
-        this.shadowRoot.querySelector("details").open = newValue;
+        this.shadowRoot.querySelector(".content").open = newValue;
         break;
       case "x":
         this.style.left = `${this.x}px`;
@@ -103,14 +133,14 @@ export default class NodeElement extends HTMLElement {
 
   set open(value) {
     if (value) {
-      this.shadowRoot.querySelector("details").setAttribute("open", "");
+      this.shadowRoot.querySelector(".content").setAttribute("open", "");
     } else {
-      this.shadowRoot.querySelector("details").removeAttribute("open");
+      this.shadowRoot.querySelector(".content").removeAttribute("open");
     }
   }
 
   get open() {
-    return this.shadowRoot.querySelector("details").hasAttribute("open");
+    return this.shadowRoot.querySelector(".content").hasAttribute("open");
   }
 
   get name() {
