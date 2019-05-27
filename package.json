@@ -4,12 +4,12 @@
   "description": "The ultimate node editor to become",
   "main": "index.js",
   "scripts": {
-    "start": "dsrv --path=?dev",
-    "server": "nodemon --watch server server/index.js",
+    "start": "server --path=?dev",
     "build": "rollup -c",
-    "docs": "jsdoc src -r -d docs",
     "release": "npm run build && terser build/index.js --compress --mangle --module --output build/index.js",
-    "bump": "npm version patch && npm publish --access=public",
+    "bump": "npm run docs && npm version patch",
+    "docs": "jsdoc -c jsdoc.config.json",
+    "server": "nodemon --watch server server/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Damien Mortini",

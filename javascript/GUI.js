@@ -14,6 +14,8 @@ const tagNameResolvers = new Map([
   ["graph-input-checkbox", (attributes) => typeof attributes.object[attributes.key] === "boolean"],
 ]);
 
+const foldersMap = new Map();
+
 export default class GUI {
   get graph() {
     return graph;
@@ -23,17 +25,37 @@ export default class GUI {
     graph = value;
   }
 
-  static addFolder(options, parent = undefined) {
-    const folder = GUI.add({
-      tagName: "graph-node",
-      ...options,
-    }, parent);
-    folder.style.resize = "none";
-    return folder;
-  }
-
-  static add(options, parent = undefined) {
+  static add(options) {
     options = { ...options };
+
+    if (!graph) {
+      graph = document.createElement("graph-editor");
+      document.body.appendChild(graph);
+      graph.insertAdjacentHTML("afterbegin", `
+        <style>
+          graph-editor {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 250px;
+            color: white;
+            text-shadow: 0 0 3px black;
+          }
+          graph-node {
+            background: transparent;
+            border: none;
+          }
+          graph-connector {
+            display: none;
+          }
+        </style>
+      `);
+      mainNode = graph.add({
+        name: "GUI",
+        tagName: "graph-node",
+        noConnector: true,
+      });
+    }
 
     if (!options.tagName) {
       for (const [tagName, resolve] of tagNameResolvers) {
@@ -44,38 +66,43 @@ export default class GUI {
       }
     }
 
-    let { object, key } = options;
+    let { object, key, folder } = options;
     delete options.object;
     delete options.key;
+    delete options.folder;
 
-    if (!graph) {
-      graph = document.createElement("graph-editor");
-      document.body.appendChild(graph);
-      graph.insertAdjacentHTML("afterbegin", `
-        <style>
-          graph-node {
-            background: transparent;
-            border: none;
-          }
-        </style>
-      `);
-      graph.style.position = "absolute";
-      graph.style.top = "0";
-      graph.style.left = "0";
-      graph.style.width = "250px";
-      graph.style.color = "white";
-      graph.style.textShadow = "0 0 3px black";
-      mainNode = graph.add({
-        name: "GUI",
-        tagName: "graph-node",
-      });
+    let folderElement;
+
+    if (folder) {
+      const folderNames = folder.split("/");
+      let path = "";
+      let parentFolderElement = undefined;
+      for (const folderName of folderNames) {
+        if (path) {
+          path += "/";
+        }
+        path += folderName;
+        folderElement = foldersMap.get(folder);
+        console.log(folderName, parentFolderElement);
+        
+        if (!folderElement) {
+          folderElement = graph.add({
+            name: folderName,
+            tagName: "graph-node",
+            noConnector: true,
+          }, parentFolderElement);
+          folderElement.style.resize = "none";
+          foldersMap.set(path, folderElement);
+        }
+        parentFolderElement = folderElement;
+      }
     }
 
     if (!options.id && key) {
       options.id = key;
     }
 
-    const input = graph.add(options, parent || mainNode);
+    const input = graph.add(options, folderElement || mainNode);
     if (object) {
       input.value = object[key];
       input.addEventListener("input", (event) => {

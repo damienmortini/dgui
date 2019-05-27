@@ -52,6 +52,9 @@ export default class NodeElement extends HTMLElement {
         section.input label:empty {
           display: none;
         }
+        :host([noconnector]) section.input graph-connector {
+          display: none;
+        }
       </style>
       <details class="content" open>
         <summary></summary>
@@ -149,6 +152,18 @@ export default class NodeElement extends HTMLElement {
 
   set name(value) {
     this.setAttribute("name", value);
+  }
+
+  get noConnector() {
+    return this.hasAttribute("noconnector");
+  }
+
+  set noConnector(value) {
+    if (value) {
+      this.setAttribute("noconnector", "");
+    } else {
+      this.removeAttribute("noconnector");
+    }
   }
 
   get x() {
