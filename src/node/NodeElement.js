@@ -48,6 +48,7 @@ export default class NodeElement extends HTMLElement {
           overflow: hidden;
           text-overflow: ellipsis;
           padding: 0 5px;
+          white-space: nowrap;
         }
         section.input label:empty {
           display: none;

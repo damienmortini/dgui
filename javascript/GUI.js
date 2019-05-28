@@ -58,6 +58,7 @@ export default class GUI {
     }
 
     if (!options.tagName) {
+      options.tagName = "graph-input-text";
       for (const [tagName, resolve] of tagNameResolvers) {
         if (resolve(options)) {
           options.tagName = tagName;
@@ -71,20 +72,18 @@ export default class GUI {
     delete options.key;
     delete options.folder;
 
-    let folderElement;
+    let folderElement = mainNode;
 
     if (folder) {
       const folderNames = folder.split("/");
       let path = "";
-      let parentFolderElement = undefined;
+      let parentFolderElement = mainNode;
       for (const folderName of folderNames) {
         if (path) {
           path += "/";
         }
         path += folderName;
         folderElement = foldersMap.get(folder);
-        console.log(folderName, parentFolderElement);
-        
         if (!folderElement) {
           folderElement = graph.add({
             name: folderName,
@@ -102,7 +101,7 @@ export default class GUI {
       options.id = key;
     }
 
-    const input = graph.add(options, folderElement || mainNode);
+    const input = graph.add(options, folderElement);
     if (object) {
       input.value = object[key];
       input.addEventListener("input", (event) => {
