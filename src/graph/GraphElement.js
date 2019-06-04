@@ -8,8 +8,6 @@ export default class GraphElement extends HTMLElement {
   constructor() {
     super();
 
-    this.childrenMap = new Map();
-
     this.attachShadow({ mode: "open" }).innerHTML = `
       <style>
         :host {

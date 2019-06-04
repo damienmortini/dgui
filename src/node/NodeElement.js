@@ -198,10 +198,4 @@ export default class NodeElement extends HTMLElement {
   set height(value) {
     this.setAttribute("height", String(value));
   }
-
-  toJSON() {
-    return {
-      name: this.name,
-    };
-  }
 }
