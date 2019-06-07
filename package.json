@@ -7,9 +7,11 @@
     "start": "server --path=?dev",
     "build": "rollup -c",
     "release": "npm run build && terser build/index.js --compress --mangle --module --output build/index.js",
-    "bump": "npm run docs && npm version patch",
     "docs": "jsdoc -c jsdoc.config.json",
     "server": "nodemon --watch server server/index.js",
+    "bump-patch": "npm version patch && npm publish --access=public",
+    "bump-minor": "npm version minor && npm publish --access=public",
+    "bump-major": "npm version major && npm publish --access=public",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Damien Mortini",
