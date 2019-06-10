@@ -15,6 +15,7 @@ const tagNameResolvers = new Map([
 ]);
 
 const foldersMap = new Map();
+const valuesMap = new Map(JSON.parse(new URLSearchParams(location.hash.slice(1)).get("gui")));
 
 export default class GUI {
   get graph() {
@@ -93,10 +94,8 @@ export default class GUI {
     }
 
     if (!options.id && key) {
-      options.id = key;
+      options.id = `${folder}/${key}`;
     }
-
-    // const input = graph.add(options, folderElement);
 
     const element = document.createElement(options.tagName);
     for (const key in options) {
@@ -107,12 +106,28 @@ export default class GUI {
     }
     folderElement.appendChild(element);
 
-    if (object) {
+    const urlValue = valuesMap.get(options.id);
+    if (urlValue !== undefined) {
+      element.value = urlValue;
+      object[key] = urlValue;
+    } else if (object) {
       element.value = object[key];
-      element.addEventListener("input", (event) => {
-        object[key] = element.value;
-      });
     }
+
+    let timeout;
+    element.addEventListener("input", () => {
+      valuesMap.set(options.id, element.value);
+      if (object) {
+        object[key] = element.value;
+      }
+
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        const urlSearchParams = new URLSearchParams(location.hash.slice(1));
+        urlSearchParams.set("gui", JSON.stringify([...valuesMap]));
+        location.hash = urlSearchParams.toString();
+      }, 100);
+    });
 
     return element;
   }
