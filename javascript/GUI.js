@@ -28,33 +28,29 @@ export default class GUI {
   static add(options) {
     options = { ...options };
 
-    if (!graph) {
-      graph = document.createElement("graph-editor");
-      document.body.appendChild(graph);
-      graph.insertAdjacentHTML("afterbegin", `
+    if (!mainNode) {
+      mainNode = document.createElement("graph-node");
+      mainNode.name = "GUI";
+      mainNode.classList.add("gui");
+      mainNode.noConnector = true;
+      document.body.appendChild(mainNode);
+      mainNode.insertAdjacentHTML("afterbegin", `
         <style>
-          graph-editor {
+          graph-node.gui {
             position: absolute;
             top: 0;
             left: 0;
             width: 250px;
             color: white;
             text-shadow: 0 0 3px black;
+            font-family: sans-serif;
           }
           graph-node {
             background: transparent;
             border: none;
           }
-          graph-connector {
-            display: none;
-          }
         </style>
       `);
-      mainNode = graph.add({
-        name: "GUI",
-        tagName: "graph-node",
-        noConnector: true,
-      });
     }
 
     if (!options.tagName) {
@@ -83,13 +79,12 @@ export default class GUI {
           path += "/";
         }
         path += folderName;
-        folderElement = foldersMap.get(folder);
+        folderElement = foldersMap.get(path);
         if (!folderElement) {
-          folderElement = graph.add({
-            name: folderName,
-            tagName: "graph-node",
-            noConnector: true,
-          }, parentFolderElement);
+          const template = document.createElement("template");
+          template.innerHTML = `<graph-node name="${folderName}" noconnector></graph-node>`;
+          folderElement = template.content.firstChild;
+          parentFolderElement.appendChild(folderElement);
           folderElement.style.resize = "none";
           foldersMap.set(path, folderElement);
         }
@@ -101,14 +96,24 @@ export default class GUI {
       options.id = key;
     }
 
-    const input = graph.add(options, folderElement);
+    // const input = graph.add(options, folderElement);
+
+    const element = document.createElement(options.tagName);
+    for (const key in options) {
+      if (key === "tagName") {
+        continue;
+      }
+      element[key] = options[key];
+    }
+    folderElement.appendChild(element);
+
     if (object) {
-      input.value = object[key];
-      input.addEventListener("input", (event) => {
-        object[key] = input.value;
+      element.value = object[key];
+      element.addEventListener("input", (event) => {
+        object[key] = element.value;
       });
     }
 
-    return input;
+    return element;
   }
 }
