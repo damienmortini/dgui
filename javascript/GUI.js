@@ -7,11 +7,11 @@ const tagNameResolvers = new Map([
   ["graph-input-button", (attributes) => !!attributes.onclick],
   ["graph-input-select", (attributes) => !!attributes.options],
   ["graph-input-color", (attributes) => {
-    return typeof attributes.object[attributes.key] === "string" && ((attributes.object[attributes.key].length === 7 && attributes.object[attributes.key].startsWith("#")) || attributes.object[attributes.key].startsWith("rgb") || attributes.object[attributes.key].startsWith("hsl")) || (typeof attributes.object[attributes.key] === "object" && attributes.object[attributes.key].r !== undefined && attributes.object[attributes.key].g !== undefined && attributes.object[attributes.key].b !== undefined);
+    return typeof attributes.value === "string" && ((attributes.value.length === 7 && attributes.value.startsWith("#")) || attributes.value.startsWith("rgb") || attributes.value.startsWith("hsl")) || (typeof attributes.value === "object" && attributes.value.r !== undefined && attributes.value.g !== undefined && attributes.value.b !== undefined);
   }],
-  ["graph-input-text", (attributes) => typeof attributes.object[attributes.key] === "string"],
-  ["graph-input-range", (attributes) => typeof attributes.object[attributes.key] === "number"],
-  ["graph-input-checkbox", (attributes) => typeof attributes.object[attributes.key] === "boolean"],
+  ["graph-input-text", (attributes) => typeof attributes.value === "string"],
+  ["graph-input-range", (attributes) => typeof attributes.value === "number"],
+  ["graph-input-checkbox", (attributes) => typeof attributes.value === "boolean"],
 ]);
 
 const foldersMap = new Map();
@@ -56,6 +56,9 @@ export default class GUI {
 
     if (!options.tagName) {
       options.tagName = "graph-input-text";
+      if (options.object) {
+        options.value = options.object[options.key];
+      }
       for (const [tagName, resolve] of tagNameResolvers) {
         if (resolve(options)) {
           options.tagName = tagName;
@@ -96,6 +99,9 @@ export default class GUI {
     if (!options.id && key) {
       options.id = `${folder}/${key}`;
     }
+    if (!options.id) {
+      console.warn(`GUI: ${JSON.stringify(options)} doesn't have any id`);
+    }
 
     const element = document.createElement(options.tagName);
     for (const key in options) {
@@ -109,9 +115,7 @@ export default class GUI {
     const urlValue = valuesMap.get(options.id);
     if (urlValue !== undefined) {
       element.value = urlValue;
-      object[key] = urlValue;
-    } else if (object) {
-      element.value = object[key];
+      element.dispatchEvent(new Event("input"));
     }
 
     let timeout;
