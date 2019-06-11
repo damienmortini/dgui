@@ -7,6 +7,7 @@ import LinkElement from "./link/LinkElement.js";
 import ButtonInputElement from "../../elements/src/input/ButtonInputElement.js";
 import CheckboxInputElement from "../../elements/src/input/CheckboxInputElement.js";
 import ColorInputElement from "../../elements/src/input/ColorInputElement.js";
+import ColorPickerInputElement from "../../elements/src/input/ColorPickerInputElement.js";
 import NumberInputElement from "../../elements/src/input/NumberInputElement.js";
 import RangeInputElement from "../../elements/src/input/RangeInputElement.js";
 import SelectInputElement from "../../elements/src/input/SelectInputElement.js";
@@ -24,7 +25,8 @@ export default {
     "graph-node": NodeElement,
     "graph-input-button": ButtonInputElement,
     "graph-input-checkbox": CheckboxInputElement,
-    "graph-input-color": ColorInputElement,
+    // "graph-input-color": ColorInputElement,
+    "graph-input-color": ColorPickerInputElement,
     "graph-input-number": NumberInputElement,
     "graph-input-range": RangeInputElement,
     "graph-input-select": SelectInputElement,

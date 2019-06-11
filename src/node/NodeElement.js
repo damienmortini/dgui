@@ -41,7 +41,7 @@ export default class NodeElement extends HTMLElement {
           justify-content: space-between;
         }
         section.input ::slotted(*) {
-          flex: 1;
+          flex: 2;
           min-width: 50%;
         }
         section.input label {
@@ -49,6 +49,7 @@ export default class NodeElement extends HTMLElement {
           text-overflow: ellipsis;
           padding: 0 5px;
           white-space: nowrap;
+          flex: 1;
         }
         section.input label:empty {
           display: none;
