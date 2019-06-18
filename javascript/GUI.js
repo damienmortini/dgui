@@ -97,7 +97,7 @@ export default class GUI {
     }
 
     if (!options.id && key) {
-      options.id = `${folder}/${key}`;
+      options.id = `${folder ? folder + "/" : ""}${key}`;
     }
     if (!options.id) {
       console.warn(`GUI: ${JSON.stringify(options)} doesn't have any id`);
@@ -114,6 +114,9 @@ export default class GUI {
 
     const urlValue = valuesMap.get(options.id);
     if (urlValue !== undefined) {
+      if (object) {
+        object[key] = urlValue;
+      }
       element.value = urlValue;
       element.dispatchEvent(new Event("input"));
     }
