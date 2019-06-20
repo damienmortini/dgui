@@ -42,6 +42,7 @@ export default class GUI {
             top: 0;
             left: 0;
             width: 250px;
+            max-height: 100%;
             color: white;
             text-shadow: 0 0 3px black;
             font-family: sans-serif;
@@ -67,10 +68,11 @@ export default class GUI {
       }
     }
 
-    let { object, key, folder } = options;
+    let { object, key, folder, reload } = options;
     delete options.object;
     delete options.key;
     delete options.folder;
+    delete options.reload;
 
     let folderElement = mainNode;
 
@@ -133,6 +135,9 @@ export default class GUI {
         const urlSearchParams = new URLSearchParams(location.hash.slice(1));
         urlSearchParams.set("gui", JSON.stringify([...valuesMap]));
         location.hash = urlSearchParams.toString();
+        if (reload) {
+          window.location.reload();
+        }
       }, 100);
     });
 

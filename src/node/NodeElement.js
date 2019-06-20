@@ -40,9 +40,10 @@ export default class NodeElement extends HTMLElement {
           align-items: center;
           justify-content: space-between;
         }
-        section.input ::slotted(*) {
+        section.input .input {
           flex: 2;
           min-width: 50%;
+          text-align: center;
         }
         section.input label {
           overflow: hidden;
@@ -88,7 +89,7 @@ export default class NodeElement extends HTMLElement {
           section.innerHTML = `
             <graph-connector></graph-connector>
             <label title="${label}">${label}</label>
-            <slot name="${inputSlotUID}"></slot>
+            <div class="input"><slot name="${inputSlotUID}"></slot></div>
             <graph-connector></graph-connector>
           `;
           const connectors = section.querySelectorAll("graph-connector");
