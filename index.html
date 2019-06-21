@@ -30,12 +30,8 @@
 </head>
 
 <body>
-  <graph-editor config="graph.config.json"></graph-editor>
-  <!-- <graph-editor>
+  <graph-editor config="graph.config.json">
     <graph-node name="Test">
-      <graph-connectors>
-        <graph-input name="Base"></graph-input>
-      </graph-connectors>
       <graph-input-button name="Button" onclick="this.value = Math.random()"></graph-input-button>
       <graph-input-checkbox name="Checkbox"></graph-input-checkbox>
       <graph-input-color name="Color"></graph-input-color>
@@ -44,7 +40,7 @@
       <graph-input-select name="Select" options="[1, 2, 3]"></graph-input-select>
       <graph-input-text name="Text"></graph-input-text>
     </graph-node>
-
+<!-- 
     <graph-node name="Output node" oninput="this.querySelector('#result').value = this.querySelector('#source').value + ' World!'"
       x="350" y="200" width="250">
       <graph-connector id="connector2" outputs="[this.nextElementSibling]"></graph-connector>
@@ -75,8 +71,8 @@
       <section>
         <input type="text" id="tata" disabled style="width: 100%; box-sizing: border-box;">
       </section>
-    </graph-node>
-  </graph-editor> -->
+    </graph-node> -->
+  </graph-editor>
 
 
   <script type="module">
@@ -85,7 +81,7 @@
     import Graph from "./src/index.js";
     customElements.define("graph-editor", Graph);
 
-    import GUI from "./javascript/GUI.js";
+    // import GUI from "./javascript/GUI.js";
 
     // fetch("data.json").then((response) => response.json()).then((data) => {
     //   graph.add(data);

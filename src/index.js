@@ -1,14 +1,28 @@
 import Config from "./Config.js";
 
-for (const customElementName in Config.customElementsMap) {
-  if (customElements.get(customElementName) === undefined) {
-    customElements.define(customElementName, Config.customElementsMap[customElementName]);
-  }
-}
+let initialized = false;
 
 export default class GraphElement extends HTMLElement {
+  static initialize(configUrl) {
+    if (initialized) {
+      console.warn("Graph has already been initialized with a config file.");
+      return Promise.resolve();
+    }
+    initialized = true;
+    return (configUrl ? fetch(configUrl).then((response) => response.json()) : Promise.resolve({})).then((config) => {
+      const customElementUrlsMap = new Map(Object.entries({ ...Config.customElementUrlsMap, ...config.customElementUrlsMap }));
+      async function loadModules() {
+        for (const [customElementName, customElementUrlMap] of customElementUrlsMap) {
+          const module = await import(customElementUrlMap);
+          customElements.define(customElementName, module.default);
+        }
+      };
+      return loadModules();
+    });
+  }
+
   static get observedAttributes() {
-    return ["draggable", "zoomable"];
+    return ["draggable", "zoomable", "config"];
   }
 
   constructor() {
@@ -40,43 +54,43 @@ export default class GraphElement extends HTMLElement {
     this._zoomable.addEventListener("zoom", () => {
       this._draggable.dragFactor = 1 / this._zoomable.zoom;
     });
-
-    this._nodesDataMap = new Map();
-  }
-
-  connectedCallback() {
-    if (this.hasAttribute("config")) {
-      fetch(this.getAttribute("config")).then((response) => response.json()).then((config) => {
-        const customElementUrlsMap = new Map(Object.entries({ ...Config.customElementUrlsMap, ...config.customElementUrlsMap }));
-        for (const [key, customElementUrlMap] of customElementUrlsMap) {
-          import(customElementUrlMap).then((module) => {
-            console.log(module);
-          });
-        }
-      });
-    }
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
-    if (oldValue === newValue) {
-      return;
+    switch (name) {
+      case "config":
+        GraphElement.initialize(newValue);
+        break;
+      case "draggable":
+        this._draggable.disabled = !newValue;
+        break;
+      case "zoomable":
+        this._zoomable.disabled = !newValue;
+        break;
     }
-    this[name] = newValue === "true";
   }
 
   get zoomable() {
-    return this._zoomable.disabled;
+    return this.hasAttribute("zoomable");
   }
 
   set zoomable(value) {
-    this._zoomable.disabled = !value;
+    if (value) {
+      this.setAttribute("zoomable", "");
+    } else {
+      this.removeAttribute("zoomable");
+    }
   }
 
   get draggable() {
-    return this._draggable.disabled;
+    return this.hasAttribute("draggable");
   }
 
   set draggable(value) {
-    this._draggable.disabled = !value;
+    if (value) {
+      this.setAttribute("draggable", "");
+    } else {
+      this.removeAttribute("draggable");
+    }
   }
 }

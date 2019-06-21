@@ -1,4 +1,15 @@
-import "../src/index.js";
+import Graph from "../src/index.js";
+
+let initialized = false;
+const queue = new Set();
+
+Graph.initialize().then(() => {
+  initialized = true;
+  for (const options of queue) {
+    GUI.add(options);
+    queue.delete(options);
+  }
+});
 
 let graph;
 let mainNode;
@@ -29,6 +40,45 @@ export default class GUI {
   static add(options) {
     options = { ...options };
 
+    if (!options.id && options.key) {
+      options.id = `${options.folder ? options.folder + "/" : ""}${options.key}`;
+    }
+    if (!options.id) {
+      console.warn(`GUI: ${JSON.stringify(options)} doesn't have any id`);
+    }
+    
+    const urlValue = valuesMap.get(options.id);
+
+    if (urlValue !== undefined) {
+      if (options.object) {
+        options.object[options.key] = urlValue;
+      }
+    }
+
+    if (!initialized) {
+      queue.add(options);
+      return options.object ? options.object[options.key] : options.value;
+    }
+
+    if (!options.tagName) {
+      options.tagName = "graph-input-text";
+      if (options.object) {
+        options.value = options.object[options.key];
+      }
+      for (const [tagName, resolve] of tagNameResolvers) {
+        if (resolve(options)) {
+          options.tagName = tagName;
+          break;
+        }
+      }
+    }
+
+    let { object, key, folder, reload } = options;
+    delete options.object;
+    delete options.key;
+    delete options.folder;
+    delete options.reload;
+
     if (!mainNode) {
       mainNode = document.createElement("graph-node");
       mainNode.name = "GUI";
@@ -55,25 +105,6 @@ export default class GUI {
       `);
     }
 
-    if (!options.tagName) {
-      options.tagName = "graph-input-text";
-      if (options.object) {
-        options.value = options.object[options.key];
-      }
-      for (const [tagName, resolve] of tagNameResolvers) {
-        if (resolve(options)) {
-          options.tagName = tagName;
-          break;
-        }
-      }
-    }
-
-    let { object, key, folder, reload } = options;
-    delete options.object;
-    delete options.key;
-    delete options.folder;
-    delete options.reload;
-
     let folderElement = mainNode;
 
     if (folder) {
@@ -98,13 +129,6 @@ export default class GUI {
       }
     }
 
-    if (!options.id && key) {
-      options.id = `${folder ? folder + "/" : ""}${key}`;
-    }
-    if (!options.id) {
-      console.warn(`GUI: ${JSON.stringify(options)} doesn't have any id`);
-    }
-
     const element = document.createElement(options.tagName);
     for (const key in options) {
       if (key === "tagName") {
@@ -114,11 +138,7 @@ export default class GUI {
     }
     folderElement.appendChild(element);
 
-    const urlValue = valuesMap.get(options.id);
     if (urlValue !== undefined) {
-      if (object) {
-        object[key] = urlValue;
-      }
       element.value = urlValue;
       element.dispatchEvent(new Event("input"));
     }
