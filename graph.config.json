@@ -1,0 +1,17 @@
+{
+  "customElementUrlsMap": {
+    "graph-draggable": "../node_modules/@damienmortini/elements/src/draggable/index.js",
+    "graph-zoomable": "../node_modules/@damienmortini/elements/src/zoomable/index.js",
+    "graph-link": "../node_modules/@damienmortini/elements/src/link/index.js",
+    "graph-connector": "../node_modules/@damienmortini/elements/src/input-connectorlink/index.js",
+    "graph-node": "../node_modules/@damienmortini/elements/src/node/index.js",
+    "graph-input-button": "../node_modules/@damienmortini/elements/src/input-button/index.js",
+    "graph-input-checkbox": "../node_modules/@damienmortini/elements/src/input-checkbox/index.js",
+    "graph-input-pad2d": "../node_modules/@damienmortini/elements/src/input-pad2d/index.js",
+    "graph-input-color": "../node_modules/@damienmortini/elements/src/input-colorpicker/index.js",
+    "graph-input-number": "../node_modules/@damienmortini/elements/src/input-number/index.js",
+    "graph-input-range": "../node_modules/@damienmortini/elements/src/input-range/index.js",
+    "graph-input-select": "../node_modules/@damienmortini/elements/src/input-select/index.js",
+    "graph-input-text": "../node_modules/@damienmortini/elements/src/input-text/index.js"
+  }
+}

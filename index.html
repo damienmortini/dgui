@@ -30,6 +30,7 @@
 </head>
 
 <body>
+  <graph-editor config="graph.config.json"></graph-editor>
   <!-- <graph-editor>
     <graph-node name="Test">
       <graph-connectors>
@@ -81,7 +82,8 @@
   <script type="module">
     import(`./${/\bdev\b/.test(window.location.search) ? "src" : "build"}/index.js`);
 
-    import "./src/index.js";
+    import Graph from "./src/index.js";
+    customElements.define("graph-editor", Graph);
 
     import GUI from "./javascript/GUI.js";
 
@@ -110,48 +112,48 @@
     //   ]
     // });
 
-    GUI.add({
-      name: "Hey",
-      object: { value: .5 },
-      key: "value"
-    });
+    // GUI.add({
+    //   name: "Hey",
+    //   object: { value: .5 },
+    //   key: "value"
+    // });
 
-    GUI.add({
-      name: "Hey",
-      object: { value: "bonjour" },
-      key: "value",
-    });
+    // GUI.add({
+    //   name: "Hey",
+    //   object: { value: "bonjour" },
+    //   key: "value",
+    // });
 
-    GUI.add({
-      name: "Hey",
-      object: { value: false },
-      key: "value",
-    });
+    // GUI.add({
+    //   name: "Hey",
+    //   object: { value: false },
+    //   key: "value",
+    // });
 
-    GUI.add({
-      name: "Hey",
-      object: { value: "#ff0000" },
-      key: "value",
-    });
+    // GUI.add({
+    //   name: "Hey",
+    //   object: { value: "#ff0000" },
+    //   key: "value",
+    // });
 
-    GUI.add({
-      name: "Hey",
-      object: { value: 4 },
-      key: "value",
-      options: [
-        1,
-        2,
-        4,
-        8
-      ]
-    });
+    // GUI.add({
+    //   name: "Hey",
+    //   object: { value: 4 },
+    //   key: "value",
+    //   options: [
+    //     1,
+    //     2,
+    //     4,
+    //     8
+    //   ]
+    // });
 
-    GUI.add({
-      label: "Hey",
-      onclick: () => {
-        console.log("fkldsfd");
-      }
-    });
+    // GUI.add({
+    //   label: "Hey",
+    //   onclick: () => {
+    //     console.log("fkldsfd");
+    //   }
+    // });
 
     // const test = GUI.add({
     //   name: "Hey",
