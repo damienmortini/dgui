@@ -1,15 +1,24 @@
-import Graph from "../src/index.js";
+import NodeElement from "../../elements/src/node/index.js";
+import InputButtonElement from "../../elements/src/input-button/index.js";
+import InputCheckboxElement from "../../elements/src/input-checkbox/index.js";
+import InputColorPickerElement from "../../elements/src/input-colorpicker/index.js";
+import InputRangeElement from "../../elements/src/input-range/index.js";
+import InputSelectElement from "../../elements/src/input-select/index.js";
+import InputTextElement from "../../elements/src/input-text/index.js";
 
-let initialized = false;
-const queue = new Set();
+const customElementsMap = new Map(Object.entries({
+  "graph-node": NodeElement,
+  "graph-input-button": InputButtonElement,
+  "graph-input-checkbox": InputCheckboxElement,
+  "graph-input-color": InputColorPickerElement,
+  "graph-input-range": InputRangeElement,
+  "graph-input-select": InputSelectElement,
+  "graph-input-text": InputTextElement,
+}));
 
-Graph.initialize().then(() => {
-  initialized = true;
-  for (const options of queue) {
-    GUI.add(options);
-    queue.delete(options);
-  }
-});
+for (const [customElementName, customElementConstructor] of customElementsMap) {
+  customElements.define(customElementName, customElementConstructor);
+}
 
 let graph;
 let mainNode;
@@ -40,24 +49,19 @@ export default class GUI {
   static add(options) {
     options = { ...options };
 
-    if (!options.id && options.key) {
+    if (options.id === undefined && options.key !== undefined) {
       options.id = `${options.folder ? options.folder + "/" : ""}${options.key}`;
     }
     if (!options.id) {
       console.warn(`GUI: ${JSON.stringify(options)} doesn't have any id`);
     }
-    
+
     const urlValue = valuesMap.get(options.id);
 
     if (urlValue !== undefined) {
       if (options.object) {
         options.object[options.key] = urlValue;
       }
-    }
-
-    if (!initialized) {
-      queue.add(options);
-      return options.object ? options.object[options.key] : options.value;
     }
 
     if (!options.tagName) {
