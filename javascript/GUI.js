@@ -1,7 +1,8 @@
 import NodeElement from "../../elements/src/node/index.js";
 import InputButtonElement from "../../elements/src/input-button/index.js";
 import InputCheckboxElement from "../../elements/src/input-checkbox/index.js";
-import InputColorPickerElement from "../../elements/src/input-colorpicker/index.js";
+import InputColorElement from "../../elements/src/input-color/index.js";
+// import InputColorPickerElement from "../../elements/src/input-colorpicker/index.js";
 import InputRangeElement from "../../elements/src/input-range/index.js";
 import InputSelectElement from "../../elements/src/input-select/index.js";
 import InputTextElement from "../../elements/src/input-text/index.js";
@@ -10,7 +11,7 @@ const customElementsMap = new Map(Object.entries({
   "graph-node": NodeElement,
   "graph-input-button": InputButtonElement,
   "graph-input-checkbox": InputCheckboxElement,
-  "graph-input-color": InputColorPickerElement,
+  "graph-input-color": InputColorElement,
   "graph-input-range": InputRangeElement,
   "graph-input-select": InputSelectElement,
   "graph-input-text": InputTextElement,
@@ -104,6 +105,13 @@ export default class GUI {
           graph-node {
             background: transparent;
             border: none;
+          }
+          graph-node::-webkit-scrollbar { 
+            background: transparent;
+            width: 4px;
+          }
+          graph-node::-webkit-scrollbar-thumb { 
+            background: rgba(1, 1, 1, .1);
           }
         </style>
       `);
