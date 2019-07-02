@@ -21,7 +21,6 @@ for (const [customElementName, customElementConstructor] of customElementsMap) {
   customElements.define(customElementName, customElementConstructor);
 }
 
-let graph;
 let mainNode;
 
 const tagNameResolvers = new Map([
@@ -39,12 +38,8 @@ const foldersMap = new Map();
 const valuesMap = new Map(JSON.parse(new URLSearchParams(location.hash.slice(1)).get("gui")));
 
 export default class GUI {
-  get graph() {
-    return graph;
-  }
-
-  set graph(value) {
-    graph = value;
+  static get folders() {
+    return foldersMap;
   }
 
   static add(options) {
@@ -130,12 +125,17 @@ export default class GUI {
         path += folderName;
         folderElement = foldersMap.get(path);
         if (!folderElement) {
-          const template = document.createElement("template");
-          template.innerHTML = `<graph-node name="${folderName}" noconnector></graph-node>`;
-          folderElement = template.content.firstChild;
-          parentFolderElement.appendChild(folderElement);
+          folderElement = document.createElement("graph-node");
+          folderElement.name = folderName;
+          folderElement.noConnector = true;
           folderElement.style.resize = "none";
-          foldersMap.set(path, folderElement);
+          const currentPath = path;
+          folderElement.close = !(sessionStorage.getItem(`GUI[${currentPath}]`) === "false");
+          folderElement.addEventListener("toggle", (event) => {
+            sessionStorage.setItem(`GUI[${currentPath}]`, event.target.close);
+          });
+          parentFolderElement.appendChild(folderElement);
+          foldersMap.set(currentPath, folderElement);
         }
         parentFolderElement = folderElement;
       }
