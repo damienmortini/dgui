@@ -22,6 +22,7 @@ for (const [customElementName, customElementConstructor] of customElementsMap) {
 }
 
 let mainNode;
+let hidden = false;
 
 const tagNameResolvers = new Map([
   ["graph-input-button", (attributes) => !!attributes.onclick],
@@ -40,6 +41,17 @@ const valuesMap = new Map(JSON.parse(new URLSearchParams(location.hash.slice(1))
 export default class GUI {
   static get folders() {
     return foldersMap;
+  }
+
+  static get hidden() {
+    return hidden;
+  }
+
+  static set hidden(value) {
+    hidden = value;
+    if(mainNode) {
+      mainNode.style.display = hidden ? "none" : "";
+    }
   }
 
   static add(options) {
@@ -81,6 +93,7 @@ export default class GUI {
 
     if (!mainNode) {
       mainNode = document.createElement("graph-node");
+      GUI.hidden = GUI.hidden;
       mainNode.name = "GUI";
       mainNode.classList.add("gui");
       mainNode.noConnector = true;
