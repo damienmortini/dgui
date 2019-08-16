@@ -10,7 +10,7 @@ export default class GraphElement extends HTMLElement {
     }
     initialized = true;
     return (configUrl ? fetch(configUrl).then((response) => response.json()) : Promise.resolve({})).then((config) => {
-      const customElementUrlsMap = new Map(Object.entries({ ...Config.customElementUrlsMap, ...config.customElementUrlsMap }));
+      const customElementUrlsMap = new Map(Object.entries(Object.assign(Config.customElementUrlsMap, config.customElementUrlsMap)));
       async function loadModules() {
         for (const [customElementName, customElementUrlMap] of customElementUrlsMap) {
           const module = await import(customElementUrlMap);

@@ -49,13 +49,13 @@ export default class GUI {
 
   static set hidden(value) {
     hidden = value;
-    if(mainNode) {
+    if (mainNode) {
       mainNode.style.display = hidden ? "none" : "";
     }
   }
 
   static add(options) {
-    options = { ...options };
+    options = Object.assign({}, options);
 
     if (options.id === undefined && options.key !== undefined) {
       options.id = `${options.folder ? options.folder + "/" : ""}${options.key}`;
