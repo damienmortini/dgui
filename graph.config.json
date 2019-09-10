@@ -1,5 +1,6 @@
 {
   "customElementUrlsMap": {
+    "graph-viewport": "../node_modules/@damienmortini/elements/src/viewport/index.js",
     "graph-draggable": "../node_modules/@damienmortini/elements/src/draggable/index.js",
     "graph-zoomable": "../node_modules/@damienmortini/elements/src/zoomable/index.js",
     "graph-link": "../node_modules/@damienmortini/elements/src/link/index.js",

@@ -1,5 +1,6 @@
 const Config = {
   customElementUrlsMap: {
+    "graph-viewport": "../../elements/src/viewport/index.js",
     "graph-draggable": "../../elements/src/draggable/index.js",
     "graph-zoomable": "../../elements/src/zoomable/index.js",
     "graph-link": "../../elements/src/link/index.js",
