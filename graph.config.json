@@ -4,7 +4,6 @@
     "graph-draggable": "../node_modules/@damienmortini/elements/src/draggable/index.js",
     "graph-zoomable": "../node_modules/@damienmortini/elements/src/zoomable/index.js",
     "graph-link": "../node_modules/@damienmortini/elements/src/link/index.js",
-    "graph-connector": "../node_modules/@damienmortini/elements/src/input-connectorlink/index.js",
     "graph-node": "../node_modules/@damienmortini/elements/src/node/index.js",
     "graph-input-button": "../node_modules/@damienmortini/elements/src/input-button/index.js",
     "graph-input-checkbox": "../node_modules/@damienmortini/elements/src/input-checkbox/index.js",

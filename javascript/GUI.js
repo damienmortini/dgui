@@ -1,20 +1,20 @@
-import NodeElement from "../../elements/src/node/index.js";
-import InputButtonElement from "../../elements/src/input-button/index.js";
-import InputCheckboxElement from "../../elements/src/input-checkbox/index.js";
-import InputColorElement from "../../elements/src/input-color/index.js";
+import NodeElement from '../../elements/src/node/index.js';
+import InputButtonElement from '../../elements/src/input-button/index.js';
+import InputCheckboxElement from '../../elements/src/input-checkbox/index.js';
+import InputColorElement from '../../elements/src/input-color/index.js';
 // import InputColorPickerElement from "../../elements/src/input-colorpicker/index.js";
-import InputRangeElement from "../../elements/src/input-range/index.js";
-import InputSelectElement from "../../elements/src/input-select/index.js";
-import InputTextElement from "../../elements/src/input-text/index.js";
+import InputRangeElement from '../../elements/src/input-range/index.js';
+import InputSelectElement from '../../elements/src/input-select/index.js';
+import InputTextElement from '../../elements/src/input-text/index.js';
 
 const customElementsMap = new Map(Object.entries({
-  "graph-node": NodeElement,
-  "graph-input-button": InputButtonElement,
-  "graph-input-checkbox": InputCheckboxElement,
-  "graph-input-color": InputColorElement,
-  "graph-input-range": InputRangeElement,
-  "graph-input-select": InputSelectElement,
-  "graph-input-text": InputTextElement,
+  'graph-node': NodeElement,
+  'graph-input-button': InputButtonElement,
+  'graph-input-checkbox': InputCheckboxElement,
+  'graph-input-color': InputColorElement,
+  'graph-input-range': InputRangeElement,
+  'graph-input-select': InputSelectElement,
+  'graph-input-text': InputTextElement,
 }));
 
 for (const [customElementName, customElementConstructor] of customElementsMap) {
@@ -25,18 +25,18 @@ let mainNode;
 let hidden = false;
 
 const tagNameResolvers = new Map([
-  ["graph-input-button", (attributes) => !!attributes.onclick],
-  ["graph-input-select", (attributes) => !!attributes.options],
-  ["graph-input-color", (attributes) => {
-    return typeof attributes.value === "string" && ((attributes.value.length === 7 && attributes.value.startsWith("#")) || attributes.value.startsWith("rgb") || attributes.value.startsWith("hsl")) || (typeof attributes.value === "object" && attributes.value.r !== undefined && attributes.value.g !== undefined && attributes.value.b !== undefined);
+  ['graph-input-button', (attributes) => !!attributes.onclick],
+  ['graph-input-select', (attributes) => !!attributes.options],
+  ['graph-input-color', (attributes) => {
+    return typeof attributes.value === 'string' && ((attributes.value.length === 7 && attributes.value.startsWith('#')) || attributes.value.startsWith('rgb') || attributes.value.startsWith('hsl')) || (typeof attributes.value === 'object' && attributes.value.r !== undefined && attributes.value.g !== undefined && attributes.value.b !== undefined);
   }],
-  ["graph-input-text", (attributes) => typeof attributes.value === "string"],
-  ["graph-input-range", (attributes) => typeof attributes.value === "number"],
-  ["graph-input-checkbox", (attributes) => typeof attributes.value === "boolean"],
+  ['graph-input-text', (attributes) => typeof attributes.value === 'string'],
+  ['graph-input-range', (attributes) => typeof attributes.value === 'number'],
+  ['graph-input-checkbox', (attributes) => typeof attributes.value === 'boolean'],
 ]);
 
 const foldersMap = new Map();
-const valuesMap = new Map(JSON.parse(new URLSearchParams(location.hash.slice(1)).get("gui")));
+const valuesMap = new Map(JSON.parse(new URLSearchParams(location.hash.slice(1)).get('gui')));
 
 export default class GUI {
   static get folders() {
@@ -50,7 +50,7 @@ export default class GUI {
   static set hidden(value) {
     hidden = value;
     if (mainNode) {
-      mainNode.style.display = hidden ? "none" : "";
+      mainNode.style.display = hidden ? 'none' : '';
     }
   }
 
@@ -58,7 +58,7 @@ export default class GUI {
     options = Object.assign({}, options);
 
     if (options.id === undefined && options.key !== undefined) {
-      options.id = `${options.folder ? options.folder + "/" : ""}${options.key}`;
+      options.id = `${options.folder ? options.folder + '/' : ''}${options.key}`;
     }
     if (!options.id) {
       console.warn(`GUI: ${JSON.stringify(options)} doesn't have any id`);
@@ -73,7 +73,7 @@ export default class GUI {
     }
 
     if (!options.tagName) {
-      options.tagName = "graph-input-text";
+      options.tagName = 'graph-input-text';
       if (options.object) {
         options.value = options.object[options.key];
       }
@@ -85,20 +85,19 @@ export default class GUI {
       }
     }
 
-    let { object, key, folder, reload } = options;
+    const { object, key, folder, reload } = options;
     delete options.object;
     delete options.key;
     delete options.folder;
     delete options.reload;
 
     if (!mainNode) {
-      mainNode = document.createElement("graph-node");
+      mainNode = document.createElement('graph-node');
       GUI.hidden = GUI.hidden;
-      mainNode.name = "GUI";
-      mainNode.classList.add("gui");
-      mainNode.noConnector = true;
+      mainNode.name = 'GUI';
+      mainNode.classList.add('gui');
       document.body.appendChild(mainNode);
-      mainNode.insertAdjacentHTML("afterbegin", `
+      mainNode.insertAdjacentHTML('afterbegin', `
         <style>
           graph-node.gui {
             position: absolute;
@@ -128,23 +127,23 @@ export default class GUI {
     let folderElement = mainNode;
 
     if (folder) {
-      const folderNames = folder.split("/");
-      let path = "";
+      const folderNames = folder.split('/');
+      let path = '';
       let parentFolderElement = mainNode;
       for (const folderName of folderNames) {
         if (path) {
-          path += "/";
+          path += '/';
         }
         path += folderName;
         folderElement = foldersMap.get(path);
         if (!folderElement) {
-          folderElement = document.createElement("graph-node");
+          folderElement = document.createElement('graph-node');
           folderElement.name = folderName;
           folderElement.noConnector = true;
-          folderElement.style.resize = "none";
+          folderElement.style.resize = 'none';
           const currentPath = path;
-          folderElement.close = !(sessionStorage.getItem(`GUI[${currentPath}]`) === "false");
-          folderElement.addEventListener("toggle", (event) => {
+          folderElement.close = !(sessionStorage.getItem(`GUI[${currentPath}]`) === 'false');
+          folderElement.addEventListener('toggle', (event) => {
             sessionStorage.setItem(`GUI[${currentPath}]`, event.target.close);
           });
           parentFolderElement.appendChild(folderElement);
@@ -156,7 +155,7 @@ export default class GUI {
 
     const element = document.createElement(options.tagName);
     for (const key in options) {
-      if (key === "tagName") {
+      if (key === 'tagName') {
         continue;
       }
       element[key] = options[key];
@@ -165,11 +164,11 @@ export default class GUI {
 
     if (urlValue !== undefined) {
       element.value = urlValue;
-      element.dispatchEvent(new Event("input"));
+      element.dispatchEvent(new Event('input'));
     }
 
     let timeout;
-    element.addEventListener("input", () => {
+    element.addEventListener('input', () => {
       valuesMap.set(options.id, element.value);
       if (object) {
         object[key] = element.value;
@@ -178,7 +177,7 @@ export default class GUI {
       clearTimeout(timeout);
       timeout = setTimeout(() => {
         const urlSearchParams = new URLSearchParams(location.hash.slice(1));
-        urlSearchParams.set("gui", JSON.stringify([...valuesMap]));
+        urlSearchParams.set('gui', JSON.stringify([...valuesMap]));
         location.hash = urlSearchParams.toString();
         if (reload) {
           window.location.reload();

@@ -4,14 +4,14 @@
   "description": "The ultimate node editor to become",
   "main": "index.js",
   "scripts": {
-    "start": "server --path=?dev",
-    "build": "rollup -c",
-    "release": "npm run build && terser build/index.js --compress --mangle --module --output build/index.js",
-    "docs": "jsdoc -c jsdoc.config.json",
-    "server": "nodemon --watch server server/index.js",
     "bump-patch": "npm version patch && npm publish --access=public",
     "bump-minor": "npm version minor && npm publish --access=public",
     "bump-major": "npm version major && npm publish --access=public",
+    "build": "rollup -c",
+    "docs": "jsdoc -c jsdoc.config.json",
+    "release": "npm run build && terser build/index.js --compress --mangle --module --output build/index.js",
+    "server": "nodemon --watch server server/index.js",
+    "start": "server --path=?dev",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Damien Mortini",
@@ -24,7 +24,7 @@
   "devDependencies": {
     "@damienmortini/server": "^1.0.3",
     "jsdoc": "^3.6.3",
-    "rollup": "^1.25.2",
+    "rollup": "^1.26.0",
     "terser": "^4.3.9"
   }
 }
