@@ -31,7 +31,7 @@
 
 <body>
   <graph-editor config="graph.config.json">
-    <graph-node name="Test">
+    <graph-node name="Test" style="width:300px">
       <graph-input-button name="Button" onclick="this.value = Math.random()">Click here</graph-input-button>
       <graph-input-checkbox name="Checkbox"></graph-input-checkbox>
       <graph-input-color name="Color"></graph-input-color>
@@ -40,38 +40,26 @@
       <graph-input-select name="Select" options="[1, 2, 3]"></graph-input-select>
       <graph-input-text name="Text"></graph-input-text>
     </graph-node>
-<!-- 
-    <graph-node name="Output node" oninput="this.querySelector('#result').value = this.querySelector('#source').value + ' World!'"
-      x="350" y="200" width="250">
-      <graph-connector id="connector2" outputs="[this.nextElementSibling]"></graph-connector>
-      <input type="text" id="source" name="output">
+
+    <graph-node name="Output node"
+      oninput="this.querySelector('#result').value = this.querySelector('#source').value + ' World!'" style="left:350px; top:200px; width:250px">
+      <input type="text" id="source" name="output" style="width: 100%; box-sizing: border-box;">
       <input type="text" id="result" disabled style="width: 100%; box-sizing: border-box;">
     </graph-node>
 
-    <graph-node name="Input node" x="50" y="100" width="250">
-      <input type="text" name="input">
-      <graph-connector inputs="[this.previousElementSibling]" outputs="[document.querySelector('#connector2')]"></graph-connector>
+    <graph-node name="Input node" style="left:50px; top:50px; width:250px">
+      <input type="text" name="input" style="width: 100%; box-sizing: border-box;">
     </graph-node>
 
-    <graph-node name="Third node" x="300" y="400" width="250">
-      <section>
-        <graph-connector outputs="[this.nextElementSibling]"></graph-connector>
-        <input type="text">
-        <graph-connector inputs="[this.previousElementSibling]"></graph-connector>
-      </section>
+    <graph-node name="Third node" style="left:100px; top:400px; width:250px">
+      <input type="text" style="width: 100%; box-sizing: border-box;">
     </graph-node>
 
-    <graph-node name="Fourth node" oninput="this.querySelector('#tata').value = this.querySelector('#toto').value + '_yoyo'"
-      x="200" y="500" width="250">
-      <section>
-        <graph-connector outputs="[this.nextElementSibling]"></graph-connector>
-        <input type="text" id="toto">
-        <graph-connector inputs="[this.previousElementSibling]"></graph-connector>
-      </section>
-      <section>
-        <input type="text" id="tata" disabled style="width: 100%; box-sizing: border-box;">
-      </section>
-    </graph-node> -->
+    <graph-node name="Fourth node"
+      oninput="this.querySelector('#tata').value = this.querySelector('#toto').value + '_yoyo'" style="left:200px; top:500px; width:250px">
+      <input type="text" id="toto" style="width: 100%; box-sizing: border-box;">
+      <input type="text" id="tata" disabled style="width: 100%; box-sizing: border-box;">
+    </graph-node>
   </graph-editor>
 
 

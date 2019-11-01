@@ -45,6 +45,17 @@ export default class GraphElement extends HTMLElement {
         <slot></slot>
       </graph-viewport>
     `;
+
+    customElements.whenDefined('graph-viewport').then(() => {
+      this.shadowRoot.querySelector('graph-viewport').childrenDragAndDropExceptions.push((nodes) => {
+        for (const node of nodes) {
+          if ((node.nodeName === 'INPUT' || node.nodeName === 'BUTTON' || node.nodeName === 'TEXTAREA') && !node.disabled) {
+            return true;
+          }
+        }
+        return false;
+      });
+    })
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
