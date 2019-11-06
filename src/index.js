@@ -1,30 +1,34 @@
-import Config from './Config.js';
+import InputButtonElement from '../node_modules/@damienmortini/elements/src/input-button/index.js';
+import InputCheckboxElement from '../node_modules/@damienmortini/elements/src/input-checkbox/index.js';
+import InputPad2DElement from '../node_modules/@damienmortini/elements/src/input-pad2d/index.js';
+import InputColorElement from '../node_modules/@damienmortini/elements/src/input-color/index.js';
+import InputNumberElement from '../node_modules/@damienmortini/elements/src/input-number/index.js';
+import InputRangeElement from '../node_modules/@damienmortini/elements/src/input-range/index.js';
+import InputSelectElement from '../node_modules/@damienmortini/elements/src/input-select/index.js';
+import InputTextElement from '../node_modules/@damienmortini/elements/src/input-text/index.js';
+import LinkElement from '../node_modules/@damienmortini/elements/src/link/index.js';
+import NodeElement from '../node_modules/@damienmortini/elements/src/node/index.js';
+import ViewportElement from '../node_modules/@damienmortini/elements/src/viewport/index.js';
 
-let initialized = false;
+for (const [name, constructor] of new Map([
+  ['graph-input-button', InputButtonElement],
+  ['graph-input-checkbox', InputCheckboxElement],
+  ['graph-input-pad2d', InputPad2DElement],
+  ['graph-input-color', InputColorElement],
+  ['graph-input-number', InputNumberElement],
+  ['graph-input-range', InputRangeElement],
+  ['graph-input-select', InputSelectElement],
+  ['graph-input-text', InputTextElement],
+  ['graph-link', LinkElement],
+  ['graph-node', NodeElement],
+  ['graph-viewport', ViewportElement],
+])) {
+  if (!customElements.get(name)) {
+    customElements.define(name, constructor);
+  }
+}
 
 export default class GraphElement extends HTMLElement {
-  static get observedAttributes() {
-    return ['config'];
-  }
-
-  static initialize(configUrl) {
-    if (initialized) {
-      console.warn('Graph has already been initialized with a config file.');
-      return Promise.resolve();
-    }
-    initialized = true;
-    return (configUrl ? fetch(configUrl).then((response) => response.json()) : Promise.resolve({})).then((config) => {
-      const customElementUrlsMap = new Map(Object.entries(Object.assign(Config.customElementUrlsMap, config.customElementUrlsMap)));
-      async function loadModules() {
-        for (const [customElementName, customElementUrlMap] of customElementUrlsMap) {
-          const module = await import(customElementUrlMap);
-          customElements.define(customElementName, module.default);
-        }
-      };
-      return loadModules();
-    });
-  }
-
   constructor() {
     super();
 
@@ -46,15 +50,13 @@ export default class GraphElement extends HTMLElement {
       </graph-viewport>
     `;
 
-    customElements.whenDefined('graph-viewport').then(() => {
-      this.shadowRoot.querySelector('graph-viewport').childrenDragAndDropExceptions.push((nodes) => {
-        for (const node of nodes) {
-          if ((node.nodeName === 'NODE-CONNECTOR-INPUT' || node.nodeName === 'INPUT' || node.nodeName === 'BUTTON' || node.nodeName === 'TEXTAREA') && !node.disabled) {
-            return true;
-          }
+    this.shadowRoot.querySelector('graph-viewport').childrenDragAndDropExceptions.push((nodes) => {
+      for (const node of nodes) {
+        if ((node.nodeName === 'NODE-CONNECTOR-INPUT' || node.nodeName === 'INPUT' || node.nodeName === 'BUTTON' || node.nodeName === 'TEXTAREA') && !node.disabled) {
+          return true;
         }
-        return false;
-      });
+      }
+      return false;
     });
 
     const currentViewport = this.shadowRoot.querySelector('graph-viewport');
@@ -80,13 +82,5 @@ export default class GraphElement extends HTMLElement {
     };
     this.addEventListener('linkstart', onLink);
     this.addEventListener('linkend', onLink);
-  }
-
-  attributeChangedCallback(name, oldValue, newValue) {
-    switch (name) {
-      case 'config':
-        GraphElement.initialize(newValue);
-        break;
-    }
   }
 }

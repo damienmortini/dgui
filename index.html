@@ -30,7 +30,7 @@
 </head>
 
 <body>
-  <graph-editor config="graph.config.json">
+  <graph-editor>
     <graph-node name="Test" style="width:300px">
       <graph-input-button name="Button" onclick="this.value = Math.random()">Click here</graph-input-button>
       <graph-input-checkbox name="Checkbox"></graph-input-checkbox>
@@ -42,7 +42,8 @@
     </graph-node>
 
     <graph-node name="Output node"
-      oninput="this.querySelector('#result').value = this.querySelector('#source').value + ' World!'" style="left:350px; top:200px; width:250px">
+      oninput="this.querySelector('#result').value = this.querySelector('#source').value + ' World!'"
+      style="left:350px; top:200px; width:250px">
       <input type="text" id="source" name="output" style="width: 100%; box-sizing: border-box;">
       <input type="text" id="result" disabled style="width: 100%; box-sizing: border-box;">
     </graph-node>
@@ -56,7 +57,8 @@
     </graph-node>
 
     <graph-node name="Fourth node"
-      oninput="this.querySelector('#tata').value = this.querySelector('#toto').value + '_yoyo'" style="left:200px; top:500px; width:250px">
+      oninput="this.querySelector('#tata').value = this.querySelector('#toto').value + '_yoyo'"
+      style="left:200px; top:500px; width:250px">
       <input type="text" id="toto" style="width: 100%; box-sizing: border-box;">
       <input type="text" id="tata" disabled style="width: 100%; box-sizing: border-box;">
     </graph-node>
