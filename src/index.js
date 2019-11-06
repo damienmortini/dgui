@@ -50,14 +50,14 @@ export default class GraphElement extends HTMLElement {
       </graph-viewport>
     `;
 
-    this.shadowRoot.querySelector('graph-viewport').childrenDragAndDropExceptions.push((nodes) => {
-      for (const node of nodes) {
+    this.shadowRoot.querySelector('graph-viewport').dragAndDropException = (event) => {
+      for (const node of event.composedPath()) {
         if ((node.nodeName === 'NODE-CONNECTOR-INPUT' || node.nodeName === 'INPUT' || node.nodeName === 'BUTTON' || node.nodeName === 'TEXTAREA') && !node.disabled) {
           return true;
         }
       }
       return false;
-    });
+    };
 
     const currentViewport = this.shadowRoot.querySelector('graph-viewport');
     let currentLink;
