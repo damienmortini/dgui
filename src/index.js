@@ -50,9 +50,9 @@ export default class GraphElement extends HTMLElement {
       </graph-viewport>
     `;
 
-    this.shadowRoot.querySelector('graph-viewport').dragAndDropException = (event) => {
+    this.shadowRoot.querySelector('graph-viewport').preventManipulation = (event) => {
       for (const node of event.composedPath()) {
-        if ((node.nodeName === 'NODE-CONNECTOR-INPUT' || node.nodeName === 'INPUT' || node.nodeName === 'BUTTON' || node.nodeName === 'TEXTAREA') && !node.disabled) {
+        if ('value' in node && !node.disabled) {
           return true;
         }
       }

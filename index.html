@@ -20,6 +20,7 @@
       height: 100%;
       margin: 0;
       overflow: hidden;
+      /* background: #111; */
     }
 
     graph-editor {
@@ -53,22 +54,22 @@
 
     <graph-node name="Output node"
       oninput="this.querySelector('#result').value = this.querySelector('#source').value + ' World!'"
-      style="left:350px; top:200px; width:250px">
+      style="transform: translate(350px, 200px); width:250px">
       <input type="text" id="source" name="output" style="width: 100%; box-sizing: border-box;">
       <input type="text" id="result" disabled style="width: 100%; box-sizing: border-box;">
     </graph-node>
 
-    <graph-node name="Input node" style="left:50px; top:50px; width:250px">
+    <graph-node name="Input node" style="transform: translate(50px, 50px); width:250px">
       <input type="text" name="input" style="width: 100%; box-sizing: border-box;">
     </graph-node>
 
-    <graph-node name="Third node" style="left:100px; top:400px; width:250px">
+    <graph-node name="Third node" style="transform: translate(100px, 400px); width:250px">
       <input type="text" style="width: 100%; box-sizing: border-box;">
     </graph-node>
 
     <graph-node name="Fourth node"
       oninput="this.querySelector('#tata').value = this.querySelector('#toto').value + '_yoyo'"
-      style="left:200px; top:500px; width:250px">
+      style="transform: translate(200px, 500px); width:250px">
       <input type="text" id="toto" style="width: 100%; box-sizing: border-box;">
       <input type="text" id="tata" disabled style="width: 100%; box-sizing: border-box;">
     </graph-node>
