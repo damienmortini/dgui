@@ -36,7 +36,6 @@ export default class GraphElement extends HTMLElement {
       <style>
         :host {
           display: block;
-          font-family: sans-serif;
         }
 
         graph-viewport {
@@ -46,11 +45,12 @@ export default class GraphElement extends HTMLElement {
         }
       </style>
       <graph-viewport>
-        <slot></slot>
       </graph-viewport>
     `;
 
-    this.shadowRoot.querySelector('graph-viewport').preventManipulation = (event) => {
+    this._currentViewport = this.shadowRoot.querySelector('graph-viewport');
+
+    this._currentViewport.preventManipulation = (event) => {
       for (const node of event.composedPath()) {
         if ('value' in node && !node.disabled) {
           return true;
@@ -59,7 +59,6 @@ export default class GraphElement extends HTMLElement {
       return false;
     };
 
-    const currentViewport = this.shadowRoot.querySelector('graph-viewport');
     let currentLink;
     const onLink = (event) => {
       if (currentLink) {
@@ -72,7 +71,7 @@ export default class GraphElement extends HTMLElement {
         currentLink = null;
       } else {
         currentLink = document.createElement('graph-link');
-        currentViewport.prepend(currentLink);
+        this._currentViewport.prepend(currentLink);
         currentLink.input = event.composedPath()[0];
         currentLink.addEventListener('click', (event) => {
           event.currentTarget.input.outputs.delete(event.currentTarget.output);
@@ -82,5 +81,62 @@ export default class GraphElement extends HTMLElement {
     };
     this.addEventListener('linkstart', onLink);
     this.addEventListener('linkend', onLink);
+  }
+
+  connectedCallback() {
+    this._currentViewport.innerHTML = `
+      <!-- <div style="width: 300px; height: 300px; background: red"></div> -->
+      <div style="width: 300px; height: 300px; background: red; resize: both;">
+        <div style="width: 200px; height: 100px; background: green; overflow: auto;">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur atque, quibusdam ducimus sapiente, impedit illo sint voluptatem eligendi pariatur sed suscipit accusamus voluptatibus qui? Reprehenderit veritatis natus nulla. Beatae, molestias.
+        </div>
+      </div>
+
+      <graph-node name="Test" style="width:300px;">
+        <graph-input-button name="Button" onclick="this.value = Math.random()">Click here</graph-input-button>
+        <graph-input-checkbox name="Checkbox"></graph-input-checkbox>
+        <graph-input-color name="Color"></graph-input-color>
+        <graph-input-number name="Number"></graph-input-number>
+        <graph-input-range name="Range"></graph-input-range>
+        <graph-input-select name="Select" options="[1, 2, 3]" value="2"></graph-input-select>
+        <graph-input-text name="Text"></graph-input-text>
+      </graph-node>
+
+      <!-- <graph-node name="Input node" style="left:100px; top:100px; width:200px">
+        <input type="text" name="input" style="width: 100%; box-sizing: border-box;">
+      </graph-node>
+      <graph-node name="Input node" style="left:200px; top:200px; width:200px">
+        <input type="text" name="input" style="width: 100%; box-sizing: border-box;">
+      </graph-node>
+      <graph-node name="Input node" style="left:300px; top:300px; width:200px">
+        <input type="text" name="input" style="width: 100%; box-sizing: border-box;">
+      </graph-node> -->
+
+      <graph-node name="Output node"
+        oninput="this.querySelector('#result').value = this.querySelector('#source').value + ' World!'"
+        style="transform: translate(350px, 200px); width:250px">
+        <input type="text" id="source" name="output" style="width: 100%; box-sizing: border-box;">
+        <input type="text" id="result" disabled style="width: 100%; box-sizing: border-box;">
+      </graph-node>
+
+      <graph-node name="Input node" style="transform: translate(500px, 50px); width:250px">
+        <input type="text" name="input" style="width: 100%; box-sizing: border-box;">
+      </graph-node>
+
+      <graph-node name="Third node" style="transform: translate(100px, 400px); width:250px">
+        <input type="text" style="width: 100%; box-sizing: border-box;">
+      </graph-node>
+
+      <graph-node name="Fourth node"
+        oninput="this.querySelector('#tata').value = this.querySelector('#toto').value + '_yoyo'"
+        style="transform: translate(200px, 500px); width:250px">
+        <input type="text" id="toto" style="width: 100%; box-sizing: border-box;">
+        <input type="text" id="tata" disabled style="width: 100%; box-sizing: border-box;">
+      </graph-node>
+    `;
+
+    requestAnimationFrame(() => {
+      this._currentViewport.centerView();
+    });
   }
 }

@@ -20,6 +20,7 @@
       height: 100%;
       margin: 0;
       overflow: hidden;
+      font-family: sans-serif;
       /* background: #111; */
     }
 
@@ -31,51 +32,7 @@
 </head>
 
 <body>
-  <graph-editor>
-    <graph-node name="Test" style="width:300px">
-      <graph-input-button name="Button" onclick="this.value = Math.random()">Click here</graph-input-button>
-      <graph-input-checkbox name="Checkbox"></graph-input-checkbox>
-      <graph-input-color name="Color"></graph-input-color>
-      <graph-input-number name="Number"></graph-input-number>
-      <graph-input-range name="Range"></graph-input-range>
-      <graph-input-select name="Select" options="[1, 2, 3]"></graph-input-select>
-      <graph-input-text name="Text"></graph-input-text>
-    </graph-node>
-
-    <!-- <graph-node name="Input node" style="left:100px; top:100px; width:200px">
-      <input type="text" name="input" style="width: 100%; box-sizing: border-box;">
-    </graph-node>
-    <graph-node name="Input node" style="left:200px; top:200px; width:200px">
-      <input type="text" name="input" style="width: 100%; box-sizing: border-box;">
-    </graph-node>
-    <graph-node name="Input node" style="left:300px; top:300px; width:200px">
-      <input type="text" name="input" style="width: 100%; box-sizing: border-box;">
-    </graph-node> -->
-
-    <graph-node name="Output node"
-      oninput="this.querySelector('#result').value = this.querySelector('#source').value + ' World!'"
-      style="transform: translate(350px, 200px); width:250px">
-      <input type="text" id="source" name="output" style="width: 100%; box-sizing: border-box;">
-      <input type="text" id="result" disabled style="width: 100%; box-sizing: border-box;">
-    </graph-node>
-
-    <graph-node name="Input node" style="transform: translate(50px, 50px); width:250px">
-      <input type="text" name="input" style="width: 100%; box-sizing: border-box;">
-    </graph-node>
-
-    <graph-node name="Third node" style="transform: translate(100px, 400px); width:250px">
-      <input type="text" style="width: 100%; box-sizing: border-box;">
-    </graph-node>
-
-    <graph-node name="Fourth node"
-      oninput="this.querySelector('#tata').value = this.querySelector('#toto').value + '_yoyo'"
-      style="transform: translate(200px, 500px); width:250px">
-      <input type="text" id="toto" style="width: 100%; box-sizing: border-box;">
-      <input type="text" id="tata" disabled style="width: 100%; box-sizing: border-box;">
-    </graph-node>
-  </graph-editor>
-
-
+    <graph-editor></graph-editor>
   <script type="module">
     import(`./${/\bdev\b/.test(window.location.search) ? "src" : "build"}/index.js`);
 
