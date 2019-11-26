@@ -38,6 +38,13 @@ export default class GraphElement extends HTMLElement {
           display: block;
         }
 
+        graph-node {
+          border: solid 1px rgba(0, 0, 0, .1);
+          background: rgba(255, 255, 255, .9);
+          resize: horizontal;
+          box-sizing: border-box; 
+        }
+
         graph-viewport {
           position: absolute;
           width: 100%;
@@ -58,6 +65,16 @@ export default class GraphElement extends HTMLElement {
       }
       return false;
     };
+
+    window.addEventListener('keyup', (event) => {
+      switch (event.key) {
+        case 'Delete':
+          for (const element of this._currentViewport.selectedElements) {
+            element.remove();
+          }
+          break;
+      }
+    });
 
     let currentLink;
     const onLink = (event) => {
