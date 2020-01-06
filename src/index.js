@@ -233,6 +233,13 @@ export default class GraphElement extends HTMLElement {
     window.addEventListener('keydown', this._onKeyDownBinded);
     window.addEventListener('keyup', this._onKeyUpBinded);
     window.addEventListener('unload', () => {
+      const children = this._currentViewport.querySelectorAll('*');
+      for (const child of children) {
+        if ('value' in child && child.value !== undefined && !child.disabled) {
+          child.setAttribute('value', typeof child.value === 'string' ? child.value : JSON.stringify(child.value));
+        }
+      }
+
       for (const child of this._currentViewport.children) {
         const boundingRect = this._currentViewport.getElementBoundingRect(child);
         child.style.transform = `translate(${boundingRect.x}px, ${boundingRect.y}px)`;
