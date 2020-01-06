@@ -32,9 +32,19 @@ export default class GraphElement extends HTMLElement {
   constructor() {
     super();
 
+    this._keyDownTimeMap = new Map();
+
     this._opacity = 1;
 
+    if (localStorage.getItem('opacity') !== null) {
+      this.opacity = Number(localStorage.getItem('opacity'));
+    }
+    if (localStorage.getItem('disabled') !== null) {
+      this.disabled = localStorage.getItem('disabled') === 'true';
+    }
+
     this._onKeyUpBinded = this._onKeyUp.bind(this);
+    this._onKeyDownBinded = this._onKeyDown.bind(this);
 
     this.attachShadow({ mode: 'open' }).innerHTML = `
       <style>
@@ -44,6 +54,10 @@ export default class GraphElement extends HTMLElement {
 
         :host([hidden]) {
           visibility: hidden;
+        }
+
+        :host([disabled]) {
+          pointer-events: none;
         }
 
         graph-node {
@@ -98,6 +112,22 @@ export default class GraphElement extends HTMLElement {
     this.addEventListener('linkend', onLink);
   }
 
+  _onKeyDown(event) {
+    if (this._keyDownTimeMap.get(event.key)) {
+      return;
+    }
+
+    this._keyDownTimeMap.set(event.key, performance.now());
+    switch (event.key) {
+      case 'h':
+        this.hidden = !this.hidden;
+        break;
+      case 'd':
+        this.disabled = !this.disabled;
+        break;
+    }
+  }
+
   _onKeyUp(event) {
     switch (event.key) {
       case 'Delete':
@@ -106,16 +136,21 @@ export default class GraphElement extends HTMLElement {
         }
         break;
       case 'h':
-        this.hidden = !this.hidden;
+        if (performance.now() - this._keyDownTimeMap.get(event.key) > 200) {
+          this.hidden = !this.hidden;
+        };
+        break;
+      case 'd':
+        if (performance.now() - this._keyDownTimeMap.get(event.key) > 200) {
+          this.disabled = !this.disabled;
+        };
         break;
       case 'o':
-        if (this.opacity > 0 && this.hidden) {
-          break;
-        }
-        this.opacity = (this.opacity + .25) % 1.25;
-        this.hidden = !this.opacity;
+        let opacity = this.opacity - .25;
+        this.opacity = !opacity ? 1 : opacity;
         break;
     }
+    this._keyDownTimeMap.delete(event.key);
   }
 
   get opacity() {
@@ -124,7 +159,21 @@ export default class GraphElement extends HTMLElement {
 
   set opacity(value) {
     this._opacity = value;
+    localStorage.setItem('opacity', this._opacity);
     this.style.opacity = this._opacity;
+  }
+
+  get disabled() {
+    return this.hasAttribute('disabled');
+  }
+
+  set disabled(value) {
+    localStorage.setItem('disabled', String(!!value));
+    if (value) {
+      this.setAttribute('disabled', '');
+    } else {
+      this.removeAttribute('disabled');
+    }
   }
 
   connectedCallback() {
@@ -183,6 +232,7 @@ export default class GraphElement extends HTMLElement {
       this._currentViewport.centerView();
     });
 
+    window.addEventListener('keydown', this._onKeyDownBinded);
     window.addEventListener('keyup', this._onKeyUpBinded);
   }
 }
