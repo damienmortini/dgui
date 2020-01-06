@@ -73,8 +73,7 @@ export default class GraphElement extends HTMLElement {
           height: 100%;
         }
       </style>
-      <graph-viewport>
-      </graph-viewport>
+      <graph-viewport></graph-viewport>
     `;
 
     this._currentViewport = this.shadowRoot.querySelector('graph-viewport');
@@ -177,8 +176,7 @@ export default class GraphElement extends HTMLElement {
   }
 
   connectedCallback() {
-    this._currentViewport.innerHTML = `
-      <!-- <div style="width: 300px; height: 300px; background: red"></div> -->
+    this._currentViewport.innerHTML = localStorage.getItem("state") || `
       <div style="width: 300px; height: 300px; background: red; resize: both;">
         <div style="width: 200px; height: 100px; background: green; overflow: auto;">
           Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur atque, quibusdam ducimus sapiente, impedit illo sint voluptatem eligendi pariatur sed suscipit accusamus voluptatibus qui? Reprehenderit veritatis natus nulla. Beatae, molestias.
@@ -234,5 +232,18 @@ export default class GraphElement extends HTMLElement {
 
     window.addEventListener('keydown', this._onKeyDownBinded);
     window.addEventListener('keyup', this._onKeyUpBinded);
+    window.addEventListener('unload', () => {
+      for (const child of this._currentViewport.children) {
+        const boundingRect = this._currentViewport.getElementBoundingRect(child);
+        child.style.transform = `translate(${boundingRect.x}px, ${boundingRect.y}px)`;
+        if (boundingRect.width) {
+          child.style.width = `${boundingRect.width}px`;
+        }
+        if (boundingRect.height) {
+          child.style.height = `${boundingRect.height}px`;
+        }
+      }
+      localStorage.setItem("state", this._currentViewport.innerHTML);
+    });
   }
 }
