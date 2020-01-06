@@ -32,10 +32,18 @@ export default class GraphElement extends HTMLElement {
   constructor() {
     super();
 
+    this._opacity = 1;
+
+    this._onKeyUpBinded = this._onKeyUp.bind(this);
+
     this.attachShadow({ mode: 'open' }).innerHTML = `
       <style>
         :host {
           display: block;
+        }
+
+        :host([hidden]) {
+          visibility: hidden;
         }
 
         graph-node {
@@ -66,16 +74,6 @@ export default class GraphElement extends HTMLElement {
       return false;
     };
 
-    window.addEventListener('keyup', (event) => {
-      switch (event.key) {
-        case 'Delete':
-          for (const element of this._currentViewport.selectedElements) {
-            element.remove();
-          }
-          break;
-      }
-    });
-
     let currentLink;
     const onLink = (event) => {
       if (currentLink) {
@@ -98,6 +96,35 @@ export default class GraphElement extends HTMLElement {
     };
     this.addEventListener('linkstart', onLink);
     this.addEventListener('linkend', onLink);
+  }
+
+  _onKeyUp(event) {
+    switch (event.key) {
+      case 'Delete':
+        for (const element of this._currentViewport.selectedElements) {
+          element.remove();
+        }
+        break;
+      case 'h':
+        this.hidden = !this.hidden;
+        break;
+      case 'o':
+        if (this.opacity > 0 && this.hidden) {
+          break;
+        }
+        this.opacity = (this.opacity + .25) % 1.25;
+        this.hidden = !this.opacity;
+        break;
+    }
+  }
+
+  get opacity() {
+    return this._opacity;
+  }
+
+  set opacity(value) {
+    this._opacity = value;
+    this.style.opacity = this._opacity;
   }
 
   connectedCallback() {
@@ -155,5 +182,7 @@ export default class GraphElement extends HTMLElement {
     requestAnimationFrame(() => {
       this._currentViewport.centerView();
     });
+
+    window.addEventListener('keyup', this._onKeyUpBinded);
   }
 }
