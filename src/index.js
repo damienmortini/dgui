@@ -6,9 +6,13 @@ import InputNumberElement from '../node_modules/@damienmortini/elements/src/inpu
 import InputRangeElement from '../node_modules/@damienmortini/elements/src/input-range/index.js';
 import InputSelectElement from '../node_modules/@damienmortini/elements/src/input-select/index.js';
 import InputTextElement from '../node_modules/@damienmortini/elements/src/input-text/index.js';
+import InputConnectorLinkableElement from '../node_modules/@damienmortini/elements/src/input-connector-linkable/index.js';
 import LinkElement from '../node_modules/@damienmortini/elements/src/link/index.js';
-import NodeElement from '../node_modules/@damienmortini/elements/src/node/index.js';
+import NodeElement from './node/index.js';
 import ViewportElement from '../node_modules/@damienmortini/elements/src/viewport/index.js';
+import MenuElement from '../node_modules/@damienmortini/elements/src/menu/index.js';
+
+import './node-input-text/index.js';
 
 for (const [name, constructor] of new Map([
   ['graph-input-button', InputButtonElement],
@@ -19,7 +23,9 @@ for (const [name, constructor] of new Map([
   ['graph-input-range', InputRangeElement],
   ['graph-input-select', InputSelectElement],
   ['graph-input-text', InputTextElement],
+  ['graph-input-connector', InputConnectorLinkableElement],
   ['graph-link', LinkElement],
+  ['graph-menu', MenuElement],
   ['graph-node', NodeElement],
   ['graph-viewport', ViewportElement],
 ])) {
@@ -29,6 +35,11 @@ for (const [name, constructor] of new Map([
 }
 
 export default class GraphElement extends HTMLElement {
+  static get nodeList() {
+    return [
+
+    ];
+  }
   constructor() {
     super();
 
@@ -48,7 +59,10 @@ export default class GraphElement extends HTMLElement {
 
     this.attachShadow({ mode: 'open' }).innerHTML = `
       <style>
+      
         :host {
+          --node-background: white;
+
           display: block;
         }
 
@@ -60,32 +74,71 @@ export default class GraphElement extends HTMLElement {
           pointer-events: none;
         }
 
-        graph-node {
-          border: solid 1px rgba(0, 0, 0, .1);
-          background: rgba(255, 255, 255, .9);
-          resize: horizontal;
-          box-sizing: border-box; 
-        }
-
         graph-viewport {
           position: absolute;
           width: 100%;
           height: 100%;
+          z-index: 0;
+        }
+
+        graph-menu {
+          position: absolute;
+          background: var(--node-background);
+          left: 25%;
+          top: 25%;
+          width: calc(50%);
+          height: calc(50%);
+        }
+
+        #menu-overlay {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          z-index: 1;
+          will-change: visibility;
+        }
+
+        #menu-overlay[hidden] {
+          visibility: hidden;
         }
       </style>
+      <div id="menu-overlay" hidden>
+        <graph-menu></graph-menu>
+      </div>
       <graph-viewport></graph-viewport>
     `;
 
     this._currentViewport = this.shadowRoot.querySelector('graph-viewport');
+    this._addMenu = this.shadowRoot.querySelector('graph-menu');
+    this._menuOverlay = this.shadowRoot.querySelector('#menu-overlay');
 
-    this._currentViewport.preventManipulation = (event) => {
-      for (const node of event.composedPath()) {
-        if ('value' in node && !node.disabled) {
-          return true;
-        }
+    this._addMenu.options = [{
+      textContent: 'yes',
+      onclick: () => {
+        this._addMenu.hidden = true;
+        this._appendHTML('<graph-node-input-text></graph-node-input-text>');
       }
-      return false;
-    };
+    },
+    {
+      textContent: 'coucou',
+    },
+    {
+      textContent: 'coucou2',
+    }];
+
+    // this._currentViewport.preventManipulation = (event) => {
+    //   for (const node of event.composedPath()) {
+    //     if (!(node instanceof HTMLElement)) {
+    //       continue;
+    //     }
+    //     if (getComputedStyle(node)['touch-action'] === 'none') {
+    //       console.log(node);
+          
+    //       // return true;
+    //     }
+    //   }
+    //   return false;
+    // };
 
     let currentLink;
     const onLink = (event) => {
@@ -134,6 +187,19 @@ export default class GraphElement extends HTMLElement {
           element.remove();
         }
         break;
+      case ' ':
+        this._menuOverlay.hidden = !this._menuOverlay.hidden;
+        //   this._appendHTML(`
+        //   <graph-node name="Test" style="width:300px;">
+        //   <graph-input-button name="Button" onclick="this.value = Math.random()">Click here</graph-input-button>
+        //   <graph-input-checkbox name="Checkbox"></graph-input-checkbox>
+        //   <graph-input-color name="Color"></graph-input-color>
+        //   <graph-input-number name="Number"></graph-input-number>
+        //   <graph-input-range name="Range"></graph-input-range>
+        //   <graph-input-select name="Select" options="[1, 2, 3]" value="2"></graph-input-select>
+        //   <graph-input-text name="Text"></graph-input-text>
+        // </graph-node>`);
+        break;
       case 'h':
         if (performance.now() - this._keyDownTimeMap.get(event.key) > 200) {
           this.hidden = !this.hidden;
@@ -175,56 +241,12 @@ export default class GraphElement extends HTMLElement {
     }
   }
 
+  _appendHTML(html) {
+    this._currentViewport.insertAdjacentHTML('beforeend', html);
+  }
+
   connectedCallback() {
-    this._currentViewport.innerHTML = localStorage.getItem("state") || `
-      <div style="width: 300px; height: 300px; background: red; resize: both;">
-        <div style="width: 200px; height: 100px; background: green; overflow: auto;">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tenetur atque, quibusdam ducimus sapiente, impedit illo sint voluptatem eligendi pariatur sed suscipit accusamus voluptatibus qui? Reprehenderit veritatis natus nulla. Beatae, molestias.
-        </div>
-      </div>
-
-      <graph-node name="Test" style="width:300px;">
-        <graph-input-button name="Button" onclick="this.value = Math.random()">Click here</graph-input-button>
-        <graph-input-checkbox name="Checkbox"></graph-input-checkbox>
-        <graph-input-color name="Color"></graph-input-color>
-        <graph-input-number name="Number"></graph-input-number>
-        <graph-input-range name="Range"></graph-input-range>
-        <graph-input-select name="Select" options="[1, 2, 3]" value="2"></graph-input-select>
-        <graph-input-text name="Text"></graph-input-text>
-      </graph-node>
-
-      <!-- <graph-node name="Input node" style="left:100px; top:100px; width:200px">
-        <input type="text" name="input" style="width: 100%; box-sizing: border-box;">
-      </graph-node>
-      <graph-node name="Input node" style="left:200px; top:200px; width:200px">
-        <input type="text" name="input" style="width: 100%; box-sizing: border-box;">
-      </graph-node>
-      <graph-node name="Input node" style="left:300px; top:300px; width:200px">
-        <input type="text" name="input" style="width: 100%; box-sizing: border-box;">
-      </graph-node> -->
-
-      <graph-node name="Output node"
-        oninput="this.querySelector('#result').value = this.querySelector('#source').value + ' World!'"
-        style="transform: translate(350px, 200px); width:250px">
-        <input type="text" id="source" name="output" style="width: 100%; box-sizing: border-box;">
-        <input type="text" id="result" disabled style="width: 100%; box-sizing: border-box;">
-      </graph-node>
-
-      <graph-node name="Input node" style="transform: translate(500px, 50px); width:250px">
-        <input type="text" name="input" style="width: 100%; box-sizing: border-box;">
-      </graph-node>
-
-      <graph-node name="Third node" style="transform: translate(100px, 400px); width:250px">
-        <input type="text" style="width: 100%; box-sizing: border-box;">
-      </graph-node>
-
-      <graph-node name="Fourth node"
-        oninput="this.querySelector('#tata').value = this.querySelector('#toto').value + '_yoyo'"
-        style="transform: translate(200px, 500px); width:250px">
-        <input type="text" id="toto" style="width: 100%; box-sizing: border-box;">
-        <input type="text" id="tata" disabled style="width: 100%; box-sizing: border-box;">
-      </graph-node>
-    `;
+    this._currentViewport.innerHTML = localStorage.getItem("state") || ``;
 
     requestAnimationFrame(() => {
       this._currentViewport.centerView();
