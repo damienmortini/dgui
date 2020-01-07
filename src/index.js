@@ -47,11 +47,11 @@ export default class GraphElement extends HTMLElement {
 
     this._opacity = 1;
 
-    if (localStorage.getItem('opacity') !== null) {
-      this.opacity = Number(localStorage.getItem('opacity'));
+    if (localStorage.getItem('graph-opacity') !== null) {
+      this.opacity = Number(localStorage.getItem('graph-opacity'));
     }
-    if (localStorage.getItem('disabled') !== null) {
-      this.disabled = localStorage.getItem('disabled') === 'true';
+    if (localStorage.getItem('graph-disabled') !== null) {
+      this.disabled = localStorage.getItem('graph-disabled') === 'true';
     }
 
     this._onKeyUpBinded = this._onKeyUp.bind(this);
@@ -108,7 +108,7 @@ export default class GraphElement extends HTMLElement {
       <graph-viewport></graph-viewport>
     `;
 
-    this._currentViewport = this.shadowRoot.querySelector('graph-viewport');
+    this._viewport = this.shadowRoot.querySelector('graph-viewport');
     this._addMenu = this.shadowRoot.querySelector('graph-menu');
     this._menuOverlay = this.shadowRoot.querySelector('#menu-overlay');
 
@@ -126,14 +126,14 @@ export default class GraphElement extends HTMLElement {
       textContent: 'coucou2',
     }];
 
-    // this._currentViewport.preventManipulation = (event) => {
+    // this._viewport.preventManipulation = (event) => {
     //   for (const node of event.composedPath()) {
     //     if (!(node instanceof HTMLElement)) {
     //       continue;
     //     }
     //     if (getComputedStyle(node)['touch-action'] === 'none') {
     //       console.log(node);
-          
+
     //       // return true;
     //     }
     //   }
@@ -152,7 +152,7 @@ export default class GraphElement extends HTMLElement {
         currentLink = null;
       } else {
         currentLink = document.createElement('graph-link');
-        this._currentViewport.prepend(currentLink);
+        this._viewport.prepend(currentLink);
         currentLink.input = event.composedPath()[0];
         currentLink.addEventListener('click', (event) => {
           event.currentTarget.input.outputs.delete(event.currentTarget.output);
@@ -183,7 +183,7 @@ export default class GraphElement extends HTMLElement {
   _onKeyUp(event) {
     switch (event.key) {
       case 'Delete':
-        for (const element of this._currentViewport.selectedElements) {
+        for (const element of this._viewport.selectedElements) {
           element.remove();
         }
         break;
@@ -224,7 +224,7 @@ export default class GraphElement extends HTMLElement {
 
   set opacity(value) {
     this._opacity = value;
-    localStorage.setItem('opacity', this._opacity);
+    localStorage.setItem('graph-opacity', this._opacity);
     this.style.opacity = this._opacity;
   }
 
@@ -233,7 +233,7 @@ export default class GraphElement extends HTMLElement {
   }
 
   set disabled(value) {
-    localStorage.setItem('disabled', String(!!value));
+    localStorage.setItem('graph-disabled', String(!!value));
     if (value) {
       this.setAttribute('disabled', '');
     } else {
@@ -242,29 +242,79 @@ export default class GraphElement extends HTMLElement {
   }
 
   _appendHTML(html) {
-    this._currentViewport.insertAdjacentHTML('beforeend', html);
+    this._viewport.insertAdjacentHTML('beforeend', html);
+  }
+
+  add(elementData) {
+    if (!(elementData instanceof Array)) {
+      elementData = [elementData];
+    }
+
+    // TODO check why value doesn't reload
+
+    const addElementDataTo = (elementData, container) => {
+      for (const data of elementData) {
+        if (typeof data === 'string') {
+          const element = document.createElement('div');
+          element.textContent = data;
+          container.appendChild(element);
+        } else {
+          const element = document.createElement(data.tagName || 'div');
+          if(container === this._viewport) {
+            element.style.position = 'absolute';
+          }
+          delete data.tagName;
+          if (data.style) {
+            for (const [key, value] of Object.entries(data.style)) {
+              element.style[key] = value;
+            }
+            delete data.style;
+          }
+          if (data.children) {
+            addElementDataTo(data.children, element);
+            delete data.children;
+          }
+          for (const [key, value] of Object.entries(data)) {
+            element[key] = value;
+          }
+          container.appendChild(element);
+        }
+      }
+    }
+
+    addElementDataTo(elementData, this._viewport);
   }
 
   connectedCallback() {
-    this._currentViewport.innerHTML = localStorage.getItem("state") || ``;
+    if (localStorage.getItem("graph-data")) {
+      this.add(JSON.parse(localStorage.getItem("graph-data")));
+    }
 
     requestAnimationFrame(() => {
-      this._currentViewport.centerView();
+      this._viewport.centerView();
     });
 
     window.addEventListener('keydown', this._onKeyDownBinded);
     window.addEventListener('keyup', this._onKeyUpBinded);
+    window.addEventListener('click', () => {
+      console.log(this.toJSON());
+    });
     window.addEventListener('unload', () => {
-      const children = this._currentViewport.querySelectorAll('*');
-      for (const child of children) {
-        if ('value' in child && child.value !== undefined && !child.disabled) {
-          child.setAttribute('value', typeof child.value === 'string' ? child.value : JSON.stringify(child.value));
-        }
-      }
+      const children = this._viewport.querySelectorAll('*');
+      // for (const child of children) {
+      //   if ('value' in child && child.value !== undefined && !child.disabled) {
+      //     child.setAttribute('value', typeof child.value === 'string' ? child.value : JSON.stringify(child.value));
+      //   }
+      // }
 
-      for (const child of this._currentViewport.children) {
-        const boundingRect = this._currentViewport.getElementBoundingRect(child);
-        child.style.transform = `translate(${boundingRect.x}px, ${boundingRect.y}px)`;
+      for (const child of this._viewport.children) {
+        const boundingRect = this._viewport.getElementBoundingRect(child);
+        if (boundingRect.y) {
+          child.style.top = `${boundingRect.y}px`;
+        }
+        if (boundingRect.x) {
+          child.style.left = `${boundingRect.x}px`;
+        }
         if (boundingRect.width) {
           child.style.width = `${boundingRect.width}px`;
         }
@@ -272,7 +322,17 @@ export default class GraphElement extends HTMLElement {
           child.style.height = `${boundingRect.height}px`;
         }
       }
-      localStorage.setItem("state", this._currentViewport.innerHTML);
+      localStorage.setItem("graph-data", JSON.stringify(this.toJSON()));
     });
+  }
+
+  toJSON() {
+    const data = [];
+    for (const child of this._viewport.children) {
+      if (child.toJSON) {
+        data.push(child.toJSON())
+      }
+    }
+    return data;
   }
 }

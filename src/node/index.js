@@ -15,6 +15,7 @@ export default class GraphNodeElement extends HTMLElement {
       <style>
         :host {
           display: block;
+          width: 300px;
         }
         details, slot {
           padding: 10px;
@@ -138,7 +139,7 @@ export default class GraphNodeElement extends HTMLElement {
     if (this.shadowRoot.querySelector(`slot[name="${node.slot}"]`)) {
       return;
     }
-    const label = node.getAttribute('label') || node.getAttribute('name') || node.id || '';
+    const label = node.getAttribute('label') || node.label || node.getAttribute('name') || node.name || node.id || '';
     const section = document.createElement('section');
     section.id = `slot${slotUID}`;
     section.classList.add('input');
@@ -174,5 +175,33 @@ export default class GraphNodeElement extends HTMLElement {
 
   set name(value) {
     this.setAttribute('name', value);
+  }
+
+  toJSON() {
+    const data = {
+      name: this.name,
+    };
+    if (this.children.length) {
+      const children = [];
+      for (const child of this.children) {
+        if (child.toJSON) {
+          children.push(child.toJSON());
+        } else {
+          const childData = {
+            tagName: child.localName,
+          };
+          for (const key of ['name', 'label', 'id', 'value']) {
+            if (child[key]) {
+              childData[key] = child[key];
+            }
+          }
+          children.push(childData);
+        }
+      }
+      if (children.length) {
+        data.children = children;
+      }
+    }
+    return data;
   }
 }
