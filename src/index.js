@@ -81,6 +81,10 @@ export default class GraphElement extends HTMLElement {
           z-index: 0;
         }
 
+        graph-viewport * {
+          position: absolute;
+        }
+
         graph-menu {
           position: absolute;
           background: var(--node-background);
@@ -169,53 +173,49 @@ export default class GraphElement extends HTMLElement {
       return;
     }
 
-    this._keyDownTimeMap.set(event.key, performance.now());
-    switch (event.key) {
-      case 'h':
-        this.hidden = !this.hidden;
-        break;
-      case 'd':
-        this.disabled = !this.disabled;
-        break;
+    const target = event.composedPath()[0];
+    if (
+      target.isContentEditable ||
+      target instanceof HTMLInputElement && ['text', 'number', 'password', 'search', 'number', 'range', 'email', 'url', 'tel'].includes(target.type) ||
+      target instanceof HTMLTextAreaElement
+    ) {
+      return;
+    }
+
+    this._keyDownTimeMap.set(event.key.toLowerCase(), performance.now());
+
+    if (event.key.toLowerCase() === 'h') {
+      this.hidden = !this.hidden;
+    } else if (event.key.toLowerCase() === 'd') {
+      this.disabled = !this.disabled;
     }
   }
 
   _onKeyUp(event) {
-    switch (event.key) {
-      case 'Delete':
-        for (const element of this._viewport.selectedElements) {
-          element.remove();
-        }
-        break;
-      case ' ':
-        this._menuOverlay.hidden = !this._menuOverlay.hidden;
-        //   this._appendHTML(`
-        //   <graph-node name="Test" style="width:300px;">
-        //   <graph-input-button name="Button" onclick="this.value = Math.random()">Click here</graph-input-button>
-        //   <graph-input-checkbox name="Checkbox"></graph-input-checkbox>
-        //   <graph-input-color name="Color"></graph-input-color>
-        //   <graph-input-number name="Number"></graph-input-number>
-        //   <graph-input-range name="Range"></graph-input-range>
-        //   <graph-input-select name="Select" options="[1, 2, 3]" value="2"></graph-input-select>
-        //   <graph-input-text name="Text"></graph-input-text>
-        // </graph-node>`);
-        break;
-      case 'h':
-        if (performance.now() - this._keyDownTimeMap.get(event.key) > 200) {
-          this.hidden = !this.hidden;
-        };
-        break;
-      case 'd':
-        if (performance.now() - this._keyDownTimeMap.get(event.key) > 200) {
-          this.disabled = !this.disabled;
-        };
-        break;
-      case 'o':
-        let opacity = this.opacity - .25;
-        this.opacity = !opacity ? 1 : opacity;
-        break;
+    const target = event.composedPath()[0];
+    if (
+      target.isContentEditable ||
+      target instanceof HTMLInputElement && ['text', 'number', 'password', 'search', 'number', 'range', 'email', 'url', 'tel'].includes(target.type) ||
+      target instanceof HTMLTextAreaElement
+    ) {
+      return;
     }
-    this._keyDownTimeMap.delete(event.key);
+
+    if (event.key === 'Delete') {
+      for (const element of this._viewport.selectedElements) {
+        element.remove();
+      }
+    } else if (event.key === ' ') {
+      this._menuOverlay.hidden = !this._menuOverlay.hidden;
+    } else if (event.key.toLowerCase() === 'h' && performance.now() - this._keyDownTimeMap.get(event.key) > 200) {
+      this.hidden = !this.hidden;
+    } else if (event.key.toLowerCase() === 'd' && performance.now() - this._keyDownTimeMap.get(event.key) > 200) {
+      this.disabled = !this.disabled;
+    } else if (event.key.toLowerCase() === 'o') {
+      let opacity = this.opacity - .25;
+      this.opacity = !opacity ? 1 : opacity;
+    }
+    this._keyDownTimeMap.delete(event.key.toLowerCase());
   }
 
   get opacity() {
@@ -323,6 +323,11 @@ export default class GraphElement extends HTMLElement {
       }
       localStorage.setItem("graph-data", this._viewport.innerHTML);
     });
+  }
+
+  disconnectedCallback() {
+    window.removeEventListener('keydown', this._onKeyDownBinded);
+    window.removeEventListener('keyup', this._onKeyUpBinded);
   }
 
   // toJSON() {

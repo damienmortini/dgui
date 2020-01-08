@@ -17,7 +17,6 @@ customElements.define('graph-node-input-text', class NodeInputTextElement extend
         }
 
         graph-input-text {
-          touch-action: none;
           width: 100%;
           height: 100%;
         }
