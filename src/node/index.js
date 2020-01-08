@@ -177,31 +177,32 @@ export default class GraphNodeElement extends HTMLElement {
     this.setAttribute('name', value);
   }
 
-  toJSON() {
-    const data = {
-      name: this.name,
-    };
-    if (this.children.length) {
-      const children = [];
-      for (const child of this.children) {
-        if (child.toJSON) {
-          children.push(child.toJSON());
-        } else {
-          const childData = {
-            tagName: child.localName,
-          };
-          for (const key of ['name', 'label', 'id', 'value']) {
-            if (child[key]) {
-              childData[key] = child[key];
-            }
-          }
-          children.push(childData);
-        }
-      }
-      if (children.length) {
-        data.children = children;
-      }
-    }
-    return data;
-  }
+  // toJSON() {
+  //   const data = {
+  //     tagName: this.localName,
+  //     name: this.name,
+  //   };
+  //   if (this.children.length) {
+  //     const children = [];
+  //     for (const child of this.children) {
+  //       if (child.toJSON) {
+  //         children.push(child.toJSON());
+  //       } else {
+  //         const childData = {
+  //           tagName: child.localName,
+  //         };
+  //         for (const key of ['name', 'label', 'id', 'value']) {
+  //           if (child[key]) {
+  //             childData[key] = child[key];
+  //           }
+  //         }
+  //         children.push(childData);
+  //       }
+  //     }
+  //     if (children.length) {
+  //       data.children = children;
+  //     }
+  //   }
+  //   return data;
+  // }
 }

@@ -250,8 +250,6 @@ export default class GraphElement extends HTMLElement {
       elementData = [elementData];
     }
 
-    // TODO check why value doesn't reload
-
     const addElementDataTo = (elementData, container) => {
       for (const data of elementData) {
         if (typeof data === 'string') {
@@ -259,22 +257,23 @@ export default class GraphElement extends HTMLElement {
           element.textContent = data;
           container.appendChild(element);
         } else {
-          const element = document.createElement(data.tagName || 'div');
-          if(container === this._viewport) {
+          const dataCopy = { ...data };
+          const element = document.createElement(dataCopy.tagName || 'div');
+          if (container === this._viewport) {
             element.style.position = 'absolute';
           }
-          delete data.tagName;
-          if (data.style) {
-            for (const [key, value] of Object.entries(data.style)) {
+          delete dataCopy.tagName;
+          if (dataCopy.style) {
+            for (const [key, value] of Object.entries(dataCopy.style)) {
               element.style[key] = value;
             }
-            delete data.style;
+            delete dataCopy.style;
           }
-          if (data.children) {
-            addElementDataTo(data.children, element);
-            delete data.children;
+          if (dataCopy.children) {
+            addElementDataTo(dataCopy.children, element);
+            delete dataCopy.children;
           }
-          for (const [key, value] of Object.entries(data)) {
+          for (const [key, value] of Object.entries(dataCopy)) {
             element[key] = value;
           }
           container.appendChild(element);
@@ -287,7 +286,7 @@ export default class GraphElement extends HTMLElement {
 
   connectedCallback() {
     if (localStorage.getItem("graph-data")) {
-      this.add(JSON.parse(localStorage.getItem("graph-data")));
+      this._appendHTML(localStorage.getItem("graph-data"));
     }
 
     requestAnimationFrame(() => {
@@ -296,16 +295,16 @@ export default class GraphElement extends HTMLElement {
 
     window.addEventListener('keydown', this._onKeyDownBinded);
     window.addEventListener('keyup', this._onKeyUpBinded);
-    window.addEventListener('click', () => {
-      console.log(this.toJSON());
-    });
+    // window.addEventListener('click', () => {
+    //   console.log(this.toJSON());
+    // });
     window.addEventListener('unload', () => {
       const children = this._viewport.querySelectorAll('*');
-      // for (const child of children) {
-      //   if ('value' in child && child.value !== undefined && !child.disabled) {
-      //     child.setAttribute('value', typeof child.value === 'string' ? child.value : JSON.stringify(child.value));
-      //   }
-      // }
+      for (const child of children) {
+        if ('value' in child && child.value !== undefined && !child.disabled) {
+          child.setAttribute('value', typeof child.value === 'string' ? child.value : JSON.stringify(child.value));
+        }
+      }
 
       for (const child of this._viewport.children) {
         const boundingRect = this._viewport.getElementBoundingRect(child);
@@ -322,17 +321,17 @@ export default class GraphElement extends HTMLElement {
           child.style.height = `${boundingRect.height}px`;
         }
       }
-      localStorage.setItem("graph-data", JSON.stringify(this.toJSON()));
+      localStorage.setItem("graph-data", this._viewport.innerHTML);
     });
   }
 
-  toJSON() {
-    const data = [];
-    for (const child of this._viewport.children) {
-      if (child.toJSON) {
-        data.push(child.toJSON())
-      }
-    }
-    return data;
-  }
+  // toJSON() {
+  //   const data = [];
+  //   for (const child of this._viewport.children) {
+  //     if (child.toJSON) {
+  //       data.push(child.toJSON())
+  //     }
+  //   }
+  //   return data;
+  // }
 }
