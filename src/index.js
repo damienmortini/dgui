@@ -13,6 +13,7 @@ import ViewportElement from '../node_modules/@damienmortini/elements/src/viewpor
 import MenuElement from '../node_modules/@damienmortini/elements/src/menu/index.js';
 
 import './node-input-text/index.js';
+import './node-javascript-windowevent/index.js';
 
 for (const [name, constructor] of new Map([
   ['graph-input-button', InputButtonElement],
@@ -121,6 +122,7 @@ export default class GraphElement extends HTMLElement {
       onclick: () => {
         this._addMenu.hidden = true;
         this._appendHTML('<graph-node-input-text></graph-node-input-text>');
+        this._appendHTML('<graph-node-javascript-windowevent></graph-node-javascript-windowevent>');
       }
     },
     {
