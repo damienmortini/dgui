@@ -82,7 +82,10 @@ export default class GraphElement extends HTMLElement {
         }
 
         ::slotted(*) {
+          font-family: sans-serif;
           position: absolute;
+          background: white;
+          border-radius: 4px;
         }
 
         graph-menu {
@@ -173,12 +176,15 @@ export default class GraphElement extends HTMLElement {
           this._viewport.appendChild(slot);
           this._slotUID++;
           this._elementSlotMap.set(node, slot);
+          this._slotElementMap.set(slot, node);
         }
         for (const node of mutation.removedNodes) {
           if (!(node instanceof HTMLElement)) {
             continue;
           }
           const slot = this._elementSlotMap.get(node);
+          this._elementSlotMap.delete(node);
+          this._slotElementMap.delete(slot);
           slot.remove();
         }
       }
@@ -226,7 +232,7 @@ export default class GraphElement extends HTMLElement {
 
     if (event.key === 'Delete') {
       for (const element of this._viewport.selectedElements) {
-        element.remove();
+        this._slotElementMap.get(element).remove();
       }
     } else if (event.key === ' ') {
       this._menuOverlay.hidden = !this._menuOverlay.hidden;
