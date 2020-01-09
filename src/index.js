@@ -63,7 +63,6 @@ export default class GraphElement extends HTMLElement {
       
         :host {
           --node-background: white;
-
           display: block;
         }
 
@@ -82,7 +81,7 @@ export default class GraphElement extends HTMLElement {
           z-index: 0;
         }
 
-        graph-viewport * {
+        ::slotted(*) {
           position: absolute;
         }
 
@@ -111,6 +110,7 @@ export default class GraphElement extends HTMLElement {
         <graph-menu></graph-menu>
       </div>
       <graph-viewport></graph-viewport>
+      <slot></slot>
     `;
 
     this._viewport = this.shadowRoot.querySelector('graph-viewport');
@@ -121,8 +121,8 @@ export default class GraphElement extends HTMLElement {
       textContent: 'yes',
       onclick: () => {
         this._addMenu.hidden = true;
-        this._appendHTML('<graph-node-input-text></graph-node-input-text>');
-        this._appendHTML('<graph-node-javascript-windowevent></graph-node-javascript-windowevent>');
+        this.insertAdjacentHTML('beforeend', '<graph-node-input-text></graph-node-input-text>');
+        this.insertAdjacentHTML('beforeend', '<graph-node-javascript-windowevent></graph-node-javascript-windowevent>');
       }
     },
     {
@@ -131,20 +131,6 @@ export default class GraphElement extends HTMLElement {
     {
       textContent: 'coucou2',
     }];
-
-    // this._viewport.preventManipulation = (event) => {
-    //   for (const node of event.composedPath()) {
-    //     if (!(node instanceof HTMLElement)) {
-    //       continue;
-    //     }
-    //     if (getComputedStyle(node)['touch-action'] === 'none') {
-    //       console.log(node);
-
-    //       // return true;
-    //     }
-    //   }
-    //   return false;
-    // };
 
     let currentLink;
     const onLink = (event) => {
@@ -158,7 +144,7 @@ export default class GraphElement extends HTMLElement {
         currentLink = null;
       } else {
         currentLink = document.createElement('graph-link');
-        this._viewport.prepend(currentLink);
+        this.prepend(currentLink);
         currentLink.input = event.composedPath()[0];
         currentLink.addEventListener('click', (event) => {
           event.currentTarget.input.outputs.delete(event.currentTarget.output);
@@ -168,6 +154,41 @@ export default class GraphElement extends HTMLElement {
     };
     this.addEventListener('linkstart', onLink);
     this.addEventListener('linkend', onLink);
+
+    this._slotUID = 0;
+    this._slotElementMap = new Map();
+    this._elementSlotMap = new Map();
+
+    // Mutation Observer
+    const mutationCallback = (mutationsList) => {
+      for (const mutation of mutationsList) {
+        for (const node of mutation.addedNodes) {
+          if (!(node instanceof HTMLElement)) {
+            continue;
+          }
+          node.slot = '';
+          const slot = document.createElement('slot');
+          slot.name = `graph-editor-slot-${this._slotUID}`;
+          node.slot = slot.name;
+          this._viewport.appendChild(slot);
+          this._slotUID++;
+          this._elementSlotMap.set(node, slot);
+        }
+        for (const node of mutation.removedNodes) {
+          if (!(node instanceof HTMLElement)) {
+            continue;
+          }
+          const slot = this._elementSlotMap.get(node);
+          slot.remove();
+        }
+      }
+    };
+    mutationCallback([{
+      addedNodes: this.children,
+      removedNodes: [],
+    }]);
+    const observer = new MutationObserver(mutationCallback);
+    observer.observe(this, { childList: true });
   }
 
   _onKeyDown(event) {
@@ -243,10 +264,6 @@ export default class GraphElement extends HTMLElement {
     }
   }
 
-  _appendHTML(html) {
-    this._viewport.insertAdjacentHTML('beforeend', html);
-  }
-
   add(elementData) {
     if (!(elementData instanceof Array)) {
       elementData = [elementData];
@@ -261,9 +278,6 @@ export default class GraphElement extends HTMLElement {
         } else {
           const dataCopy = { ...data };
           const element = document.createElement(dataCopy.tagName || 'div');
-          if (container === this._viewport) {
-            element.style.position = 'absolute';
-          }
           delete dataCopy.tagName;
           if (dataCopy.style) {
             for (const [key, value] of Object.entries(dataCopy.style)) {
@@ -283,12 +297,12 @@ export default class GraphElement extends HTMLElement {
       }
     }
 
-    addElementDataTo(elementData, this._viewport);
+    addElementDataTo(elementData, this);
   }
 
   connectedCallback() {
     if (localStorage.getItem("graph-data")) {
-      this._appendHTML(localStorage.getItem("graph-data"));
+      this.insertAdjacentHTML('afterbegin', localStorage.getItem("graph-data"));
     }
 
     requestAnimationFrame(() => {
@@ -297,19 +311,17 @@ export default class GraphElement extends HTMLElement {
 
     window.addEventListener('keydown', this._onKeyDownBinded);
     window.addEventListener('keyup', this._onKeyUpBinded);
-    // window.addEventListener('click', () => {
-    //   console.log(this.toJSON());
-    // });
+
     window.addEventListener('unload', () => {
-      const children = this._viewport.querySelectorAll('*');
+      const children = this.querySelectorAll('*');
       for (const child of children) {
         if ('value' in child && child.value !== undefined && !child.disabled) {
           child.setAttribute('value', typeof child.value === 'string' ? child.value : JSON.stringify(child.value));
         }
       }
 
-      for (const child of this._viewport.children) {
-        const boundingRect = this._viewport.getElementBoundingRect(child);
+      for (const child of this.children) {
+        const boundingRect = this._viewport.getElementRect(this._elementSlotMap.get(child));
         if (boundingRect.y) {
           child.style.top = `${boundingRect.y}px`;
         }
@@ -323,7 +335,7 @@ export default class GraphElement extends HTMLElement {
           child.style.height = `${boundingRect.height}px`;
         }
       }
-      localStorage.setItem("graph-data", this._viewport.innerHTML);
+      localStorage.setItem("graph-data", this.innerHTML);
     });
   }
 

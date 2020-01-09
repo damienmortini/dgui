@@ -24,14 +24,12 @@ customElements.define('graph-node-javascript-windowevent', class NodeInputTextEl
 
     this._input = this.shadowRoot.querySelector('input');
 
-    this.id = '';
-
     this._input.addEventListener('input', (event) => {
       event.stopPropagation();
     });
     this._input.addEventListener('change', (event) => {
       event.stopPropagation();
-      this.id = this._input.value;
+      // this.id = this._input.value;
     });
 
     this._inputConnectorIn = this.shadowRoot.querySelector('graph-input-connector#in');
