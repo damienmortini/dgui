@@ -6,7 +6,7 @@ import InputNumberElement from '../node_modules/@damienmortini/elements/src/inpu
 import InputRangeElement from '../node_modules/@damienmortini/elements/src/input-range/index.js';
 import InputSelectElement from '../node_modules/@damienmortini/elements/src/input-select/index.js';
 import InputTextElement from '../node_modules/@damienmortini/elements/src/input-text/index.js';
-import InputConnectorLinkableElement from '../node_modules/@damienmortini/elements/src/input-connector-linkable/index.js';
+import InputConnectorLinkableElement from '../node_modules/@damienmortini/elements/src/input-connector/index.js';
 import LinkElement from '../node_modules/@damienmortini/elements/src/link/index.js';
 import NodeElement from './node/index.js';
 import ViewportElement from '../node_modules/@damienmortini/elements/src/viewport/index.js';
@@ -307,9 +307,9 @@ export default class GraphElement extends HTMLElement {
   }
 
   connectedCallback() {
-    if (localStorage.getItem("graph-data")) {
-      this.insertAdjacentHTML('afterbegin', localStorage.getItem("graph-data"));
-    }
+    // if (localStorage.getItem("graph-data")) {
+    //   this.insertAdjacentHTML('afterbegin', localStorage.getItem("graph-data"));
+    // }
 
     requestAnimationFrame(() => {
       this._viewport.centerView();
@@ -341,7 +341,7 @@ export default class GraphElement extends HTMLElement {
           child.style.height = `${boundingRect.height}px`;
         }
       }
-      localStorage.setItem("graph-data", this.innerHTML);
+      // localStorage.setItem("graph-data", this.innerHTML);
     });
   }
 

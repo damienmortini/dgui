@@ -4,26 +4,24 @@ customElements.define('graph-node-input-text', class NodeInputTextElement extend
 
     this.attachShadow({ mode: 'open' }).innerHTML = `
       <style>
-        :host {
-          display: block;
-          background: var(--node-background);
-          width: 100px;
-          resize: horizontal;
-        }
+      :host {
+        display: flex;
+        background: var(--node-background);
+        width: 200px;
+        resize: horizontal;
+        padding: 20px;
+        align-items: center;
+      }
 
-        graph-node {
-          width: 100%;
-          height: 100%;
-        }
-
-        graph-input-text {
-          width: 100%;
-          height: 100%;
-        }
+      input {
+        flex: 1;
+        width: 100%;
+        height: 100%;
+      }
       </style>
-      <graph-node name="Text Value">
-        <graph-input-text></graph-input-text>
-      </graph-node>
+      <graph-input-connector id="text-in"></graph-input-connector>
+      <graph-input-text></graph-input-text>
+      <graph-input-connector id="text-out" outputs="in"></graph-input-connector>
     `;
 
     this._inputText = this.shadowRoot.querySelector('graph-input-text');
