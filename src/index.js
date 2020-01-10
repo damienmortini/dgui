@@ -145,15 +145,18 @@ export default class GraphElement extends HTMLElement {
       } else {
         currentLink = document.createElement('graph-link');
         this.prepend(currentLink);
-        currentLink.input = event.composedPath()[0];
+        currentLink.input = event.detail.input;
         currentLink.addEventListener('click', (event) => {
           event.currentTarget.input.outputs.delete(event.currentTarget.output);
           event.currentTarget.remove();
         });
+        if (event.detail.output) {
+          currentLink.output = event.detail.output;
+          currentLink = null;
+        }
       }
     };
-    this.addEventListener('linkstart', onLink);
-    this.addEventListener('linkend', onLink);
+    this.addEventListener('link', onLink);
 
     this._slotUID = 0;
     this._slotElementMap = new Map();
