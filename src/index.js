@@ -156,7 +156,7 @@ export default class GraphElement extends HTMLElement {
         }
       }
     };
-    this.addEventListener('link', onLink);
+    this.addEventListener('connectorlink', onLink);
 
     this._slotUID = 0;
     this._slotElementMap = new Map();
