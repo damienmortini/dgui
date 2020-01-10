@@ -6,14 +6,11 @@ import InputNumberElement from '../node_modules/@damienmortini/elements/src/inpu
 import InputRangeElement from '../node_modules/@damienmortini/elements/src/input-range/index.js';
 import InputSelectElement from '../node_modules/@damienmortini/elements/src/input-select/index.js';
 import InputTextElement from '../node_modules/@damienmortini/elements/src/input-text/index.js';
-import InputConnectorLinkableElement from '../node_modules/@damienmortini/elements/src/input-connector/index.js';
+import InputConnectorLinkableElement from '../node_modules/@damienmortini/elements/src/input-connector-linkable/index.js';
 import LinkElement from '../node_modules/@damienmortini/elements/src/link/index.js';
 import NodeElement from './node/index.js';
 import ViewportElement from '../node_modules/@damienmortini/elements/src/viewport/index.js';
 import MenuElement from '../node_modules/@damienmortini/elements/src/menu/index.js';
-
-import './node-input-text/index.js';
-import './node-javascript-windowevent/index.js';
 
 for (const [name, constructor] of new Map([
   ['graph-input-button', InputButtonElement],
@@ -197,6 +194,90 @@ export default class GraphElement extends HTMLElement {
     observer.observe(this, { childList: true });
   }
 
+  _updateConnections() {
+    const connectors = new Set();
+    const findConnectors = (element) => {
+      if (element.tagName === 'GRAPH-INPUT-CONNECTOR') {
+        connectors.add(element);
+      }
+      for (const child of element.children) {
+        findConnectors(child);
+      }
+      if (element.shadowRoot) {
+        findConnectors(element.shadowRoot);
+      }
+    }
+    findConnectors(this);
+
+    const traverseAndConnect = (element) => {
+      if (element instanceof HTMLElement && element.getAttribute('connect')) {
+        const connectionPaths = element.getAttribute('connect').split(',');
+
+        for (let connectionPath of connectionPaths) {
+          connectionPath = connectionPath.replace(/\s+/g, ' ').trim();
+          if (!connectionPath) {
+            continue;
+          }
+          const paths = connectionPath.split(' ');
+          const inputPath = paths.length > 1 ? paths[0] : '';
+          const outputPath = paths.length > 1 ? paths[1] : paths[0];
+
+          const inputConnectors = new Set();
+          const outputConnectors = new Set();
+
+          let input = element;
+          for (const id of inputPath.split('/')) {
+            if (!id) {
+              continue;
+            }
+            let newInput = input.querySelector(`#${id}`);
+            if (!newInput && input.shadowRoot) {
+              newInput = input.shadowRoot.querySelector(`#${id}`);
+            }
+            input = newInput;
+          }
+          for (const connector of connectors) {
+            if (connector.inputs.has(input)) {
+              inputConnectors.add(connector);
+            }
+          }
+
+          let output = this;
+          for (const id of outputPath.split('/')) {
+            if (!id) {
+              continue;
+            }
+            let newOutput = output.querySelector(`#${id}`);
+            if (!newOutput && output.shadowRoot) {
+              newOutput = output.shadowRoot.querySelector(`#${id}`);
+            }
+            output = newOutput;
+          }
+          for (const connector of connectors) {
+            if (connector.outputs.has(output)) {
+              outputConnectors.add(connector);
+            }
+          }
+
+          for (const inputConnector of inputConnectors) {
+            for (const outputConnector of outputConnectors) {
+              inputConnector.outputs.add(outputConnector);
+            }
+          }
+        }
+      }
+      for (const child of element.children) {
+        traverseAndConnect(child);
+      }
+      if (element.shadowRoot) {
+        traverseAndConnect(element.shadowRoot);
+      }
+    }
+    for (const child of this.children) {
+      traverseAndConnect(child);
+    }
+  }
+
   _onKeyDown(event) {
     if (this._keyDownTimeMap.get(event.key)) {
       return;
@@ -270,46 +351,49 @@ export default class GraphElement extends HTMLElement {
     }
   }
 
-  add(elementData) {
-    if (!(elementData instanceof Array)) {
-      elementData = [elementData];
-    }
+  // add(elementData) {
+  //   if (!(elementData instanceof Array)) {
+  //     elementData = [elementData];
+  //   }
 
-    const addElementDataTo = (elementData, container) => {
-      for (const data of elementData) {
-        if (typeof data === 'string') {
-          const element = document.createElement('div');
-          element.textContent = data;
-          container.appendChild(element);
-        } else {
-          const dataCopy = { ...data };
-          const element = document.createElement(dataCopy.tagName || 'div');
-          delete dataCopy.tagName;
-          if (dataCopy.style) {
-            for (const [key, value] of Object.entries(dataCopy.style)) {
-              element.style[key] = value;
-            }
-            delete dataCopy.style;
-          }
-          if (dataCopy.children) {
-            addElementDataTo(dataCopy.children, element);
-            delete dataCopy.children;
-          }
-          for (const [key, value] of Object.entries(dataCopy)) {
-            element[key] = value;
-          }
-          container.appendChild(element);
-        }
-      }
-    }
+  //   const addElementDataTo = (elementData, container) => {
+  //     for (const data of elementData) {
+  //       if (typeof data === 'string') {
+  //         const element = document.createElement('div');
+  //         element.textContent = data;
+  //         container.appendChild(element);
+  //       } else {
+  //         const dataCopy = { ...data };
+  //         const element = document.createElement(dataCopy.tagName || 'div');
+  //         delete dataCopy.tagName;
+  //         if (dataCopy.style) {
+  //           for (const [key, value] of Object.entries(dataCopy.style)) {
+  //             element.style[key] = value;
+  //           }
+  //           delete dataCopy.style;
+  //         }
+  //         if (dataCopy.children) {
+  //           addElementDataTo(dataCopy.children, element);
+  //           delete dataCopy.children;
+  //         }
+  //         for (const [key, value] of Object.entries(dataCopy)) {
+  //           element[key] = value;
+  //         }
+  //         container.appendChild(element);
+  //       }
+  //     }
+  //   }
 
-    addElementDataTo(elementData, this);
-  }
+  //   addElementDataTo(elementData, this);
+  // }
 
   connectedCallback() {
     // if (localStorage.getItem("graph-data")) {
     //   this.insertAdjacentHTML('afterbegin', localStorage.getItem("graph-data"));
     // }
+
+
+    this._updateConnections();
 
     requestAnimationFrame(() => {
       this._viewport.centerView();

@@ -147,7 +147,7 @@ export default class GraphNodeElement extends HTMLElement {
       <graph-input-connector></graph-input-connector>
       <label title="${label}">${label}</label>
       <div class="input"><slot name="${slotUID}"></slot></div>
-      <graph-input-connector outputs="${node.getAttribute('connect')}"></graph-input-connector>
+      <graph-input-connector></graph-input-connector>
     `;
     const connectors = section.querySelectorAll('graph-input-connector');
     connectors[0].outputs.add(node);
