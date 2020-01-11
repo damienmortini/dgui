@@ -15,14 +15,15 @@ customElements.define('graph-node-input-text', class NodeInputTextElement extend
           resize: horizontal;
           padding: 20px;
           align-items: center;
+          box-sizing: border-box;
         }
 
-        input  {
+        graph-input-text {
           width: 100%;
         }
       </style>
       <graph-input-connector id="input"></graph-input-connector>
-      <graph-input-text></graph-input-text>
+      <graph-input-text id="text"></graph-input-text>
       <graph-input-connector id="output"></graph-input-connector>
     `;
 
@@ -32,8 +33,8 @@ customElements.define('graph-node-input-text', class NodeInputTextElement extend
       this.dispatchEvent(new event.constructor(event.type, event));
     });
 
-    this.shadowRoot.querySelector('#input').outputs.add(this);
-    this.shadowRoot.querySelector('#output').inputs.add(this);
+    this.shadowRoot.querySelector('#input').outputs.add(this._inputText);
+    this.shadowRoot.querySelector('#output').inputs.add(this._inputText);
 
     if (this.getAttribute('value')) {
       this.value = this.getAttribute('value');

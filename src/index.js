@@ -106,14 +106,15 @@ export default class GraphElement extends HTMLElement {
           visibility: hidden;
         }
       </style>
+      <slot></slot>
+      <graph-viewport></graph-viewport>
       <div id="menu-overlay" hidden>
         <graph-menu></graph-menu>
       </div>
-      <graph-viewport></graph-viewport>
-      <slot></slot>
     `;
 
     this._viewport = this.shadowRoot.querySelector('graph-viewport');
+    this._linksContainer = this.shadowRoot.querySelector('#links');
     this._addMenu = this.shadowRoot.querySelector('graph-menu');
     this._menuOverlay = this.shadowRoot.querySelector('#menu-overlay');
 
@@ -157,6 +158,56 @@ export default class GraphElement extends HTMLElement {
       }
     };
     this.addEventListener('connectorlink', onLink);
+
+    this.addEventListener('connected', (event) => {
+      const paths = [];
+      for (let index = 0; index < 2; index++) {
+        let path = '';
+        const side = index ? 'output' : 'input';
+        let hostElement = event.detail[side];
+        path = hostElement.id;
+        if (!path) {
+          for (const element of hostElement[`${side}s`]) {
+            if (element.id) {
+              path = element.id;
+              hostElement = element;
+              break;
+            }
+          }
+        }
+        while (hostElement.getRootNode().host) {
+          hostElement = hostElement.getRootNode().host;
+          if (hostElement && !hostElement.id) {
+            console.warn(`Graph: ${hostElement} doesn't have any id, links saving won't work on this element.`);
+            paths[0] = '';
+            path = '';
+            break;
+          }
+          path = `${hostElement.id}/${path}`;
+        }
+        paths[index] = path;
+      }
+
+      let connectString = '';
+      connectString += paths[0] ?`${paths[0]} ` : '';
+      connectString += paths[1];
+
+      if(connectString)
+
+      console.log(connectString);
+
+      // let inputPath = '';
+      // let inputHostElement = event.detail.input;
+      // if (event.detail.input.inputs.size) {
+      //   inputHostElement = event.detail.input.inputs.values().next().value;
+      //   inputPath = inputHostElement.id;
+      //   while (inputHostElement.getRootNode().host) {
+      //     inputHostElement = inputHostElement.getRootNode().host;
+      //     inputPath = `${inputHostElement.id}/${inputPath}`;
+      //   }
+      // }
+      // inputHostElement.setAttribute('connect', outputPath);
+    });
 
     this._slotUID = 0;
     this._slotElementMap = new Map();
@@ -391,10 +442,9 @@ export default class GraphElement extends HTMLElement {
   // }
 
   connectedCallback() {
-    // if (localStorage.getItem("graph-data")) {
-    //   this.insertAdjacentHTML('afterbegin', localStorage.getItem("graph-data"));
-    // }
-
+    if (localStorage.getItem("graph-data")) {
+      this.insertAdjacentHTML('afterbegin', localStorage.getItem("graph-data"));
+    }
 
     this._updateConnections();
 
@@ -428,7 +478,7 @@ export default class GraphElement extends HTMLElement {
           child.style.height = `${boundingRect.height}px`;
         }
       }
-      // localStorage.setItem("graph-data", this.innerHTML);
+      localStorage.setItem("graph-data", this.innerHTML);
     });
   }
 
