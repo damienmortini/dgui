@@ -1,7 +1,7 @@
 customElements.define('graph-node-javascript-windowevent', class NodeInputTextElement extends HTMLElement {
   constructor() {
     super();
-    
+
     this.attachShadow({ mode: 'open' }).innerHTML = `
       <style>
         :host {
@@ -52,6 +52,14 @@ customElements.define('graph-node-javascript-windowevent', class NodeInputTextEl
     if (this.getAttribute('value')) {
       this.value = this.getAttribute('value');
     }
+
+    window.addEventListener('load', () => {
+      window.dispatchEvent(new CustomEvent(this.eventType, {
+        detail: {
+          value: this._inputConnectorIn.value,
+        }
+      }));
+    }, { once: true })
   }
 
   get eventType() {

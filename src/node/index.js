@@ -16,6 +16,7 @@ export default class GraphNodeElement extends HTMLElement {
         :host {
           display: block;
           width: 300px;
+          resize: horizontal;
         }
         details, slot {
           padding: 10px;
@@ -98,10 +99,9 @@ export default class GraphNodeElement extends HTMLElement {
   connectedCallback() {
     this._details.open = !this.close;
     for (const child of this.children) {
-      // console.log('value' in child);
-      // if (!('value' in child)) {
-      //   continue;
-      // }
+      if (!('value' in child)) {
+        continue;
+      }
       this._addInput(child);
     }
   }
@@ -144,10 +144,10 @@ export default class GraphNodeElement extends HTMLElement {
     section.id = `slot${slotUID}`;
     section.classList.add('input');
     section.innerHTML = `
-      <graph-input-connector></graph-input-connector>
+      <graph-input-connector part="connector"></graph-input-connector>
       <label title="${label}">${label}</label>
       <div class="input"><slot name="${slotUID}"></slot></div>
-      <graph-input-connector></graph-input-connector>
+      <graph-input-connector part="connector"></graph-input-connector>
     `;
     const connectors = section.querySelectorAll('graph-input-connector');
     connectors[0].outputs.add(node);

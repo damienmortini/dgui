@@ -483,6 +483,10 @@ export default class GraphElement extends HTMLElement {
     window.addEventListener('keyup', this._onKeyUpBinded);
 
     window.addEventListener('unload', () => {
+      if (!this.autoSave) {
+        return;
+      }
+
       const children = this.querySelectorAll('*');
       for (const child of children) {
         if (child.tagName.toLowerCase() === 'graph-link') {
@@ -508,9 +512,7 @@ export default class GraphElement extends HTMLElement {
           child.style.height = `${boundingRect.height}px`;
         }
       }
-      if (this.autoSave) {
-        localStorage.setItem("graph-data", this.innerHTML.trim());
-      }
+      localStorage.setItem("graph-data", this.innerHTML.trim());
     });
   }
 
