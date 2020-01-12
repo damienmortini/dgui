@@ -161,45 +161,18 @@ export default class GraphElement extends HTMLElement {
     this.addEventListener('connectorlink', onLink);
 
     this.addEventListener('connected', (event) => {
-      const paths = [];
-      let inputHostElement;
-      for (let index = 0; index < 2; index++) {
-        const side = index ? 'output' : 'input';
-        let hostElement = event.detail[side];
-        if (!hostElement.id) {
-          hostElement = hostElement[`${side}s`].values().next().value;
-        }
-        if (side === 'input') {
-          inputHostElement = hostElement;
-        }
-
-        let path = '';
-        let nextHostElement = hostElement;
-        do {
-          hostElement = nextHostElement;
-          if (!hostElement.id) {
-            console.warn("Graph:", hostElement, `and its ${side}s don't have any id, link saving won't work on this element and its children.`);
-            return;
-          }
-          nextHostElement = hostElement.getRootNode().host;
-          if (nextHostElement || side === 'output') {
-            path = path ? `${hostElement.id}/${path}` : hostElement.id;
-          }
-        } while (nextHostElement);
-
-        if (side === 'input') {
-          inputHostElement = hostElement;
-        }
-
-        paths[index] = path;
+      const connectData = this._getConnectDataFromConnectors(event.detail.input, event.detail.output);
+      if (connectData) {
+        this._addConnectStringAttribute(connectData.element, connectData.connectString);
       }
+    });
 
-      let connectString = '';
-      connectString += paths[0] ? `${paths[0]} ` : '';
-      connectString += paths[1];
+    this.addEventListener('disconnected', (event) => {
+      console.log(event);
 
-      if (connectString) {
-        inputHostElement.setAttribute('connect', connectString);
+      const connectData = this._getConnectDataFromConnectors(event.detail.input, event.detail.output);
+      if (connectData) {
+        this._removeConnectStringAttribute(connectData.element, connectData.connectString);
       }
     });
 
@@ -242,6 +215,35 @@ export default class GraphElement extends HTMLElement {
     observer.observe(this, { childList: true });
   }
 
+  _addConnectStringAttribute(element, connectString) {
+    return this._toggleConnectStringAttribute(element, connectString, true);
+  }
+
+  _removeConnectStringAttribute(element, connectString) {
+    return this._toggleConnectStringAttribute(element, connectString, false);
+  }
+
+  _toggleConnectStringAttribute(element, connectString, force) {
+    connectString = connectString.replace(/\s+/g, ' ');
+
+    let connectStrings = element.getAttribute('connect') || '';
+    connectStrings = connectStrings.replace(/\s+/g, ' ');
+
+    const connections = new Set(connectStrings ? connectStrings.split(/\s*,\s*/) : undefined);
+
+    if (force) {
+      connections.add(connectString);
+    } else {
+      connections.delete(connectString);
+    }
+
+    if (connections.size) {
+      element.setAttribute('connect', [...connections].join());
+    } else {
+      element.removeAttribute('connect');
+    }
+  }
+
   _getConnectors() {
     const connectors = new Set();
     const findConnectors = (element) => {
@@ -259,20 +261,57 @@ export default class GraphElement extends HTMLElement {
     return connectors;
   }
 
+  _getConnectDataFromConnectors(input, output) {
+    const paths = {};
+    let inputHostElement;
+    for (let hostElement of [input, output]) {
+      const side = hostElement === input ? 'input' : 'output';
+      if (!hostElement.id) {
+        hostElement = hostElement[`${side}s`].values().next().value;
+      }
+
+      let path = '';
+      let nextHostElement = hostElement;
+      do {
+        hostElement = nextHostElement;
+        if (!hostElement.id) {
+          console.warn("Graph:", hostElement, `and its ${side}s don't have any id, link saving won't work on this element and its children.`);
+          return null;
+        }
+        nextHostElement = hostElement.getRootNode().host;
+        if (nextHostElement || side === 'output') {
+          path = path ? `${hostElement.id}/${path}` : hostElement.id;
+        }
+      } while (nextHostElement);
+
+      if (side === 'input') {
+        inputHostElement = hostElement;
+      }
+
+      paths[side] = path;
+    }
+    let connectString = '';
+    connectString += paths.input ? `${paths.input} ` : '';
+    connectString += paths.output;
+    return {
+      element: inputHostElement,
+      connectString
+    };
+  }
+
   _updateConnectionsFromConnectAttribute() {
     const connectors = this._getConnectors();
 
     for (const element of this.querySelectorAll('*[connect]')) {
       const connectString = element.getAttribute('connect');
       if (element instanceof HTMLElement && connectString) {
-        const connectionPaths = connectString.split(',');
+        const connectionPaths = connectString.split(/\s*,\s*/);
 
         for (let connectionPath of connectionPaths) {
-          connectionPath = connectionPath.replace(/\s+/g, ' ').trim();
           if (!connectionPath) {
             continue;
           }
-          const paths = connectionPath.split(' ');
+          const paths = connectionPath.split(/\s+/);
           const inputPath = paths.length > 1 ? paths[0] : '';
           const outputPath = paths.length > 1 ? paths[1] : paths[0];
 
@@ -432,10 +471,6 @@ export default class GraphElement extends HTMLElement {
   //   addElementDataTo(elementData, this);
   // }
 
-  // _saveConnections() {
-
-  // }
-
   connectedCallback() {
     if (localStorage.getItem("graph-data")) {
       this.insertAdjacentHTML('afterbegin', localStorage.getItem("graph-data"));
@@ -459,7 +494,6 @@ export default class GraphElement extends HTMLElement {
         if ('value' in child && child.value !== undefined && !child.disabled) {
           child.setAttribute('value', typeof child.value === 'string' ? child.value : JSON.stringify(child.value));
         }
-        // this._saveConnections();
       }
 
       for (const child of this.children) {
