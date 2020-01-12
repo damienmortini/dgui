@@ -61,6 +61,7 @@ export default class GraphElement extends HTMLElement {
         :host {
           --node-background: white;
           display: block;
+          font-family: sans-serif;
         }
 
         :host([hidden]) {
@@ -79,10 +80,10 @@ export default class GraphElement extends HTMLElement {
         }
 
         ::slotted(*) {
-          font-family: sans-serif;
           position: absolute;
-          background: white;
+          background: var(--node-background);
           border-radius: 4px;
+          box-sizing: border-box;
         }
 
         graph-menu {
@@ -161,52 +162,45 @@ export default class GraphElement extends HTMLElement {
 
     this.addEventListener('connected', (event) => {
       const paths = [];
+      let inputHostElement;
       for (let index = 0; index < 2; index++) {
-        let path = '';
         const side = index ? 'output' : 'input';
         let hostElement = event.detail[side];
-        path = hostElement.id;
-        if (!path) {
-          for (const element of hostElement[`${side}s`]) {
-            if (element.id) {
-              path = element.id;
-              hostElement = element;
-              break;
-            }
-          }
+        if (!hostElement.id) {
+          hostElement = hostElement[`${side}s`].values().next().value;
         }
-        while (hostElement.getRootNode().host) {
-          hostElement = hostElement.getRootNode().host;
-          if (hostElement && !hostElement.id) {
-            console.warn(`Graph: ${hostElement} doesn't have any id, links saving won't work on this element.`);
-            paths[0] = '';
-            path = '';
-            break;
-          }
-          path = `${hostElement.id}/${path}`;
+        if (side === 'input') {
+          inputHostElement = hostElement;
         }
+
+        let path = '';
+        let nextHostElement = hostElement;
+        do {
+          hostElement = nextHostElement;
+          if (!hostElement.id) {
+            console.warn("Graph:", hostElement, `and its ${side}s don't have any id, link saving won't work on this element and its children.`);
+            return;
+          }
+          nextHostElement = hostElement.getRootNode().host;
+          if (nextHostElement || side === 'output') {
+            path = path ? `${hostElement.id}/${path}` : hostElement.id;
+          }
+        } while (nextHostElement);
+
+        if (side === 'input') {
+          inputHostElement = hostElement;
+        }
+
         paths[index] = path;
       }
 
       let connectString = '';
-      connectString += paths[0] ?`${paths[0]} ` : '';
+      connectString += paths[0] ? `${paths[0]} ` : '';
       connectString += paths[1];
 
-      if(connectString)
-
-      console.log(connectString);
-
-      // let inputPath = '';
-      // let inputHostElement = event.detail.input;
-      // if (event.detail.input.inputs.size) {
-      //   inputHostElement = event.detail.input.inputs.values().next().value;
-      //   inputPath = inputHostElement.id;
-      //   while (inputHostElement.getRootNode().host) {
-      //     inputHostElement = inputHostElement.getRootNode().host;
-      //     inputPath = `${inputHostElement.id}/${inputPath}`;
-      //   }
-      // }
-      // inputHostElement.setAttribute('connect', outputPath);
+      if (connectString) {
+        inputHostElement.setAttribute('connect', connectString);
+      }
     });
 
     this._slotUID = 0;
@@ -458,6 +452,9 @@ export default class GraphElement extends HTMLElement {
     window.addEventListener('unload', () => {
       const children = this.querySelectorAll('*');
       for (const child of children) {
+        if (child.tagName.toLowerCase() === 'graph-link') {
+          child.remove();
+        }
         if ('value' in child && child.value !== undefined && !child.disabled) {
           child.setAttribute('value', typeof child.value === 'string' ? child.value : JSON.stringify(child.value));
         }
