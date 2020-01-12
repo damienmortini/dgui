@@ -33,11 +33,6 @@ for (const [name, constructor] of new Map([
 }
 
 export default class GraphElement extends HTMLElement {
-  static get nodeList() {
-    return [
-
-    ];
-  }
   constructor() {
     super();
 
@@ -478,9 +473,11 @@ export default class GraphElement extends HTMLElement {
 
     this._updateConnectionsFromConnectAttribute();
 
-    requestAnimationFrame(() => {
-      this._viewport.centerView();
-    });
+    if (this.getAttribute('centerview')) {
+      requestAnimationFrame(() => {
+        this._viewport.centerView();
+      });
+    }
 
     window.addEventListener('keydown', this._onKeyDownBinded);
     window.addEventListener('keyup', this._onKeyUpBinded);
@@ -511,13 +508,27 @@ export default class GraphElement extends HTMLElement {
           child.style.height = `${boundingRect.height}px`;
         }
       }
-      localStorage.setItem("graph-data", this.innerHTML.trim());
+      if (this.autoSave) {
+        localStorage.setItem("graph-data", this.innerHTML.trim());
+      }
     });
   }
 
   disconnectedCallback() {
     window.removeEventListener('keydown', this._onKeyDownBinded);
     window.removeEventListener('keyup', this._onKeyUpBinded);
+  }
+
+  get autoSave() {
+    return this.hasAttribute('autosave');
+  }
+
+  set autoSave(value) {
+    if (value) {
+      this.setAttribute('autosave', '');
+    } else {
+      this.removeAttribute('autosave');
+    }
   }
 
   // toJSON() {

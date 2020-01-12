@@ -1,7 +1,7 @@
 customElements.define('graph-node-javascript-windowevent', class NodeInputTextElement extends HTMLElement {
   constructor() {
     super();
-
+    
     this.attachShadow({ mode: 'open' }).innerHTML = `
       <style>
         :host {
@@ -33,27 +33,45 @@ customElements.define('graph-node-javascript-windowevent', class NodeInputTextEl
     });
 
     this._inputConnectorIn = this.shadowRoot.querySelector('graph-input-connector#in');
-    this._inputConnectorIn.addEventListener('input', () => {
-      window.dispatchEvent(new CustomEvent(this.value, {
-        detail: {
-          value: this._inputConnectorIn.value,
-        }
-      }));
-    });
+    // this._inputConnectorIn.addEventListener('input', () => {
+    //   window.dispatchEvent(new CustomEvent(this.eventType, {
+    //     detail: {
+    //       value: this._inputConnectorIn.value,
+    //     }
+    //   }));
+    // });
+    this._inputConnectorIn.outputs.add(this);
 
     this._inputConnectorOut = this.shadowRoot.querySelector('graph-input-connector#out');
+    this._inputConnectorOut.inputs.add(this);
+
+    if (this.getAttribute('event')) {
+      this.eventType = this.getAttribute('event');
+    }
 
     if (this.getAttribute('value')) {
       this.value = this.getAttribute('value');
     }
   }
 
-  get value() {
+  get eventType() {
     return this._input.value;
   }
 
-  set value(value) {
+  set eventType(value) {
     this._input.value = value;
-    // window.removeEventListener('')
+  }
+
+  get value() {
+    return this._value;
+  }
+
+  set value(value) {
+    this._value = value;
+    window.dispatchEvent(new CustomEvent(this.eventType, {
+      detail: {
+        value: this._inputConnectorIn.value,
+      }
+    }));
   }
 });
