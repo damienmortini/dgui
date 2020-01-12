@@ -258,8 +258,9 @@ export default class GraphElement extends HTMLElement {
     findConnectors(this);
 
     const traverseAndConnect = (element) => {
-      if (element instanceof HTMLElement && element.getAttribute('connect')) {
-        const connectionPaths = element.getAttribute('connect').split(',');
+      const connectString = element.getAttribute('connect');
+      if (element instanceof HTMLElement && connectString) {
+        const connectionPaths = connectString.split(',');
 
         for (let connectionPath of connectionPaths) {
           connectionPath = connectionPath.replace(/\s+/g, ' ').trim();
@@ -285,7 +286,7 @@ export default class GraphElement extends HTMLElement {
             input = newInput;
           }
           for (const connector of connectors) {
-            if (connector.inputs.has(input)) {
+            if (input === connector || connector.inputElements.has(input)) {
               inputConnectors.add(connector);
             }
           }
@@ -302,7 +303,7 @@ export default class GraphElement extends HTMLElement {
             output = newOutput;
           }
           for (const connector of connectors) {
-            if (connector.outputs.has(output)) {
+            if (output === connector || connector.outputElements.has(output)) {
               outputConnectors.add(connector);
             }
           }
@@ -316,9 +317,6 @@ export default class GraphElement extends HTMLElement {
       }
       for (const child of element.children) {
         traverseAndConnect(child);
-      }
-      if (element.shadowRoot) {
-        traverseAndConnect(element.shadowRoot);
       }
     }
     for (const child of this.children) {
@@ -475,7 +473,7 @@ export default class GraphElement extends HTMLElement {
           child.style.height = `${boundingRect.height}px`;
         }
       }
-      localStorage.setItem("graph-data", this.innerHTML);
+      localStorage.setItem("graph-data", this.innerHTML.trim());
     });
   }
 
