@@ -242,7 +242,7 @@ export default class GraphElement extends HTMLElement {
     observer.observe(this, { childList: true });
   }
 
-  _updateConnections() {
+  _getConnectors() {
     const connectors = new Set();
     const findConnectors = (element) => {
       if (element.tagName === 'GRAPH-INPUT-CONNECTOR') {
@@ -256,8 +256,13 @@ export default class GraphElement extends HTMLElement {
       }
     }
     findConnectors(this);
+    return connectors;
+  }
 
-    const traverseAndConnect = (element) => {
+  _updateConnectionsFromConnectAttribute() {
+    const connectors = this._getConnectors();
+
+    for (const element of this.querySelectorAll('*[connect]')) {
       const connectString = element.getAttribute('connect');
       if (element instanceof HTMLElement && connectString) {
         const connectionPaths = connectString.split(',');
@@ -315,12 +320,6 @@ export default class GraphElement extends HTMLElement {
           }
         }
       }
-      for (const child of element.children) {
-        traverseAndConnect(child);
-      }
-    }
-    for (const child of this.children) {
-      traverseAndConnect(child);
     }
   }
 
@@ -433,12 +432,16 @@ export default class GraphElement extends HTMLElement {
   //   addElementDataTo(elementData, this);
   // }
 
+  // _saveConnections() {
+
+  // }
+
   connectedCallback() {
     if (localStorage.getItem("graph-data")) {
       this.insertAdjacentHTML('afterbegin', localStorage.getItem("graph-data"));
     }
 
-    this._updateConnections();
+    this._updateConnectionsFromConnectAttribute();
 
     requestAnimationFrame(() => {
       this._viewport.centerView();
@@ -456,6 +459,7 @@ export default class GraphElement extends HTMLElement {
         if ('value' in child && child.value !== undefined && !child.disabled) {
           child.setAttribute('value', typeof child.value === 'string' ? child.value : JSON.stringify(child.value));
         }
+        // this._saveConnections();
       }
 
       for (const child of this.children) {
