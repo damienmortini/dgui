@@ -150,8 +150,12 @@ export default class GraphNodeElement extends HTMLElement {
       <graph-input-connector part="connector"></graph-input-connector>
     `;
     const connectors = section.querySelectorAll('graph-input-connector');
-    connectors[0].outputs.add(node);
-    connectors[1].inputs.add(node);
+    if (connectors[0].outputs) {
+      connectors[0].outputs.add(node);
+    }
+    if (connectors[1].inputs) {
+      connectors[1].inputs.add(node);
+    }
     this._details.appendChild(section);
     node.slot = slotUID;
     slotUID++;

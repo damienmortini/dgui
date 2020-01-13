@@ -394,6 +394,8 @@ export default class GraphElement extends HTMLElement {
       for (const element of this._viewport.selectedElements) {
         this._slotElementMap.get(element).remove();
       }
+    } else if (event.key === 'c' && event.ctrlKey) {
+      this.copy();
     } else if (event.key === ' ') {
       this._menuOverlay.hidden = !this._menuOverlay.hidden;
     } else if (event.key.toLowerCase() === 'h' && performance.now() - this._keyDownTimeMap.get(event.key) > 200) {
@@ -486,39 +488,54 @@ export default class GraphElement extends HTMLElement {
       if (!this.autoSave) {
         return;
       }
-
-      const children = this.querySelectorAll('*');
-      for (const child of children) {
-        if (child.tagName.toLowerCase() === 'graph-link') {
-          child.remove();
-        }
-        if ('value' in child && child.value !== undefined && !child.disabled) {
-          child.setAttribute('value', typeof child.value === 'string' ? child.value : JSON.stringify(child.value));
-        }
-      }
-
-      for (const child of this.children) {
-        const boundingRect = this._viewport.getElementRect(this._elementSlotMap.get(child));
-        if (boundingRect.y) {
-          child.style.top = `${boundingRect.y}px`;
-        }
-        if (boundingRect.x) {
-          child.style.left = `${boundingRect.x}px`;
-        }
-        if (boundingRect.width) {
-          child.style.width = `${boundingRect.width}px`;
-        }
-        if (boundingRect.height) {
-          child.style.height = `${boundingRect.height}px`;
-        }
-      }
-      localStorage.setItem("graph-data", this.innerHTML.trim());
+      localStorage.setItem("graph-data", this._getCleanedHTML(this.children));
     });
   }
 
   disconnectedCallback() {
     window.removeEventListener('keydown', this._onKeyDownBinded);
     window.removeEventListener('keyup', this._onKeyUpBinded);
+  }
+
+  _getCleanedHTML(elements) {
+    const template = document.createElement('template');
+
+    for (const element of elements) {
+      template.innerHTML += element.outerHTML.trim();
+    }
+
+    for (const [index, clonedChild] of [...template.content.children].entries()) {
+      const child = elements[index];
+
+      if (child.tagName.toLowerCase() === 'graph-link') {
+        clonedChild.remove();
+        continue;
+      }
+
+      if ('value' in child && child.value !== undefined && !child.disabled) {
+        clonedChild.setAttribute('value', typeof child.value === 'string' ? child.value : JSON.stringify(child.value));
+      }
+
+      const boundingRect = this._viewport.getElementRect(this._elementSlotMap.get(child));
+      if (boundingRect.y) {
+        clonedChild.style.top = `${boundingRect.y}px`;
+      }
+      if (boundingRect.x) {
+        clonedChild.style.left = `${boundingRect.x}px`;
+      }
+      if (boundingRect.width) {
+        clonedChild.style.width = `${boundingRect.width}px`;
+      }
+      if (boundingRect.height) {
+        clonedChild.style.height = `${boundingRect.height}px`;
+      }
+    }
+
+    return template.innerHTML;
+  }
+
+  copy() {
+    navigator.clipboard.writeText(this._getCleanedHTML(this.children));
   }
 
   get autoSave() {
