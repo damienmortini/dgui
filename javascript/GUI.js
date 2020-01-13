@@ -1,4 +1,4 @@
-import NodeElement from '../../elements/src/node/index.js';
+import NodeElement from '../src/node/index.js';
 import InputButtonElement from '../../elements/src/input-button/index.js';
 import InputCheckboxElement from '../../elements/src/input-checkbox/index.js';
 import InputColorElement from '../../elements/src/input-color/index.js';
@@ -74,15 +74,16 @@ export default class GUI {
 
     if (!options.tagName) {
       options.tagName = 'graph-input-text';
-      if (options.object) {
-        options.value = options.object[options.key];
-      }
       for (const [tagName, resolve] of tagNameResolvers) {
         if (resolve(options)) {
           options.tagName = tagName;
           break;
         }
       }
+    }
+
+    if (options.object) {
+      options.value = options.object[options.key];
     }
 
     const { object, key, folder, reload } = options;
