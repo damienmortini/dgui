@@ -114,20 +114,22 @@ export default class GraphElement extends HTMLElement {
     this._addMenu = this.shadowRoot.querySelector('graph-menu');
     this._menuOverlay = this.shadowRoot.querySelector('#menu-overlay');
 
-    this._addMenu.options = [{
-      textContent: 'yes',
-      onclick: () => {
-        this._addMenu.hidden = true;
-        this.insertAdjacentHTML('beforeend', '<graph-node-input-text></graph-node-input-text>');
-        this.insertAdjacentHTML('beforeend', '<graph-node-javascript-windowevent></graph-node-javascript-windowevent>');
-      }
-    },
-    {
-      textContent: 'coucou',
-    },
-    {
-      textContent: 'coucou2',
-    }];
+    this._addMenu.options = [
+      {
+        textContent: 'Javascript WindowEvent',
+        onclick: () => {
+          this._menuOverlay.hidden = true;
+          this.insertAdjacentHTML('beforeend', '<graph-node-javascript-windowevent></graph-node-javascript-windowevent>');
+        }
+      },
+      {
+        textContent: 'Midi',
+        onclick: () => {
+          this._menuOverlay.hidden = true;
+          this.insertAdjacentHTML('beforeend', '<graph-node-midi></graph-node-midi>');
+        }
+      },
+    ];
 
     let currentLink;
     const onLink = (event) => {
@@ -154,20 +156,6 @@ export default class GraphElement extends HTMLElement {
       }
     };
     this.addEventListener('connectorlink', onLink);
-
-    this.addEventListener('connected', (event) => {
-      const connectData = this._getConnectDataFromConnectors(event.detail.input, event.detail.output);
-      if (connectData) {
-        this._addConnectStringAttribute(connectData.element, connectData.connectString);
-      }
-    });
-
-    this.addEventListener('disconnected', (event) => {
-      const connectData = this._getConnectDataFromConnectors(event.detail.input, event.detail.output);
-      if (connectData) {
-        this._removeConnectStringAttribute(connectData.element, connectData.connectString);
-      }
-    });
 
     this._slotUID = 0;
     this._slotElementMap = new Map();
@@ -480,6 +468,20 @@ export default class GraphElement extends HTMLElement {
       });
     }
 
+    this.addEventListener('connected', (event) => {
+      const connectData = this._getConnectDataFromConnectors(event.detail.input, event.detail.output);
+      if (connectData) {
+        this._addConnectStringAttribute(connectData.element, connectData.connectString);
+      }
+    });
+
+    this.addEventListener('disconnected', (event) => {
+      const connectData = this._getConnectDataFromConnectors(event.detail.input, event.detail.output);
+      if (connectData) {
+        this._removeConnectStringAttribute(connectData.element, connectData.connectString);
+      }
+    });
+
     window.addEventListener('keydown', this._onKeyDownBinded);
     window.addEventListener('keyup', this._onKeyUpBinded);
 
@@ -534,10 +536,11 @@ export default class GraphElement extends HTMLElement {
       if (boundingRect.x) {
         cloneChild.style.left = `${boundingRect.x}px`;
       }
-      if (boundingRect.width) {
+      const style = getComputedStyle(child);
+      if (boundingRect.width && /both|horizontal/.test(style.resize)) {
         cloneChild.style.width = `${boundingRect.width}px`;
       }
-      if (boundingRect.height) {
+      if (boundingRect.height && /both|vertical/.test(style.resize)) {
         cloneChild.style.height = `${boundingRect.height}px`;
       }
     }
