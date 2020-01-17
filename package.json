@@ -10,6 +10,7 @@
     "bump-major": "npm version major && npm publish --access=public",
     "docs": "jsdoc -c jsdoc.config.json",
     "fix": "eslint src --fix",
+    "link": "npm link @damienmortini/lib @damienmortini/server @damienmortini/elements",
     "release": "npm run build && terser build/index.js --compress --mangle --module --output build/index.js",
     "server": "nodemon --watch server server/index.js",
     "start": "server --path=?dev",

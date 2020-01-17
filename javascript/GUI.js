@@ -18,7 +18,9 @@ const customElementsMap = new Map(Object.entries({
 }));
 
 for (const [customElementName, customElementConstructor] of customElementsMap) {
-  customElements.define(customElementName, customElementConstructor);
+  if (!customElements.get(customElementName)) {
+    customElements.define(customElementName, customElementConstructor);
+  }
 }
 
 let mainNode;

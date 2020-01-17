@@ -78,7 +78,7 @@ customElements.define('graph-node-javascript-windowevent', class NodeInputTextEl
     this._value = value;
     window.dispatchEvent(new CustomEvent(this.eventType, {
       detail: {
-        value: this._inputConnectorIn.value,
+        value,
       }
     }));
   }

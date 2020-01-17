@@ -163,8 +163,6 @@ export default class GraphElement extends HTMLElement {
     });
 
     this.addEventListener('disconnected', (event) => {
-      console.log(event);
-
       const connectData = this._getConnectDataFromConnectors(event.detail.input, event.detail.output);
       if (connectData) {
         this._removeConnectStringAttribute(connectData.element, connectData.connectString);
@@ -198,8 +196,11 @@ export default class GraphElement extends HTMLElement {
           const slot = this._elementSlotMap.get(node);
           this._elementSlotMap.delete(node);
           this._slotElementMap.delete(slot);
-          slot.remove();
+          if (slot) {
+            slot.remove();
+          }
         }
+        this._updateConnectionsFromConnectAttribute();
       }
     };
     mutationCallback([{
@@ -469,11 +470,9 @@ export default class GraphElement extends HTMLElement {
   // }
 
   connectedCallback() {
-    if (localStorage.getItem("graph-data")) {
-      this.insertAdjacentHTML('afterbegin', localStorage.getItem("graph-data"));
+    if (this.autoSave && localStorage.getItem("graph-data")) {
+      this.innerHTML = localStorage.getItem("graph-data");
     }
-
-    this._updateConnectionsFromConnectAttribute();
 
     if (this.getAttribute('centerview')) {
       requestAnimationFrame(() => {
@@ -504,30 +503,42 @@ export default class GraphElement extends HTMLElement {
       template.innerHTML += element.outerHTML.trim();
     }
 
-    for (const [index, clonedChild] of [...template.content.children].entries()) {
+    const setValues = (child, cloneChild) => {
+      if ('value' in child && child.value !== undefined && !child.disabled) {
+        cloneChild.setAttribute('value', typeof child.value === 'string' ? child.value : JSON.stringify(child.value));
+      }
+      for (const [index, nextChild] of [...child.children].entries()) {
+        setValues(nextChild, cloneChild.children[index]);
+      }
+    }
+
+    for (const [index, cloneChild] of [...template.content.children].entries()) {
       const child = elements[index];
 
+      cloneChild.removeAttribute('slot');
+      for (const slottedChild of cloneChild.querySelectorAll(['[slot]'])) {
+        slottedChild.removeAttribute('slot');
+      }
+
       if (child.tagName.toLowerCase() === 'graph-link') {
-        clonedChild.remove();
+        cloneChild.remove();
         continue;
       }
 
-      if ('value' in child && child.value !== undefined && !child.disabled) {
-        clonedChild.setAttribute('value', typeof child.value === 'string' ? child.value : JSON.stringify(child.value));
-      }
+      setValues(child, cloneChild);
 
       const boundingRect = this._viewport.getElementRect(this._elementSlotMap.get(child));
       if (boundingRect.y) {
-        clonedChild.style.top = `${boundingRect.y}px`;
+        cloneChild.style.top = `${boundingRect.y}px`;
       }
       if (boundingRect.x) {
-        clonedChild.style.left = `${boundingRect.x}px`;
+        cloneChild.style.left = `${boundingRect.x}px`;
       }
       if (boundingRect.width) {
-        clonedChild.style.width = `${boundingRect.width}px`;
+        cloneChild.style.width = `${boundingRect.width}px`;
       }
       if (boundingRect.height) {
-        clonedChild.style.height = `${boundingRect.height}px`;
+        cloneChild.style.height = `${boundingRect.height}px`;
       }
     }
 
