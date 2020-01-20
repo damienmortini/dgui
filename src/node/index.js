@@ -61,32 +61,38 @@ export default class GraphNodeElement extends HTMLElement {
     const mutationCallback = (mutationsList) => {
       for (const mutation of mutationsList) {
         for (const node of mutation.addedNodes) {
-          const slot = document.createElement('slot');
-          slot.name = `node-slot-${slotUID}`;
-          node.slot = slot.name;
-          const label = node.getAttribute('label') || node.label || node.getAttribute('name') || node.name || node.id || '';
-          const section = document.createElement('section');
-          section.id = `slot${slotUID}`;
-          section.classList.add('input');
-          section.innerHTML = `
-            <graph-input-connector part="connector"></graph-input-connector>
-            <label title="${label}">${label}</label>
-            <div class="input"><slot name="${slotUID}"></slot></div>
-            <graph-input-connector part="connector"></graph-input-connector>
-          `;
-          const connectors = section.querySelectorAll('graph-input-connector');
-          if (connectors[0].outputs) {
-            connectors[0].outputs.add(node);
+          const slotName = `node-slot-${++slotUID}`;
+          if (!('value' in node)) {
+            const slot = document.createElement('slot');
+            slot.name = slotName;
+            this._details.appendChild(slot);
+          } else {
+            const label = node.getAttribute('label') || node.label || node.getAttribute('name') || node.name || node.id || '';
+            const section = document.createElement('section');
+            section.id = slotName;
+            section.classList.add('input');
+            section.innerHTML = `
+              <graph-input-connector part="connector"></graph-input-connector>
+              <label title="${label}">${label}</label>
+              <div class="input"><slot name="${slotName}"></slot></div>
+              <graph-input-connector part="connector"></graph-input-connector>
+            `;
+            const connectors = section.querySelectorAll('graph-input-connector');
+            if (connectors[0].outputs) {
+              connectors[0].outputs.add(node);
+            }
+            if (connectors[1].inputs) {
+              connectors[1].inputs.add(node);
+            }
+            this._details.appendChild(section);
           }
-          if (connectors[1].inputs) {
-            connectors[1].inputs.add(node);
-          }
-          this._details.appendChild(section);
-          node.slot = slotUID;
-          slotUID++;
+          node.slot = slotName;
         }
         for (const node of mutation.removedNodes) {
-          this.shadowRoot.querySelector(`section#slot${node.slot}`).remove();
+          const section = this.shadowRoot.querySelector(`section#${node.slot}`)
+          if (section) {
+            section.remove();
+          };
         }
       }
     };
