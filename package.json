@@ -5,9 +5,6 @@
   "main": "index.js",
   "scripts": {
     "build": "rollup -c",
-    "bump-patch": "npm version patch && npm publish --access=public",
-    "bump-minor": "npm version minor && npm publish --access=public",
-    "bump-major": "npm version major && npm publish --access=public",
     "docs": "jsdoc -c jsdoc.config.json",
     "fix": "eslint src --fix",
     "link": "npm link @damienmortini/lib @damienmortini/server @damienmortini/elements",
