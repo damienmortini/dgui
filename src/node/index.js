@@ -1,5 +1,3 @@
-let slotUID = 0;
-
 /**
  * Graph Node Element
  */
@@ -58,6 +56,7 @@ export default class GraphNodeElement extends HTMLElement {
     this._summary = this.shadowRoot.querySelector('summary');
     this._summaryContent = this.shadowRoot.querySelector('summary span');
 
+    let slotUID = 0;
     const mutationCallback = (mutationsList) => {
       for (const mutation of mutationsList) {
         for (const node of mutation.addedNodes) {
